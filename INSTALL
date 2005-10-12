@@ -1,0 +1,51 @@
+Any solver with an Osi-interface can be used together with FLOPC++.
+In the sample models, Cbc, is used. To compile these samples the 
+following components of COIN must be installed first:
+   Osi, OsiClp, Clp, OsiCbc, Cbc, Coin and Cgl
+Making OsiCbc should suffice to make the rest of the dependencies as well.
+
+The two makefiles (flopc/Makefile - to build the libraries;
+and flopc/Samples/Makefile - to build the samples) assumes that
+the flopc directory is a subdirectory of COIN. If this is not the
+case the first line of each makefile must be modified to reflect 
+the location of COIN.
+ 
+To build the library, simply type make in the flopc/ directory.
+
+To compile the samples/(unittests), type make in the flopc/Samples
+directory. To execute all the samples type runall. The result should
+ideally be:
+
+Test aircraft passed.
+Test transport passed.
+Test ampl passed.
+Test bid passed.
+Test magic passed.
+Test multiproduct passed.
+Test tap passed.
+Test coex passed.
+Test coexx passed.
+Test cross passed.
+Test xbsl passed.
+Test cuttingstock passed.
+Test gapmin passed.
+Test stochbenders passed.
+Test mine passed.
+Test train passed.
+
+NOTE 1: bid might fail when using the Cbc solver. When using
+osl bid should pass. If you have osl (and OsiOsl) available change 
+"OsiCbc" to "OsiOsl" in bid.cpp and uncomment the fifth line in
+flopc/Samples/Makefile
+
+NOTE 2: If you experience linking errors of the form:
+   /lib/COIN/lib/libCoin.so: undefined reference to `glp_mpl_get_row_kind'
+   /lib/COIN/lib/libCoin.so: undefined reference to `glp_mpl_get_row_name'
+   /lib/COIN/lib/libCoin.so: undefined reference to `glp_mpl_get_col_name'
+you need to add -lglpk to the makefile. If you experience errors
+regarding gzip or bzip2, you need to add -lz and -lbz2 to the
+makefile.
+
+
+
+

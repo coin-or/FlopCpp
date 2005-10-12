@@ -1,0 +1,16 @@
+./runone aircraft 
+./runone transport 
+./runone ampl 
+./runone bid 
+./runone magic 
+./runone multiProduct 
+./runone tap
+./runone coex 
+./runone coexx 
+./runone cross 
+./runone xbsl 
+./runone cuttingStock 
+./runone gapmin 
+./runone stochbenders 
+./runone mine 
+./runone train

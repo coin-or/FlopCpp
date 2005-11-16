@@ -78,7 +78,7 @@ public:
     int size() const;
 
     vector<MP_boolean> condition;
-    Handle<MP_domain_base*> last;
+    MP_domain_base* last;
 };
 
 class MP_domain_set : public MP_domain_base {

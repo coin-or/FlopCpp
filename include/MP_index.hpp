@@ -27,7 +27,7 @@ namespace flopc {
 	virtual MP_index* getIndex() const = 0;
 	virtual MP_domain getDomain(MP_set* s) const = 0;
     protected:
-	MP_index_base() : count(1) {}
+	MP_index_base() : count(0) {}
 	virtual ~MP_index_base() {}
     private:
 	int count;
@@ -75,6 +75,23 @@ namespace flopc {
 	MP_index_exp(MP_index& i);
 	MP_index_exp(const SUBSETREF& d);
 	static MP_index_exp Empty;
+    };
+
+    class MP_index_mult : public MP_index_base {
+	friend MP_index_exp operator*(MP_index& i,const Constant& j) {
+	    return new MP_index_mult(i,j);
+	}
+    private:
+	MP_index_mult(MP_index& i, const Constant& j) : left(i), right(j) {}
+	int evaluate() const {
+	    return left->evaluate()*int(right->evaluate()); 
+	}
+	MP_index* getIndex() const {
+	    return left->getIndex();
+	}
+	virtual MP_domain getDomain(MP_set* s) const;
+	MP_index_exp left;
+	Constant right;
     };
 
     class MP_index_sum : public MP_index_base {

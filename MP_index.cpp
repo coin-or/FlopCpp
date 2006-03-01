@@ -53,6 +53,10 @@ MP_domain MP_index::getDomain(MP_set* s) const{
     return new MP_domain_set(s,const_cast<MP_index*>(this)) ;
 }
 
+MP_domain MP_index_mult::getDomain(MP_set* s) const{
+    return left->getDomain(s); 
+}
+
 MP_domain MP_index_sum::getDomain(MP_set* s) const{
     return left->getDomain(s); 
 }

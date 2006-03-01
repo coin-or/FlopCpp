@@ -30,6 +30,7 @@ Samples/mine.cpp -text
 Samples/multiProduct.cpp -text
 Samples/runall -text
 Samples/runone -text
+Samples/sodoku.cpp -text
 Samples/stochbenders.cpp -text
 Samples/tap.cpp -text
 Samples/train.cpp -text

@@ -1,4 +1,4 @@
-CoinDir  := ../..
+CoinDir  := /homespace/hultberg/COIN
 FlopcDir := ..
 
 ## uncomment line below to be able to use OSL
@@ -52,10 +52,10 @@ default: all
 
 all :	aircraft transport ampl magic multiProduct tap \
         coex coexx cross xbsl cuttingStock gapmin stochbenders \
-	mine train bid
+	mine train bid sodoku
 
 clean:	
 	@rm aircraft transport ampl magic multiProduct tap \
 	coex coexx cross xbsl cuttingStock gapmin stochbenders \
-	mine train bid
+	mine train bid sodoku
 ###############################################################################

@@ -12,31 +12,51 @@
 
 namespace flopc {
 
-    class Functor_conditional : public Functor {
-    public:
-	Functor_conditional(const Functor* f, const vector<MP_boolean> & condition)
-	    : F(f), Condition(condition) {}
-	virtual ~Functor_conditional() {}
-	void operator()() const {
-	    bool goOn = true;
-	    for (unsigned int i = 0; i<Condition.size(); i++) {
-		if (Condition[i]->evaluate()==false) {
-		    goOn = false;
-		    break;
-		}
-	    }
-	    if (goOn == true) {
-		F->operator()();
-	    }
+  class Functor_conditional : public Functor {
+  public:
+    Functor_conditional(const Functor* f, const vector<MP_boolean> & condition)
+      : F(f), Condition(condition) {}
+    virtual ~Functor_conditional() {}
+    void operator()() const {
+      bool goOn = true;
+      for (unsigned int i = 0; i<Condition.size(); i++) {
+	if (Condition[i]->evaluate()==false) {
+	  goOn = false;
+	  break;
 	}
-	const Functor* F;
-	vector<MP_boolean> Condition;
-    };	
+      }
+      if (goOn == true) {
+	F->operator()();
+      }
+    }
+    const Functor* F;
+    vector<MP_boolean> Condition;
+  };	
+
+  MP_domain operator*(const MP_domain& a, const MP_domain& b) {
+    if (a.root == MP_domain::Empty.root) {
+      return b;
+    } else if (b.root == MP_domain::Empty.root) {
+      return a;
+    } else {
+      MP_domain retval = a;
+      retval.last->donext = b.root;
+      b.root->count+=1;
+      a.root->count+=1;
+      retval.last = b.last;
+      retval.condition.insert(retval.condition.end(),b.condition.begin(),
+			      b.condition.end());
+      return retval;
+    }
+  }
+  
+
+
 }
 
 using namespace flopc;
 
-MP_domain_base::MP_domain_base() : count(1), donext(0) {}
+MP_domain_base::MP_domain_base() : count(0), donext(0) {}
 
 void MP_domain::Forall(const Functor* op) const {
     if (condition.size()>0) {

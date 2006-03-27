@@ -12,37 +12,50 @@
 
 namespace flopc {
 
-    class MP_index_constant : public MP_index_base {
-	friend class MP_index_exp;
-    private:
-	MP_index_constant(const Constant& c) : C(c) {}
-	int evaluate() const {
-	    return int(C->evaluate()); 
-	}
-	MP_index* getIndex() const {
-	    return 0;
-	}
-	virtual MP_domain getDomain(MP_set* s) const{
-	    return MP_domain::Empty;
-	}
-	Constant C;
-    };
+  class MP_index_constant : public MP_index_base {
+    friend class MP_index_exp;
+  private:
+    MP_index_constant(const Constant& c) : C(c) {}
+    int evaluate() const {
+      return int(C->evaluate()); 
+    }
+    MP_index* getIndex() const {
+      return 0;
+    }
+    virtual MP_domain getDomain(MP_set* s) const{
+      return MP_domain::Empty;
+    }
+    Constant C;
+  };
 
-    class MP_index_subsetRef : public MP_index_base {
-	friend class MP_index_exp;
-    private:
-	MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
-	int evaluate() const {
-	    return int(S->evaluate()); 
-	}
-	MP_index* getIndex() const {
-	    return S->getIndex();
-	}
-	virtual MP_domain getDomain(MP_set* s) const{
-	    return MP_domain(S->getDomain(s));
-	}
-	const SUBSETREF* S;
-    };
+  class MP_index_subsetRef : public MP_index_base {
+    friend class MP_index_exp;
+  private:
+    MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
+    int evaluate() const {
+      return int(S->evaluate()); 
+    }
+    MP_index* getIndex() const {
+      return S->getIndex();
+    }
+    virtual MP_domain getDomain(MP_set* s) const{
+      return MP_domain(S->getDomain(s));
+    }
+    const SUBSETREF* S;
+  };
+  
+  MP_index_exp operator+(MP_index& i,const Constant& j) {
+    return new MP_index_sum(i,j);
+  }
+
+  MP_index_exp operator-(MP_index& i,const Constant& j) {
+    return new MP_index_dif(i,j);
+  }
+
+  MP_index_exp operator*(MP_index& i,const Constant& j) {
+    return new MP_index_mult(i,j);
+  }
+  
 
 } // End of namespace flopc
 

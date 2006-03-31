@@ -38,6 +38,7 @@ Samples/train.cpp -text
 Samples/train.dat -text
 Samples/transport.cpp -text
 Samples/xbsl.cpp -text
+experiment/test.cpp -text
 /flopc.cpp -text
 include/MP_boolean.hpp -text
 include/MP_constant.hpp -text

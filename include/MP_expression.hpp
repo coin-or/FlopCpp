@@ -77,7 +77,7 @@ namespace flopc {
     private:
 	int count;
     public:
-	MP_expression_base() : count(1) {}
+	MP_expression_base() : count(0) {}
 
 	virtual double level() const = 0;
 	virtual void generate(const MP_domain& domain,

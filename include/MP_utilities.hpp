@@ -79,38 +79,75 @@ namespace flopc {
 	string name;
     };
 
+//     template<class T> class Handle {
+//     public:
+// 	T operator->() const {
+// 	    return root;
+// 	}
+//       // protected:
+// 	Handle(T r) : root(r) {
+// 	  if (root!=0) {
+// 	    root->count++;
+// 	  }
+// 	}
+// 	Handle(const Handle& h) : root(h.root) {
+// 	  if (root!=0) {
+// 	    root->count++;
+// 	  }
+// 	}
+// 	const Handle& operator=(const Handle& h) {
+// 	  if (h.root!=0) {
+// 	    h.root->count++;
+// 	  }
+// 	  if (--(root->count) == 0) {
+// 	    delete root;
+// 	  }
+// 	  root = h.root;
+// 	  return *this;
+// 	}
+
+// 	~Handle() {
+// 	    if (--(root->count) == 0) {
+// 		delete root;
+// 	    }
+// 	}
+// 	T root;
+//     };
+
     template<class T> class Handle {
     public:
 	T operator->() const {
 	    return root;
 	}
     public:
-	Handle(T r) : root(r) {}
-	Handle(const Handle& h) : root(h.root) {
-	    if (root!=0) {
-		root->count++;
-	    }
+      Handle(T r) : root(r) {
+	if (root!=0) {
+	  root->count++;
 	}
-	const Handle& operator=(const Handle& h) {
-	    if (root!=h.root) {
-		if ((root!=0) && (--(root->count)==0)) {
-		    delete root;
-		    root = 0; // TF
-		}
-		root = h.root;
-		if (root!=0) {
-		    root->count++;
-		}
-	    }
-	    return *this;
+      }
+      Handle(const Handle& h) : root(h.root) {
+	if (root!=0) {
+	  root->count++;
 	}
-	~Handle() {
-	    if ((root!=0) && (--(root->count)==0)) {
-		delete root;
-		root = 0; // TF
-	    }
+      }
+      const Handle& operator=(const Handle& h) {
+	if (root!=h.root) {
+	  if ((root!=0) && (--(root->count)==0)) {
+	    delete root;
+	  }
+	  root = h.root;
+	  if (root!=0) {
+	    root->count++;
+	  }
 	}
-	T root;
+	return *this;
+      }
+      virtual ~Handle() {
+	if ((root!=0) && (--(root->count)==0)) {
+	  delete root;
+	}
+      }
+      T root;
     };
 
 } // End of namespace flopc

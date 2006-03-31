@@ -24,6 +24,7 @@ Samples/coex.cpp -text
 Samples/coexx.cpp -text
 Samples/cross.cpp -text
 Samples/cuttingStock.cpp -text
+Samples/fixed.dat -text
 Samples/gapmin.cpp -text
 Samples/magic.cpp -text
 Samples/mine.cpp -text

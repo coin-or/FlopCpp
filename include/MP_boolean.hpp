@@ -24,7 +24,7 @@ namespace flopc {
     public:
 	virtual bool evaluate() const = 0;
     protected:
-	Boolean_base() : count(1) {}
+	Boolean_base() : count(0) {}
 	virtual ~Boolean_base() {}
 
 	int count;

@@ -52,12 +52,12 @@ void MP_constraint::coefficients(GenerateFunctor& f) {
 
     vector<Constant> v;
 
-    if (I1.root!=0) {
+        if (I1.root!=0) {
 	left->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,1.0);
  	right->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,-1.0);
-     } else {
- 	cout<<"FLOPC++ Warning: Constraint declared but not defined."<<endl;
-     }
+	 } else {
+		cout<<"FLOPC++ Warning: Constraint declared but not defined."<<endl;
+	}
 }
 
 void MP_constraint::insertVariables(set<MP_variable*>& v) {

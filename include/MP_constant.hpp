@@ -18,7 +18,7 @@ namespace flopc {
     public:
 	virtual double evaluate() const = 0;
     protected:
-	Constant_base() : count(1) {}
+	Constant_base() : count(0) {}
 	virtual ~Constant_base() {}
 	int count;
     };

@@ -16,7 +16,7 @@ using std::set;
 
 #include "MP_expression.hpp"
 #include "MP_constraint.hpp"
-#include "CoinPackedVector.hpp"
+#include <CoinPackedVector.hpp>
 class OsiSolverInterface;
 
 namespace flopc {

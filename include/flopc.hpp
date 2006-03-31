@@ -20,30 +20,47 @@
 #include "MP_model.hpp"
 
 namespace flopc {
-     
-    void forall(const MP_domain& d, const Functor& f) {
-	d.Forall(&f);
-    }
 
-    void forall(const Functor& f) {
-	forall(MP_domain::Empty, f);
-    }
+  // Initialization of static member data
+  MP_index& MP_index::Empty = *new MP_index();
+  MP_index& MP_index::Any = *new MP_index();
+  MP_index_exp MP_index_exp::Empty =  *new MP_index_exp(Constant(0.0));
 
-    void operator<<=(const MP_domain& s, const MP_domain& d) {
-	d.Forall( s->makeInsertFunctor());
-    }
+  double MP_data::outOfBoundData = 0;
 
-    void minimize(const MP_expression &obj) {
-	MP_model::default_model.minimize(obj);
-    }
+  const MP_domain& MP_domain::Empty =
+  new MP_domain_set(&MP_set::Empty,&MP_index::Empty);
 
-    void minimize_max(MP_set& d, const MP_expression &obj) {
-	MP_model::default_model.minimize_max(d,obj);
-    }
+  MP_set MP_set::Empty = *new MP_set(1);
 
-    void maximize(const MP_expression &obj) {
-	MP_model::default_model.maximize(obj);
-    }
+  MP_model& MP_model::default_model = *new MP_model(0);
+  MP_model* MP_model::current_model = &MP_model::default_model;
+
+  
+  // Global functions
+  void forall(const MP_domain& d, const Functor& f) {
+    d.Forall(&f);
+  }
+
+  void forall(const Functor& f) {
+    forall(MP_domain::Empty, f);
+  }
+
+  void operator<<=(const MP_domain& s, const MP_domain& d) {
+    d.Forall( s->makeInsertFunctor());
+  }
+
+  void minimize(const MP_expression &obj) {
+    MP_model::default_model.minimize(obj);
+  }
+
+  void minimize_max(MP_set& d, const MP_expression &obj) {
+    MP_model::default_model.minimize_max(d,obj);
+  }
+
+  void maximize(const MP_expression &obj) {
+    MP_model::default_model.maximize(obj);
+  }
 
 } // End of namespace flopc
 #endif

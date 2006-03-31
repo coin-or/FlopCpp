@@ -47,7 +47,9 @@ main() {
 
     preselected(F(i,j,k)) = x(i,j,k) == 1;
 
-    minimize(sum(J(i)*J(j)*J(k),x(i,j,k)));
+    //    minimize(sum(J(i)*J(j)*J(k),x(i,j,k)));
+
+    minimize(x(0,0,0));
 
     for (int i=0; i<9; i++) {
       for (int j=0; j<9; j++) {

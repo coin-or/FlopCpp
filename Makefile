@@ -1,4 +1,4 @@
-CoinDir		= ..
+CoinDir		= /homespace/hultberg/COIN
 FlopcDir	= .
 
 CXX     =  g++

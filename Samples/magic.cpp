@@ -68,7 +68,7 @@ main() {
 
     MP_index i,j;
 
-    peak() = max(T(i), dem(i));
+    peak() = maximum(T(i), dem(i));
 
     ener(i) = dur(i)*dem(i);  
 

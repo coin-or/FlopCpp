@@ -105,7 +105,7 @@ main() {
     MP_index c1,c2,t1,t2;
 
     low(schedule) = ceil(demand(schedule));
-    high(schedule) = max (2, min (ceil(2*demand(schedule)), 
+    high(schedule) = maximum (2, minimum (ceil(2*demand(schedule)), 
 				  section*ceil(demand(schedule)/section) ));
     low.display("LOW");
     high.display("HIGH");

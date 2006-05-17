@@ -65,7 +65,7 @@ main() {
     double zlbest = 0.0;
     f.value(&ftable[0][0]);
 
-    zfeas() = sum(j, max(i, f(i,j)));
+    zfeas() = sum(j, maximum(i, f(i,j)));
     zfeas.display("zfeas");
 
     double alpha = 1.0;

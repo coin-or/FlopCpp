@@ -8,6 +8,7 @@
 
 #include <float.h>
 #include <cmath>
+#include <sstream>
 #include "MP_constant.hpp"
 #include "MP_data.hpp"
 #include "MP_domain.hpp"
@@ -15,6 +16,12 @@
 
 namespace flopc {
 
+	std::string Constant_base::toString()const
+	{
+		std::stringstream ss;
+		ss<<"Constant";
+		return ss.str();
+	}
     class Constant_index : public Constant_base {
 	friend class Constant;
     private:

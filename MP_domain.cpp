@@ -6,13 +6,24 @@
 // All Rights Reserved.
 //****************************************************************************
 
+#include <sstream>
 #include "MP_domain.hpp"
 #include "MP_set.hpp"
 #include "MP_boolean.hpp"
+#include "MP_model.hpp"
 
 namespace flopc {
 
-  class Functor_conditional : public Functor {
+
+  const MP_domain& MP_domain::Empty =
+  new MP_domain_set(&MP_set::getEmpty(),const_cast<MP_index *>(&MP_index::getEmpty()));
+
+  const MP_domain &MP_domain::getEmpty()
+  {
+    return Empty;
+  }
+
+	class Functor_conditional : public Functor {
   public:
     Functor_conditional(const Functor* f, const vector<MP_boolean> & condition)
       : F(f), Condition(condition) {}
@@ -32,6 +43,11 @@ namespace flopc {
     const Functor* F;
     vector<MP_boolean> Condition;
   };	
+
+std::string MP_domain::toString()const
+{
+	return operator->()->toString();
+}
 
   MP_domain operator*(const MP_domain& a, const MP_domain& b) {
     if (a.root == MP_domain::Empty.root) {
@@ -55,6 +71,23 @@ namespace flopc {
 }
 
 using namespace flopc;
+std::string MP_domain_base::toString()const
+{
+	std::stringstream ss;
+	;
+	if(this->getSet() != &(MP_set_base::getEmpty()))
+		ss<<"Over "<<this->getSet()->getName()<<"{"<<size()<<"}"<<std::ends;
+	return ss.str();
+}
+
+void MP_domain_base::display()const 
+{ 
+	// This is a bit of a hack, but until the messaging is separate from MOdel, this is the
+	// way to get output.
+	MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+}
+int MP_domain_base::size() const 
+{ return count;}
 
 MP_domain_base::MP_domain_base() : count(0), donext(0) {}
 

@@ -9,11 +9,42 @@
 #include "MP_index.hpp"
 #include "MP_domain.hpp"
 #include "MP_set.hpp"
+#include "MP_model.hpp"
 
 namespace flopc {
+  // Initialization of static member data
+  MP_index& MP_index::Empty = *new MP_index();
+  MP_index& MP_index::Any = *new MP_index();
+  MP_index_exp MP_index_exp::Empty =  *new MP_index_exp(Constant(0.0));
+
+   MP_index &MP_index::getEmpty()
+  {
+	  return Empty;
+  }
+  const MP_index_exp &MP_index_exp::getEmpty()
+  {
+	  return Empty;
+  }
+
+
+  void MP_index_base::display()const
+  {
+		MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+}
 
   class MP_index_constant : public MP_index_base {
     friend class MP_index_exp;
+  public:
+	  virtual std::string toString()const
+		{
+			std::stringstream ss;
+			ss<<"MP_index_constant = "<<C->evaluate()<<std::ends;
+			return ss.str();
+		}
+		void display()const
+		{
+			MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+		}
   private:
     MP_index_constant(const Constant& c) : C(c) {}
     int evaluate() const {
@@ -23,14 +54,25 @@ namespace flopc {
       return 0;
     }
     virtual MP_domain getDomain(MP_set* s) const{
-      return MP_domain::Empty;
+      return MP_domain::getEmpty();
     }
     Constant C;
   };
 
   class MP_index_subsetRef : public MP_index_base {
     friend class MP_index_exp;
-  private:
+  public:
+	virtual std::string toString()const
+		{
+			std::stringstream ss;
+			ss<<"MP_index_subsetRef = "<<toString()<<std::endl;
+			return ss.str();
+		}
+		void display()const
+		{
+			MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+		}
+private:
     MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
     int evaluate() const {
       return int(S->evaluate()); 
@@ -69,14 +111,33 @@ MP_domain MP_index::getDomain(MP_set* s) const{
 MP_domain MP_index_mult::getDomain(MP_set* s) const{
     return left->getDomain(s); 
 }
+std::string MP_index_mult::toString()const
+{
+		std::stringstream ss;
+		ss<<"("<<left->toString()<<" * "<<right->toString()<<")"<<std::endl;
+		return ss.str();
+}
 
 MP_domain MP_index_sum::getDomain(MP_set* s) const{
     return left->getDomain(s); 
 }
 
+std::string MP_index_sum::toString()const
+{
+		std::stringstream ss;
+		ss<<"("<<left->toString()<<" + "<<right->toString()<<")"<<std::endl;
+		return ss.str();
+}
 MP_domain MP_index_dif::getDomain(MP_set* s) const{
     return left->getDomain(s);
 }
+std::string MP_index_dif::toString()const
+{
+		std::stringstream ss;
+		ss<<"("<<left->toString()<<" - "<<right->toString()<<")"<<std::endl;
+		return ss.str();
+}
+
 
 MP_index_exp::MP_index_exp(int i) : 
     Handle<MP_index_base*>(new MP_index_constant(Constant(i))) {} 
@@ -90,3 +151,24 @@ MP_index_exp::MP_index_exp(const Constant& c) :
 MP_index_exp::MP_index_exp(MP_index& i) : 
     Handle<MP_index_base*>(&i) { root->count++; }
 
+MP_index_exp::MP_index_exp(const MP_index_exp &other):
+	Handle<MP_index_base*>((const Handle<MP_index_base*> &)other) {}
+
+std::string MP_index::toString()const
+{
+	std::stringstream ss;
+	if(isInstantiated())
+	{
+		ss<<"MP_index "<<index<<std::ends;
+	}
+	else
+	{
+		ss<<"MP_index not instantiated";
+	}
+	return ss.str();
+}
+
+std::string MP_index_exp::toString()const
+{
+	return operator->()->toString();
+}

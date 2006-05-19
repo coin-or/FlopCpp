@@ -18,6 +18,7 @@ using std::endl;
 #include "MP_expression.hpp" 
 
 using namespace flopc;
+ double MP_data::outOfBoundData = 0;
 
 const DataRef& DataRef::operator=(const Constant& c) {
     C = c;
@@ -60,11 +61,11 @@ double& DataRef::evaluate_lhs() const {
 }
 
 void MP_data::operator()() const {
-    if (&S1!=&MP_set::Empty) cout << i1.evaluate() << " ";
-    if (&S2!=&MP_set::Empty) cout << i2.evaluate() << " ";
-    if (&S3!=&MP_set::Empty) cout << i3.evaluate() << " ";
-    if (&S4!=&MP_set::Empty) cout << i4.evaluate() << " ";
-    if (&S5!=&MP_set::Empty) cout << i5.evaluate() << " ";
+    if (&S1!=&MP_set::getEmpty()) cout << i1.evaluate() << " ";
+    if (&S2!=&MP_set::getEmpty()) cout << i2.evaluate() << " ";
+    if (&S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
+    if (&S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
+    if (&S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
     cout<<"  "<<v[f(i1.evaluate(),i2.evaluate(),i3.evaluate(),
 		    i4.evaluate(),i5.evaluate())] << endl;
 }

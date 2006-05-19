@@ -7,6 +7,7 @@
 //****************************************************************************
 
 #include <iostream>
+#include <sstream>
 using std::cout;
 using std::endl;
 
@@ -17,6 +18,31 @@ using std::endl;
 #include "MP_data.hpp"
 
 using namespace flopc;
+
+std::string MP_constraint::toString() const {
+	std::stringstream ss;
+	ss<<" S.T.: "<<getName();
+	for (size_t i=offset; i<offset+size(); i++) 
+	{
+		if(M->bl!=NULL)
+		{
+			ss<<"@"<<i<<" lb/ub:"<<M->bl[i]<<"/"<<M->bu[i];
+			if(M->rowActivity)
+				ss<<(M->rowActivity[i]!=0)?" active:":" inactive";
+			else
+				ss<<" No row info: solve not run";
+			if(M->rowPrice)
+				ss<<"  RowPrice:"<<M->rowPrice[i];
+			ss<<std::ends;
+		}
+		else
+		{
+			ss<<" Model not yet generated";
+		}
+		ss<<"-->"<<left->toString()<<" "<<right->toString()<<"<--";
+	}
+	return ss.str();
+}
 
 void MP_constraint::operator=(const Constraint &v) {
    left = v.left;

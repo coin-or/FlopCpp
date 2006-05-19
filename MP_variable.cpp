@@ -7,6 +7,7 @@
 //****************************************************************************
 
 #include <iostream>
+#include <sstream>
 using std::cout;
 using std::endl;
 
@@ -15,7 +16,6 @@ using std::endl;
 #include "MP_domain.hpp" 
 #include "MP_constant.hpp" 
 #include "MP_model.hpp"
-
 using namespace flopc;
 
 VariableRef::VariableRef(MP_variable* v, 
@@ -27,6 +27,15 @@ VariableRef::VariableRef(MP_variable* v,
     V(v),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5) { 
     offset = v->offset; 
 }
+std::string VariableRef::toString()const
+{
+	if(V)
+	{
+		return V->toString();
+	}
+	return "Variable not bound yet";
+}
+
 
 double VariableRef::level() const {
     return  V->M->solution[V->offset +
@@ -71,7 +80,7 @@ MP_variable::MP_variable(const MP_set_base &s1,
     lowerLimit(MP_data(s1,s2,s3,s4,s5)),
     S1(&s1),S2(&s2),S3(&s3),S4(&s4),S5(&s5) {
     lowerLimit.initialize(0.0);
-    upperLimit.initialize(MP_model::default_model.getInfinity());
+    upperLimit.initialize(MP_model::getDefaultModel().getInfinity());
     type = continuous;
 }    
 
@@ -80,11 +89,11 @@ double MP_variable::level(int i1, int i2, int i3, int i4, int i5) {
 }
 
 void MP_variable::operator()() const {
-    if (S1!=&MP_set::Empty) cout << i1.evaluate() << " ";
-    if (S2!=&MP_set::Empty) cout << i2.evaluate() << " ";
-    if (S3!=&MP_set::Empty) cout << i3.evaluate() << " ";
-    if (S4!=&MP_set::Empty) cout << i4.evaluate() << " ";
-    if (S5!=&MP_set::Empty) cout << i5.evaluate() << " ";
+    if (S1!=&MP_set::getEmpty()) cout << i1.evaluate() << " ";
+    if (S2!=&MP_set::getEmpty()) cout << i2.evaluate() << " ";
+    if (S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
+    if (S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
+    if (S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
     cout<<"  "<< M->solution[offset +
 			     f(i1.evaluate(),
 			       i2.evaluate(),
@@ -93,6 +102,22 @@ void MP_variable::operator()() const {
 			       i5.evaluate())]<<endl;
 }
 
+std::string MP_variable::toString()const 
+{
+	std::stringstream ss;
+	ss<<getName();
+	if(S1&&S1!= &(MP_set::getEmpty()))
+		ss<<"["<<S1->toString()<<"]";
+	if(S2&&S2!= &(MP_set::getEmpty()))
+		ss<<"["<<S2->toString()<<"]";
+	if(S3&&S3!= &(MP_set::getEmpty()))
+		ss<<"["<<S3->toString()<<"]";
+	if(S4&&S4!= &(MP_set::getEmpty()))
+		ss<<"["<<S4->toString()<<"]";
+	if(S5&&S5!= &(MP_set::getEmpty()))
+		ss<<"["<<S5->toString()<<"]";
+	return ss.str();
+}
 void MP_variable::display(string s) {
     cout<<s<<endl;
     ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).Forall(this);

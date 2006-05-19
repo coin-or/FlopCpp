@@ -7,6 +7,7 @@
 //****************************************************************************
 
 #include <iostream>
+#include <sstream>
 using std::cout;
 using std::endl;
 #include <algorithm>
@@ -19,6 +20,11 @@ using std::endl;
 #include "Timer.hpp"
 
 using namespace flopc;
+
+  MP_model& MP_model::default_model = *new MP_model(0);
+  MP_model* MP_model::current_model = &MP_model::default_model;
+  MP_model &MP_model::getDefaultModel() { return default_model;}
+  MP_model *MP_model::getCurrentModel() { return current_model;}
 
 void NormalMessenger::statistics(int bm, int m, int bn, int n, int nz) {
     cout<<"FLOPC++: Number of constraint blocks: " <<bm<<endl;
@@ -86,8 +92,8 @@ void MP_model::addRow(const Constraint& c) {
     vector<Coef> cfs;
     vector<Constant> v;
     ObjectiveGenerateFunctor f(cfs);
-    c.left->generate(MP_domain::Empty,v,f,1.0);
-    c.right->generate(MP_domain::Empty,v,f,-1.0);
+    c.left->generate(MP_domain::getEmpty(),v,f,1.0);
+    c.right->generate(MP_domain::getEmpty(),v,f,-1.0);
     CoinPackedVector newRow;
     double rhs = 0.0;
     for (unsigned int j=0; j<cfs.size(); j++) {
@@ -326,14 +332,14 @@ void MP_model::generate() {
     if (doAssemble == true) {
 	ObjectiveGenerateFunctor f(cfs);
 	coefs.erase(coefs.begin(),coefs.end());
-	Objective->generate(MP_domain::Empty, v, f, 1.0);
+	Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
 
 	messenger->objectiveDebug(cfs);
 	assemble(cfs,coefs);
     } else {
 	ObjectiveGenerateFunctor f(coefs);
 	coefs.erase(coefs.begin(),coefs.end());
-	Objective->generate(MP_domain::Empty, v, f, 1.0);
+	Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
     }	
 
     c =  new double[n]; 
@@ -421,3 +427,21 @@ void MP_model::generate() {
 	cout<<"FLOPC++: Solution process abandoned."<<endl;
     }
 }
+
+std::string MP_model::toString()const
+{
+	std::stringstream ss;
+	ss<<"min/max:"<<Objective.toString()<<"\n";
+	for(std::set<MP_constraint *>::const_iterator cci = Constraints.begin();
+		cci != Constraints.end();cci++)
+	{
+		ss<<(*cci)->toString()<<"\n";
+	}
+	for(std::set<MP_variable *>::const_iterator vci = Variables.begin();
+		vci != Variables.end();vci++)
+	{
+		ss<<(*vci)->toString()<<"\n";
+	}
+	return ss.str();
+}
+

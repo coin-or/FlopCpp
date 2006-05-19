@@ -26,6 +26,8 @@ namespace flopc {
 	friend class MP_variable;
     public:
 	int getColumn() const;
+	virtual std::string toString()const;
+
     private:
 	VariableRef(MP_variable* v, 
 		    const MP_index_exp& i1,
@@ -52,16 +54,18 @@ namespace flopc {
     };
 
 
-    class MP_variable : public RowMajor, public Functor {
+    class MP_variable : public RowMajor, public Functor , public Named{
 	friend class MP_model;
 	friend class DisplayVariable;
 	friend class VariableRef;
     public:
-	MP_variable(const MP_set_base &s1 = MP_set::Empty, 
-		    const MP_set_base &s2 = MP_set::Empty, 
-		    const MP_set_base &s3 = MP_set::Empty,
-		    const MP_set_base &s4 = MP_set::Empty, 
-		    const MP_set_base &s5 = MP_set::Empty);
+	MP_variable(const MP_set_base &s1 = MP_set::getEmpty(), 
+		    const MP_set_base &s2 = MP_set::getEmpty(), 
+		    const MP_set_base &s3 = MP_set::getEmpty(),
+		    const MP_set_base &s4 = MP_set::getEmpty(), 
+		    const MP_set_base &s5 = MP_set::getEmpty());
+		void display(const std::string &s = "");  
+		virtual std::string toString()const;
 
 	~MP_variable() {
 	}
@@ -69,11 +73,11 @@ namespace flopc {
 	double level(int i1=0, int i2=0, int i3=0, int i4=0, int i5=0);
 
 	const VariableRef& operator()(
-	    const MP_index_exp& d1 = MP_index_exp::Empty, 
-	    const MP_index_exp& d2 = MP_index_exp::Empty, 
-	    const MP_index_exp& d3 = MP_index_exp::Empty,
-	    const MP_index_exp& d4 = MP_index_exp::Empty, 
-	    const MP_index_exp& d5 = MP_index_exp::Empty
+	    const MP_index_exp& d1 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& d2 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& d3 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& d4 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& d5 = MP_index_exp::getEmpty()
 	    ) {
 	    return *new VariableRef(this, d1, d2, d3, d4, d5);
 	}
@@ -103,11 +107,11 @@ namespace flopc {
 
     class MP_binary_variable : public MP_variable {
     public:
-	MP_binary_variable(const MP_set_base &s1 = MP_set::Empty, 
-			   const MP_set_base &s2 = MP_set::Empty, 
-			   const MP_set_base &s3 = MP_set::Empty,
-			   const MP_set_base &s4 = MP_set::Empty, 
-			   const MP_set_base &s5 = MP_set::Empty) :
+	MP_binary_variable(const MP_set_base &s1 = MP_set::getEmpty(), 
+			   const MP_set_base &s2 = MP_set::getEmpty(), 
+			   const MP_set_base &s3 = MP_set::getEmpty(),
+			   const MP_set_base &s4 = MP_set::getEmpty(), 
+			   const MP_set_base &s5 = MP_set::getEmpty()) :
 	    MP_variable(s1,s2,s3,s4,s5) {
 	    binary();
 	}

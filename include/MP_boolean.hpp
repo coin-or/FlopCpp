@@ -41,6 +41,11 @@ namespace flopc {
 	MP_boolean(SUBSETREF& c); 
 
 	MP_boolean(Boolean_base* r) : Handle<Boolean_base*>(r) {};
+	virtual std::string toString()const{ 
+		if(root->evaluate())
+			return "BooleanBase::true";
+		return "BooleanBase::false";
+	}
     };
 
     MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
@@ -58,6 +63,8 @@ namespace flopc {
     MP_boolean operator>(const Constant& e1, const Constant& e2);
     MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
     MP_boolean operator==(const Constant& e1, const Constant& e2);
+    MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
+    MP_boolean operator!=(const Constant& e1, const Constant& e2);
 
 } // End of namespace flopc
 #endif

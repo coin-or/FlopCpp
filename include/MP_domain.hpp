@@ -40,6 +40,9 @@ namespace flopc {
     virtual const MP_set_base* getSet() const = 0;
 
     int size() const;
+	virtual std::string toString()const;
+	void display()const;
+
     const Functor* donext;
   };
   
@@ -57,11 +60,14 @@ namespace flopc {
     }
 
     void Forall(const Functor* op) const;
-    static const MP_domain& Empty;
     int size() const;
 
     vector<MP_boolean> condition;
     MP_domain_base* last;
+	virtual std::string toString()const;
+	static const MP_domain &getEmpty();
+  private:
+    static const MP_domain& Empty;
   };
 
 
@@ -126,7 +132,7 @@ namespace flopc {
 	} else {
 	  isBound[j] = false;
 	  allBound = false;
-	  if (I[j]!=const_cast<MP_index* const>(&MP_index::Empty)) {
+	  if (I[j]!=const_cast<MP_index* const>(&MP_index::getEmpty())) {
 	    I[j]->instantiate();
 	  }
 	}

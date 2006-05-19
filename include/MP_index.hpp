@@ -12,7 +12,6 @@
 #include "MP_utilities.hpp"
 #include "MP_constant.hpp"
 
-
 namespace flopc {
 
   class MP_index;
@@ -26,6 +25,8 @@ namespace flopc {
     virtual int evaluate() const = 0;
     virtual MP_index* getIndex() const = 0;
     virtual MP_domain getDomain(MP_set* s) const = 0;
+	virtual void display()const;
+	virtual std::string toString()const=0;
   protected:
     MP_index_base() : count(0) {}
     virtual ~MP_index_base() {}
@@ -56,8 +57,11 @@ namespace flopc {
     }
     virtual MP_domain getDomain(MP_set* s) const;
     static MP_index& Any;
-    static MP_index& Empty;
+	static MP_index &getEmpty();
+	virtual std::string toString()const;
+
   private:
+    static MP_index& Empty;
     int index;
     bool instantiated;
   };
@@ -74,6 +78,10 @@ namespace flopc {
     MP_index_exp(const Constant& c);
     MP_index_exp(MP_index& i);
     MP_index_exp(const SUBSETREF& d);
+    MP_index_exp(const MP_index_exp& other);
+    static const MP_index_exp &getEmpty();
+	virtual std::string toString()const;
+  private:
     static MP_index_exp Empty;
   };
 
@@ -91,6 +99,7 @@ namespace flopc {
     virtual MP_domain getDomain(MP_set* s) const;
     MP_index_exp left;
     Constant right;
+	virtual std::string toString()const;
   };
 
   class MP_index_sum : public MP_index_base {
@@ -107,6 +116,7 @@ namespace flopc {
     virtual MP_domain getDomain(MP_set* s) const;
     MP_index_exp left;
     Constant right;
+	virtual std::string toString()const;
   };
 
   class MP_index_dif : public MP_index_base {
@@ -123,6 +133,7 @@ namespace flopc {
     virtual MP_domain getDomain(MP_set* s) const;
     MP_index_exp left;
     Constant right;
+	virtual std::string toString()const;
   };
 
 } // End of namespace flopc

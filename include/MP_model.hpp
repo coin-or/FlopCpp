@@ -28,6 +28,8 @@ class MP_set;
 
 
 class Messenger {
+public:
+	virtual void logMessage(int level, const char * const msg){}
     friend class MP_model;
 private:
     virtual void constraintDebug(string name, const vector<Coef>& cfs) {}
@@ -85,8 +87,6 @@ public:
    
     void minimize_max(MP_set& d, const MP_expression &obj);
     void setObjective(const MP_expression& o);
-    static MP_model& default_model;
-    static MP_model* current_model;
     const double* solution;
     const double* reducedCost;
     const double* rowPrice;
@@ -96,7 +96,13 @@ public:
     void add(MP_variable* v);
     void addRow(const Constraint& c); 
 
+	static MP_model &getDefaultModel();
+	static MP_model *getCurrentModel();
+	std::string toString()const;
+	Messenger *getMessenger(){ return messenger;}
 private:
+    static MP_model& default_model;
+    static MP_model* current_model;
     MP_model(const MP_model&);
     MP_model& operator=(const MP_model&);
 

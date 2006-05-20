@@ -105,25 +105,8 @@ public:
 	      const MP_set& s5=MP_set::getEmpty()) {
 	S = makeVector<nbr,const MP_set*>(&s1,&s2,&s3,&s4,&s5);
     }
-	void display(const std::string& s = "") const 
-	{
-		Messenger &msgr = MP_model::getCurrentModel()->getMessenger();
-		if(msgr.logging(5))
-		{
-			msgr.logMessage(5,s.c_str());
-			std::map<std::vector<int>, int>::const_iterator i;
-			for (i = elements.begin(); i != elements.end(); i++) 
-			{
-				std::stringstream ss;
-				for (int j=0; j<nbr; j++) 
-				{
-					ss<<(*i).first[j]<<"  ";
-				}
-				ss<<(*i).second<<std::ends;
-				msgr.logMessage(5,ss.str().c_str());
-			}
-		}
-	}
+	void display(const std::string& s )const ;
+	
 
     MP_subset(vector<const MP_set*> s) : S(s) {}
 
@@ -254,11 +237,6 @@ private:
 			ss<<" I5=<"<<I4.toString()<<">="<<I5->toString();
 		}
 		return ss.str();
-	}
-	void display()const
-	{
-		Messenger &msgr=*MP_model::getCurrentModel()->getMessenger();
-		msgr.logMessage(5,toString().c_str());
 	}
     
 	operator MP_domain() const {

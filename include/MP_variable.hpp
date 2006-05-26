@@ -82,7 +82,7 @@ namespace flopc {
 	    return *new VariableRef(this, d1, d2, d3, d4, d5);
 	}
     
-	void display(string s = "");  
+	//void display(string s = "");  
 
 	void binary() { 
 	    upperLimit.initialize(1);

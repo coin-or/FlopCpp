@@ -14,7 +14,7 @@ Bracken, J, and McCormick, G P, Chapter 3. In Selected Applications of
 Nonlinear Programming. John Wiley and Sons, New York, 1968, pp. 28-36.
 */
 
-main() {
+int main() {
     MP_model bid(new OsiCbcSolverInterface);
 
     enum { a, b, c, d, e, nbrV};

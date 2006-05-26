@@ -56,7 +56,7 @@ double knapsack(int n, double* a, const double* c, double b, double* pat) {
     return KnapSack->getObjValue();
 }
 
-main() {
+int main() {
     const int numWidths = 5;
     double tabDemand[] = {150, 96, 48, 108, 227};
     double tabWidth[] = {17, 21, 22.5, 24, 29.5};

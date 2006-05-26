@@ -2,6 +2,7 @@
 #include "flopc.hpp"
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
+#include <utility>
 
 /* This is a FLOPC++ version of the model gapmin.gms from 
    the GAMS model library.
@@ -39,7 +40,7 @@ public:
     }
 };
 
-main() {
+int main() {
     const int numResources = 5; const int numItems = 10;
     MP_set  i(numResources), j(numItems);
  
@@ -96,7 +97,7 @@ main() {
 	zl() = zlr + sum(j, w(j));
 
 	bool improve = (zl>zlbest);
-	zlbest = std::max(zlbest,zl(0));
+	zlbest = std::max<double>(zlbest,zl(0));
 	
 	double norm = 0.0;
 	for (int jc=0; jc<j.size(); jc++) {

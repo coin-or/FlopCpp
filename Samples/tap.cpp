@@ -39,7 +39,7 @@ public:
     }    
 };
 
-main() {
+int main() {
     double stab_1[6]  = {5,5,6,6,6,6};
     double dtab_1[4]  = {4, 7, 10, 11};
     double stab_2[7] =  {9,9,10,12,12,12,16};

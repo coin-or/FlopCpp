@@ -59,7 +59,7 @@ void VerboseMessenger::objectiveDebug(const vector<Coef>& cfs) {
 }
 
 MP_model::MP_model(OsiSolverInterface* s, Messenger* m) : 
-    messenger(m), Objective(0), Solver(s),  m(0), n(0), nz(0) {
+    messenger(m), Objective(0), Solver(s),  m(0), n(0), nz(0), bl(0) {
     MP_model::current_model = this;
 }
 

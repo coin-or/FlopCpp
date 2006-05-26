@@ -6,106 +6,104 @@
 // All Rights Reserved.
 //****************************************************************************
 
-#include <sstream>
 #include "MP_domain.hpp"
 #include "MP_set.hpp"
 #include "MP_boolean.hpp"
 #include "MP_model.hpp"
-
-namespace flopc {
-
-
-  const MP_domain& MP_domain::Empty =
-  new MP_domain_set(&MP_set::getEmpty(),const_cast<MP_index *>(&MP_index::getEmpty()));
-
-  const MP_domain &MP_domain::getEmpty()
-  {
-    return Empty;
-  }
-
-	class Functor_conditional : public Functor {
-  public:
-    Functor_conditional(const Functor* f, const vector<MP_boolean> & condition)
-      : F(f), Condition(condition) {}
-    virtual ~Functor_conditional() {}
-    void operator()() const {
-      bool goOn = true;
-      for (unsigned int i = 0; i<Condition.size(); i++) {
-	if (Condition[i]->evaluate()==false) {
-	  goOn = false;
-	  break;
-	}
-      }
-      if (goOn == true) {
-	F->operator()();
-      }
-    }
-    const Functor* F;
-    vector<MP_boolean> Condition;
-  };	
-
-std::string MP_domain::toString()const
+namespace flopc 
 {
-	return operator->()->toString();
-}
-
-  MP_domain operator*(const MP_domain& a, const MP_domain& b) {
-    if (a.root == MP_domain::Empty.root) {
-      return b;
-    } else if (b.root == MP_domain::Empty.root) {
-      return a;
-    } else {
-      MP_domain retval = a;
-      retval.last->donext = b.root;
-      b.root->count+=1;
-      a.root->count+=1;
-      retval.last = b.last;
-      retval.condition.insert(retval.condition.end(),b.condition.begin(),
-			      b.condition.end());
-      return retval;
+    MP_domain_set::MP_domain_set(const MP_set* s, MP_index* i) 
+        : S(s), I(i) 
+    {
+	} 
+	MP_domain_set::~MP_domain_set()
+	{
+	}
+    MP_domain MP_domain_set::getDomain(MP_set* s) const 
+    {
+        return MP_domain(const_cast<MP_domain_set*>(this));
     }
-  }
-  
 
-
+    class Functor_conditional : public Functor 
+    {
+    public:
+        Functor_conditional(const Functor* f, const std::vector<MP_boolean> & condition)
+            : F(f), Condition(condition) {}
+            virtual ~Functor_conditional() {}
+            void operator()() const 
+            {
+                bool goOn = true;
+                for (size_t i = 0; i<Condition.size(); i++) 
+                {
+                    if (Condition[i]->evaluate()==false) 
+                    {
+                        goOn = false;
+                        break;
+                    }
+                }
+                if (goOn == true) 
+                {
+                    F->operator()();
+                }
+            }
+            const Functor* F;
+            std::vector<MP_boolean> Condition;
+    };	
 }
 
 using namespace flopc;
-std::string MP_domain_base::toString()const
+
+const MP_domain* MP_domain::Empty = NULL;
+const MP_domain& MP_domain::getEmpty() 
 {
-	std::stringstream ss;
-	;
-	if(this->getSet() != &(MP_set_base::getEmpty()))
-		ss<<"Over "<<this->getSet()->getName()<<"{"<<size()<<"}"<<std::ends;
-	return ss.str();
+	if(Empty==NULL)
+		Empty= new MP_domain(new MP_domain_set(&MP_set::getEmpty(),&MP_set::getEmpty()));
+    return *Empty;
 }
+
+
+ MP_domain_base::MP_domain_base() : count(0), donext(0) {}
+MP_domain_base::~MP_domain_base()
+{}
+Functor* MP_domain_base::makeInsertFunctor() const 
+{return NULL;}
+size_t MP_domain_base::size() const 
+{ return count;}
+
 
 void MP_domain_base::display()const 
 { 
-	// This is a bit of a hack, but until the messaging is separate from MOdel, this is the
-	// way to get output.
-	MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+	std::stringstream ss;
+	ss<<"domain_base::display() size="<<size()<<std::ends;
+	MP_model::getCurrentModel()->getMessenger()->logMessage(5,ss.str().c_str());
 }
-int MP_domain_base::size() const 
-{ return count;}
-
-MP_domain_base::MP_domain_base() : count(0), donext(0) {}
+MP_domain::MP_domain() : Handle<MP_domain_base*>(0), last(0) {}
+MP_domain::MP_domain(MP_domain_base* r) : Handle<MP_domain_base*>(r), last(r) {}
+MP_domain::~MP_domain()
+{
+}
+MP_domain MP_domain::such_that(const MP_boolean& b) {
+    if (b.operator ->() != 0) {
+        condition.push_back(b);
+    }
+    return *this;
+}
 
 void MP_domain::Forall(const Functor* op) const {
     if (condition.size()>0) {
-	last->donext = new Functor_conditional(op,condition);
+        last->donext = new Functor_conditional(op,condition);
     } else {
-	last->donext = op;
+        last->donext = op;
     }
-    root->operator()();
+    operator->()->operator()();
 }
 
 const MP_set_base* MP_domain_set::getSet() const {
     return S;
 }
 
-int MP_domain::size() const {
-    return root->getSet()->size();
+size_t MP_domain::size() const {
+    return operator->()->getSet()->size();
 }
 
 int MP_domain_set::evaluate() const {
@@ -114,14 +112,58 @@ int MP_domain_set::evaluate() const {
 
 void MP_domain_set::operator()() const {
     if (I->isInstantiated() == true) {
-	(*donext)(); 
+        (*donext)(); 
     } else {
-	I->instantiate();
-	for (int k=0; k<S->size(); k++) {
-	    I->assign(k);
-	    (*donext)();
-	}
-	I->assign(0);
-	I->unInstantiate();
+        I->instantiate();
+        for (size_t k=0; k<S->size(); k++) {
+            I->assign(k);
+            (*donext)();
+        }
+        I->assign(0);
+        I->unInstantiate();
     }
+}
+	std::string MP_domain_set::toString()const
+	{	
+		std::stringstream ss;
+		if(I)
+		{	
+			if(I->isInstantiated())
+				ss<<"I instantiated"<<I->toString();
+			else
+				ss<<"I not instantiated"<<std::endl;
+		}
+		return ss.str();
+	}
+
+MP_index* MP_domain_set::getIndex() const 
+{
+	return I;
+}
+
+std::string MP_domain ::toString()const
+{
+	return "MP_domain "+operator->()->toString();
+}
+
+flopc::MP_domain flopc::operator*(const flopc::MP_domain& a, const flopc::MP_domain& b)
+{
+    if (a.operator->() == MP_domain::getEmpty().operator->()) {
+        return b;
+    } else if (b.operator->() == MP_domain::getEmpty().operator->()) {
+        return a;
+    } else {
+        MP_domain retval = a;
+        retval.last->donext = b.operator->();
+        const_cast<MP_domain&>(b).increment();
+        const_cast<MP_domain&>(a).increment();
+        retval.last = b.last;
+        retval.condition.insert(retval.condition.end(),b.condition.begin(),
+            b.condition.end());
+        return retval;
+    }
+
+
+
+
 }

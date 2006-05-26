@@ -118,7 +118,7 @@ std::string MP_variable::toString()const
 		ss<<"["<<S5->toString()<<"]";
 	return ss.str();
 }
-void MP_variable::display(string s) {
+void MP_variable::display(const std::string &s) {
     cout<<s<<endl;
-    ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).Forall(this);
+    //((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).Forall(this);
 }

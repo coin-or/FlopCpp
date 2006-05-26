@@ -149,7 +149,7 @@ MP_index_exp::MP_index_exp(const Constant& c) :
     Handle<MP_index_base*>(new MP_index_constant(c)) {}
 
 MP_index_exp::MP_index_exp(MP_index& i) : 
-    Handle<MP_index_base*>(&i) { root->count++; }
+    Handle<MP_index_base*>(&i) { operator->()->count++; }
 
 MP_index_exp::MP_index_exp(const MP_index_exp &other):
 	Handle<MP_index_base*>((const Handle<MP_index_base*> &)other) {}

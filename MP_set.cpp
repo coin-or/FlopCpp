@@ -14,7 +14,7 @@ using namespace flopc;
 namespace flopc {
 
   MP_set MP_set::Empty = *new MP_set(1);
-  const MP_set &MP_set::getEmpty()
+  MP_set &MP_set::getEmpty()
   {
 	  return Empty;
   }

@@ -215,7 +215,10 @@ using namespace flopc;
 std::string MP_expression::toString()const
 {
 	std::stringstream ss;
-	ss<<operator->()->toString();
+	if(operator->())
+		ss<<operator->()->toString();
+	else
+		ss<<"Objective not instantiated";
 	return ss.str();
 }
 

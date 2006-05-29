@@ -107,19 +107,19 @@ public:
     }
 	void display(const std::string& s = "") const 
 	{
-		Messenger &msgr = *MP_model::getCurrentModel()->getMessenger();
-		msgr.logMessage(5,s.c_str());
-		std::map<std::vector<int>, int>::const_iterator i;
-		for (i = elements.begin(); i != elements.end(); i++) 
-		{
-			std::stringstream ss;
-			for (int j=0; j<nbr; j++) 
-			{
-				ss<<(*i).first[j]<<"  ";
-			}
-			ss<<(*i).second<<std::ends;
-			msgr.logMessage(5,ss.str().c_str());
-		}
+// 		Messenger &msgr = *MP_model::getCurrentModel()->getMessenger();
+// 		msgr.logMessage(5,s.c_str());
+// 		std::map<std::vector<int>, int>::const_iterator i;
+// 		for (i = elements.begin(); i != elements.end(); i++) 
+// 		{
+// 			std::stringstream ss;
+// 			for (int j=0; j<nbr; j++) 
+// 			{
+// 				ss<<(*i).first[j]<<"  ";
+// 			}
+// 			ss<<(*i).second<<std::ends;
+// 			msgr.logMessage(5,ss.str().c_str());
+// 		}
 	}
 
     MP_subset(vector<const MP_set*> s) : S(s) {}
@@ -254,8 +254,8 @@ private:
 	}
 	void display()const
 	{
-		Messenger &msgr=*MP_model::getCurrentModel()->getMessenger();
-		msgr.logMessage(5,toString().c_str());
+//		Messenger &msgr=*MP_model::getCurrentModel()->getMessenger();
+//		msgr.logMessage(5,toString().c_str());
 	}
     
 	operator MP_domain() const {

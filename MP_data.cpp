@@ -31,7 +31,7 @@ const DataRef& DataRef::operator=(const DataRef& r) {
 }
 
 void DataRef::operator()() const {
-    evaluate_lhs() = C->evaluate();
+    evaluate_lhs(C->evaluate());
 }
 
 DataRef& DataRef::such_that(const MP_boolean& b) {
@@ -55,9 +55,17 @@ double DataRef::evaluate() const {
     }
 }
 
-double& DataRef::evaluate_lhs() const {
-    return D->v[D->f(I1->evaluate(),I2->evaluate(),I3->evaluate(),
-		     I4->evaluate(),I5->evaluate())];
+double& DataRef::evaluate_lhs(double v) const {
+    int i1 = D->S1.check(I1->evaluate());
+    int i2 = D->S2.check(I2->evaluate());
+    int i3 = D->S3.check(I3->evaluate());
+    int i4 = D->S4.check(I4->evaluate());
+    int i5 = D->S5.check(I5->evaluate());
+
+    int i = D->f(i1,i2,i3,i4,i5);
+    if ( i != outOfBound ) {
+        D->v[i] = v;
+    }
 }
 
 void MP_data::operator()() const {

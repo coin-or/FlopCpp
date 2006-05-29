@@ -34,7 +34,7 @@ namespace flopc {
 	double evaluate() const;
 	const DataRef& operator=(const DataRef& r); 
 	const DataRef& operator=(const Constant& c);
-	double& evaluate_lhs() const;
+	double& evaluate_lhs(double v) const;
 	void operator()() const;
     private:
 	MP_data* D;

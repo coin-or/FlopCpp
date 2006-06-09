@@ -8,6 +8,7 @@
 
 #include <float.h>
 #include <cmath>
+#include <sstream>
 #include "MP_constant.hpp"
 #include "MP_data.hpp"
 #include "MP_domain.hpp"

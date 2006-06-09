@@ -19,7 +19,7 @@ using namespace flopc;
               New York, 1978.
 */
 
-main() {
+int main() {
     enum {t12pm_6am, t6am_9am, t9am_3pm, t3pm_6pm, t6pm_12pm, numT};
     enum {type_1, type_2, type_3, numG};
 
@@ -113,22 +113,26 @@ main() {
 	       1000*dur(i)*cost_inc(j)*(x(j,i)-min_pow(j)*n(j,i)) );
  
 
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
-    MP_model::default_model.verbose();
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
+    MP_model::getDefaultModel().verbose();
     
     minimize(cost);
 
-    assert(MP_model::default_model->getNumRows()==55);
-    assert(MP_model::default_model->getNumCols()==45);
-    assert(MP_model::default_model->getNumElements()==135);
-    assert(MP_model::default_model->getObjValue()>=988539 && MP_model::default_model->getObjValue()<=988541);
+    assert(MP_model::getDefaultModel()->getNumRows()==55);
+    assert(MP_model::getDefaultModel()->getNumCols()==45);
+    assert(MP_model::getDefaultModel()->getNumElements()==135);
+    assert(MP_model::getDefaultModel()->getObjValue()>=988539 && MP_model::getDefaultModel()->getObjValue()<=988541);
 
 
     x.display("x");
     n.display("n");
     s.display("s");
-
-    double rep[T.size()][4];
+	const int TSize=T.size();
+    double **rep = new double *[TSize];
+	for(int cnt=0;cnt<TSize;cnt++)
+	{
+		rep[cnt]=new double[4];
+	}
     for (unsigned i=0; i<T.size(); i++) {
 	rep[i][0] = dem(i);
 

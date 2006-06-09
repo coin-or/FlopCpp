@@ -7,7 +7,6 @@ using namespace flopc;
 the expected profit when traffic demand is uncertain. Two different
 formulations are used, the delta and the lambda formualation.
 
-
 Dantzig, G B, Chapter 28. In Linear Programming and Extensions.
 Princeton University Press, Princeton, New Jersey, 1963.
 */
@@ -16,7 +15,7 @@ namespace Aircraft {
     enum {a, b, c, d, numA};
 } 
 
-main() {
+int main() {
     enum {route_1, route_2, route_3, route_4, route_5, numRoutes};
     const int numDemandStates = 5;
 
@@ -104,12 +103,16 @@ main() {
 
     
     ab(i) =   sum(j, x(i,j)) <= aa(i);
+	ab.setName("aircraft balance");
 
     db(j) =  sum(i, p(i,j)*x(i,j)) >= sum( h.such_that(deltb(j,h)>0), y(j,h));
+	db.setName("demand balance");
 
     yd(j,h) = y(j,h) <= sum(i, p(i,j)*x(i,j));
+	yd.setName("definition of boarded passengers");
 
     bd(j,h) = b(j,h) == dd(j,h) - y(j,h);
+	bd.setName("definition of bumped passengers");
 
     ocd() =     oc() == sum(i*j, c(i,j)*x(i,j));
 

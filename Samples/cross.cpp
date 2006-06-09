@@ -23,8 +23,8 @@ Contributed by Soren Nielsen, Institute for Mathematical Sciences
 */
 
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
 
     enum {goose, wolf, corn, numI};
 
@@ -35,7 +35,7 @@ main() {
     MP_data dir(t);  // crossing - near to far is +1 - far to near -1;
 
     for (int k=0; k<t.size(); k++) {
-	dir(k) = pow(-1,k);
+	dir(k) = pow((double)-1,(double)k);
     }
 
     dir.display("dir");
@@ -68,10 +68,10 @@ main() {
 
     maximize(sum(t, done(t)));
     
-    assert(MP_model::default_model->getNumRows()==90);
-    assert(MP_model::default_model->getNumCols()==70);
-    assert(MP_model::default_model->getNumElements()==231);
-    assert(MP_model::default_model->getObjValue()==3);
+    assert(MP_model::getDefaultModel()->getNumRows()==90);
+    assert(MP_model::getDefaultModel()->getNumCols()==70);
+    assert(MP_model::getDefaultModel()->getNumElements()==231);
+    assert(MP_model::getDefaultModel()->getObjValue()==3);
 
     y.display("y");
     cross.display("cross");

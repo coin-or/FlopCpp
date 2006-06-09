@@ -21,6 +21,7 @@ namespace flopc {
 	Constant_base() : count(0) {}
 	virtual ~Constant_base() {}
 	int count;
+
     };
     
     class MP_index_exp;

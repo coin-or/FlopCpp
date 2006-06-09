@@ -33,9 +33,9 @@ void MultiProduct(
 
     minimize( sum(Routes(p,o,d), cost(Routes(p,o,d)) * trans(Routes(p,o,d))) );
 
-    assert(MP_model::default_model->getNumRows()==41);
-    assert(MP_model::default_model->getNumCols()==18);
-    assert(MP_model::default_model->getNumElements()==54);
+    assert(MP_model::getDefaultModel()->getNumRows()==41);
+    assert(MP_model::getDefaultModel()->getNumCols()==18);
+    assert(MP_model::getDefaultModel()->getNumElements()==54);
 
     trans.display("solution");
 }
@@ -44,9 +44,9 @@ double random(double min, double max) {
     return min + (max-min)*(rand()/(RAND_MAX+0.0));
 }
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
-    MP_model::default_model.verbose();
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
+    MP_model::getDefaultModel().verbose();
     enum {Godiva,Neuhaus,Leonidas,nbrProducts};
     enum {Brussels,Amsterdam,Antwerpen,Paris,Milan,Cassis,Bonn,Madrid,Bergen,
 	  London,nbrCities};

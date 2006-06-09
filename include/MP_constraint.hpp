@@ -101,19 +101,19 @@ namespace flopc {
     class MP_constraint : public RowMajor, public Named {
     public: 
 	MP_constraint(
-	    const MP_set_base &s1 = MP_set::Empty, 
-	    const MP_set_base &s2 = MP_set::Empty, 
-	    const MP_set_base &s3 = MP_set::Empty,
-	    const MP_set_base &s4 = MP_set::Empty, 
-	    const MP_set_base &s5 = MP_set::Empty
+	    const MP_set_base &s1 = MP_set::getEmpty(), 
+	    const MP_set_base &s2 = MP_set::getEmpty(), 
+	    const MP_set_base &s3 = MP_set::getEmpty(),
+	    const MP_set_base &s4 = MP_set::getEmpty(), 
+	    const MP_set_base &s5 = MP_set::getEmpty()
 	    );
 
 	MP_constraint& operator()(
-	    const MP_index_exp& i1 = MP_index_exp::Empty, 
-	    const MP_index_exp& i2 = MP_index_exp::Empty, 
-	    const MP_index_exp& i3 = MP_index_exp::Empty, 
-	    const MP_index_exp& i4 = MP_index_exp::Empty, 
-	    const MP_index_exp& i5 = MP_index_exp::Empty
+	    const MP_index_exp& i1 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& i2 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& i3 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& i4 = MP_index_exp::getEmpty(), 
+	    const MP_index_exp& i5 = MP_index_exp::getEmpty()
 	    )  {
 	    I1 = i1; I2 = i2; I3 = i3; I4 = i4; I5 = i5;
 	    return *this;

@@ -40,7 +40,7 @@ Samples/transport.cpp -text
 Samples/xbsl.cpp -text
 experiment/New_domain.hpp -text
 experiment/test.cpp -text
-/flopc.cpp -text svneol=unset#unset
+/flopc.cpp -text
 include/MP_boolean.hpp -text
 include/MP_constant.hpp -text
 include/MP_constraint.hpp -text

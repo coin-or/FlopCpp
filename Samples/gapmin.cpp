@@ -39,7 +39,7 @@ public:
     }
 };
 
-main() {
+int main() {
     const int numResources = 5; const int numItems = 10;
     MP_set  i(numResources), j(numItems);
  
@@ -65,7 +65,7 @@ main() {
     double zlbest = 0.0;
     f.value(&ftable[0][0]);
 
-    zfeas() = sum(j, max(i, f(i,j)));
+    zfeas() = sum(j, maximum(i, f(i,j)));
     zfeas.display("zfeas");
 
     double alpha = 1.0;
@@ -96,7 +96,7 @@ main() {
 	zl() = zlr + sum(j, w(j));
 
 	bool improve = (zl>zlbest);
-	zlbest = std::max(zlbest,zl(0));
+	zlbest = std::max<double>(zlbest,zl(0));
 	
 	double norm = 0.0;
 	for (int jc=0; jc<j.size(); jc++) {

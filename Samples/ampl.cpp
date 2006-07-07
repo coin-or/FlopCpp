@@ -8,9 +8,9 @@ Fourer, R, Gay, D M, and Kernighan, B W, AMPL: A Mathematical Programming
 Language. AT\&T Bell Laboratories, Murray Hill, New Jersey, 1987.
 */
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
-    MP_model::default_model.verbose();
+int main() {
+	MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
+    MP_model::getDefaultModel().verbose();
 
     enum {iron, nickel, numRaw};
     enum {nuts, bolts, washers, numPrd};
@@ -85,10 +85,10 @@ main() {
 	sum(raw(r), rvalue(r)*s(r,numT)) 
     );
 
-    assert(MP_model::default_model->getNumRows()==14);
-    assert(MP_model::default_model->getNumCols()==25);
-    assert(MP_model::default_model->getNumElements()==60);
-    assert(MP_model::default_model->getObjValue()>=79.3412 && MP_model::default_model->getObjValue()<=79.3414);
+    assert(MP_model::getDefaultModel()->getNumRows()==14);
+    assert(MP_model::getDefaultModel()->getNumCols()==25);
+    assert(MP_model::getDefaultModel()->getNumElements()==60);
+    assert(MP_model::getDefaultModel()->getObjValue()>=79.3412 && MP_model::getDefaultModel()->getObjValue()<=79.3414);
 
     x.display();
     s.display();

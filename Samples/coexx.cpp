@@ -17,8 +17,8 @@ using namespace flopc;
 Bosch, R, Mind Sharpener. OPTIMA MPS Newsletter (2000).
 */
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
 
     const int boardSize = 5;
 
@@ -83,10 +83,10 @@ main() {
 
     maximize(tot());
  
-    assert(MP_model::default_model->getNumRows()==242);
-    assert(MP_model::default_model->getNumCols()==75);
-    assert(MP_model::default_model->getNumElements()==480);
-    assert(MP_model::default_model->getObjValue()==4);
+    assert(MP_model::getDefaultModel()->getNumRows()==242);
+    assert(MP_model::getDefaultModel()->getNumCols()==75);
+    assert(MP_model::getDefaultModel()->getNumElements()==480);
+    assert(MP_model::getDefaultModel()->getObjValue()==4);
 
     xb.display("Black");
     xw.display("White");

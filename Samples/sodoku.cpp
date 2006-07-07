@@ -9,8 +9,8 @@ using namespace flopc;
 /**/
 
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
 
     const int p = 3;
 

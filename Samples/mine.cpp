@@ -3,8 +3,8 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
-main() {
-  MP_model::default_model.setSolver(new OsiCbcSolverInterface);
+int main() {
+  MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
   enum {nw,ne,se,sw,numK};
 
   MP_set l(4);  // identfiers for level row and column labels  / 1*4 /;
@@ -85,7 +85,7 @@ main() {
 
   d.display("d");
 
-  MP_model::default_model.verbose();
+  MP_model::getDefaultModel().verbose();
 
   MP_variable x(l,l,l); //   extraction of blocks
 
@@ -97,10 +97,10 @@ main() {
 
   maximize( sum(d(l,i,j), (conc(l,i,j)*value/100 - cost(l))*x(l,i,j)) );
 
-  assert(MP_model::default_model->getNumRows()==56);
-  assert(MP_model::default_model->getNumCols()==64);
-  assert(MP_model::default_model->getNumElements()==112);
-  assert(MP_model::default_model->getObjValue()>=17500 && MP_model::default_model->getObjValue()<=17500);
+  assert(MP_model::getDefaultModel()->getNumRows()==56);
+  assert(MP_model::getDefaultModel()->getNumCols()==64);
+  assert(MP_model::getDefaultModel()->getNumElements()==112);
+  assert(MP_model::getDefaultModel()->getObjValue()>=17500 && MP_model::getDefaultModel()->getObjValue()<=17500);
 
 
   x.display("x");

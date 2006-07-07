@@ -8,6 +8,7 @@
 
 #include <float.h>
 #include <cmath>
+#include <sstream>
 #include "MP_constant.hpp"
 #include "MP_data.hpp"
 #include "MP_domain.hpp"
@@ -99,7 +100,7 @@ namespace flopc {
     };
 
     class Constant_min_2 : public Constant_exp {
-	friend Constant min(const Constant& a, const Constant& b);
+	friend Constant minimum(const Constant& a, const Constant& b);
     private:
 	Constant_min_2(const Constant& i, const Constant& j) : Constant_exp(i,j) {}
 	double evaluate() const {
@@ -107,12 +108,12 @@ namespace flopc {
 	}
     };
 
-    Constant min(const Constant& a, const Constant& b) {
+    Constant minimum(const Constant& a, const Constant& b) {
 	return new Constant_min_2(a,b);
     }
 
     class Constant_max_2 : public Constant_exp {
-	friend Constant max(const Constant& a, const Constant& b);
+	friend Constant maximum(const Constant& a, const Constant& b);
     private:
 	Constant_max_2(const Constant& i, const Constant& j) : Constant_exp(i,j) {}
 	double evaluate() const {
@@ -120,7 +121,7 @@ namespace flopc {
 	}
     };
 
-    Constant max(const Constant& a, const Constant& b) {
+    Constant maximum(const Constant& a, const Constant& b) {
 	return new Constant_max_2(a,b);
     }
 
@@ -186,7 +187,7 @@ namespace flopc {
     }
    
     class Constant_max : public Constant_base, public Functor {
-	friend Constant max(const MP_domain& i, const Constant& e);
+	friend Constant maximum(const MP_domain& i, const Constant& e);
     private:
 	Constant_max(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
 	void operator()() const {
@@ -207,7 +208,7 @@ namespace flopc {
     };
 
     class Constant_min : public Constant_base, public Functor {
-	friend Constant min(const MP_domain& i, const Constant& e);
+	friend Constant minimum(const MP_domain& i, const Constant& e);
     private:
 	Constant_min(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
 	void operator()() const {
@@ -263,10 +264,10 @@ namespace flopc {
 	mutable double the_product;
     };
 
-    Constant max(const MP_domain& i, const Constant& e) {
+    Constant maximum(const MP_domain& i, const Constant& e) {
 	return new Constant_max(i,e);
     }
-    Constant min(const MP_domain& i, const Constant& e) {
+    Constant minimum(const MP_domain& i, const Constant& e) {
 	return new Constant_min(i,e);
     }
     Constant sum(const MP_domain& i, const Constant& e) {

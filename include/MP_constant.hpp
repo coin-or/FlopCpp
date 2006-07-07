@@ -21,6 +21,7 @@ namespace flopc {
 	Constant_base() : count(0) {}
 	virtual ~Constant_base() {}
 	int count;
+
     };
     
     class MP_index_exp;
@@ -40,15 +41,15 @@ namespace flopc {
     Constant pos(const Constant& c);
     Constant ceil(const Constant& c);
     Constant floor(const Constant& c);
-    Constant min(const Constant& a, const Constant& b);
-    Constant max(const Constant& a, const Constant& b);
+    Constant minimum(const Constant& a, const Constant& b);
+    Constant maximum(const Constant& a, const Constant& b);
     Constant operator+(const Constant& a, const Constant& b);
     Constant operator-(const Constant& a, const Constant& b);
     Constant operator*(const Constant& a, const Constant& b);
     Constant operator/(const Constant& a, const Constant& b);
 
-    Constant max(const MP_domain& i, const Constant& e);
-    Constant min(const MP_domain& i, const Constant& e);
+    Constant maximum(const MP_domain& i, const Constant& e);
+    Constant minimum(const MP_domain& i, const Constant& e);
     Constant sum(const MP_domain& i, const Constant& e);
     Constant product(const MP_domain& i, const Constant& e);
 }  // End of namespace flopc

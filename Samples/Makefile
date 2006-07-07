@@ -1,4 +1,4 @@
-CoinDir  := /homespace/hultberg/COIN
+CoinDir  := ../..
 FlopcDir := ..
 
 ## uncomment line below to be able to use OSL
@@ -19,7 +19,7 @@ LIBS 	+= -lOsiClp
 LIBS 	+= -lClp
 LIBS 	+= -lOsiCbc
 LIBS 	+= -lCbc
-LIBS 	+= -lCoin
+LIBS 	+= -lCoinUtils
 LIBS 	+= -lCgl
 
 ifneq ($(filter YES,$(USE_OSL)),)

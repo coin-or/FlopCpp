@@ -86,7 +86,6 @@ namespace flopc {
 			      double m) const = 0;
 	virtual void insertVariables(set<MP_variable*>& v) const = 0;
 
-
 	virtual ~MP_expression_base() {}
     };
 
@@ -97,6 +96,7 @@ namespace flopc {
 	MP_expression(MP_expression_base* r) : Handle<MP_expression_base*>(r) {}
 	MP_expression(const Constant& c);
 	MP_expression(const VariableRef& v);
+	virtual ~MP_expression() {}
     };
 
     class TerminalExpression : public MP_expression_base {

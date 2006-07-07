@@ -15,8 +15,8 @@ Bosch, R, Mind Sharpener. OPTIMA MPS Newsletter (2000).
 */
 
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
 
     MP_set I(5);  // size of chess board
     
@@ -51,12 +51,12 @@ main() {
  
     maximize(tot());
 
-    MP_model::default_model->writeMps("coex","mps",1.0);
+    MP_model::getDefaultModel()->writeMps("coex","mps",1.0);
 
-    assert(MP_model::default_model->getNumRows()==347);
-    assert(MP_model::default_model->getNumCols()==51);
-    assert(MP_model::default_model->getNumElements()==742);
-    assert(MP_model::default_model->getObjValue()==4);
+    assert(MP_model::getDefaultModel()->getNumRows()==347);
+    assert(MP_model::getDefaultModel()->getNumCols()==51);
+    assert(MP_model::getDefaultModel()->getNumElements()==742);
+    assert(MP_model::getDefaultModel()->getObjValue()==4);
     
     b.display("Black");
     w.display("White");

@@ -1,6 +1,7 @@
 * text=auto !eol
 /AUTHORS -text
 /Doxyfile -text
+/Externals -text
 /INSTALL -text
 /LICENSE -text
 /MP_boolean.cpp -text

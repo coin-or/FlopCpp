@@ -9,52 +9,84 @@
 #include "MP_index.hpp"
 #include "MP_domain.hpp"
 #include "MP_set.hpp"
+#include "MP_model.hpp"
 
 namespace flopc {
+    // Initialization of static member data
+    MP_index& MP_index::Empty = *new MP_index();
+    MP_index& MP_index::Any = *new MP_index();
+    MP_index_exp MP_index_exp::Empty =  *new MP_index_exp(Constant(0.0));
 
-  class MP_index_constant : public MP_index_base {
-    friend class MP_index_exp;
-  private:
-    MP_index_constant(const Constant& c) : C(c) {}
-    int evaluate() const {
-      return int(C->evaluate()); 
+    MP_index &MP_index::getEmpty() {
+	return Empty;
     }
-    MP_index* getIndex() const {
-      return 0;
+    const MP_index_exp &MP_index_exp::getEmpty() {
+	return Empty;
     }
-    virtual MP_domain getDomain(MP_set* s) const{
-      return MP_domain::Empty;
-    }
-    Constant C;
-  };
 
-  class MP_index_subsetRef : public MP_index_base {
-    friend class MP_index_exp;
-  private:
-    MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
-    int evaluate() const {
-      return int(S->evaluate()); 
+    void MP_index_base::display()const {
+	/// MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
     }
-    MP_index* getIndex() const {
-      return S->getIndex();
-    }
-    virtual MP_domain getDomain(MP_set* s) const{
-      return MP_domain(S->getDomain(s));
-    }
-    const SUBSETREF* S;
-  };
+
+    class MP_index_constant : public MP_index_base {
+	friend class MP_index_exp;
+    public:
+	void display()const {
+	    /// MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+	}
+    private:
+	MP_index_constant(const Constant& c) : C(c) {}
+	int evaluate() const {
+	    return int(C->evaluate()); 
+	}
+	MP_index* getIndex() const {
+	    return 0;
+	}
+	virtual MP_domain getDomain(MP_set* s) const{
+	    return MP_domain::getEmpty();
+	}
+	Constant C;
+    };
+
+    class MP_index_subsetRef : public MP_index_base {
+	friend class MP_index_exp;
+    public:
+	void display()const {
+	    /// MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
+	}
+    private:
+	MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
+	int evaluate() const {
+	    return int(S->evaluate()); 
+	}
+	MP_index* getIndex() const {
+	    return S->getIndex();
+	}
+	virtual MP_domain getDomain(MP_set* s) const{
+	    return MP_domain(S->getDomain(s));
+	}
+	const SUBSETREF* S;
+    };
   
-  MP_index_exp operator+(MP_index& i,const Constant& j) {
-    return new MP_index_sum(i,j);
-  }
+    MP_index_exp operator+(MP_index& i,const Constant& j) {
+	return new MP_index_sum(i,j);
+    }
 
-  MP_index_exp operator-(MP_index& i,const Constant& j) {
-    return new MP_index_dif(i,j);
-  }
+    MP_index_exp operator+(MP_index& i,const int& j) {
+	return new MP_index_sum(i,Constant(j));
+    }
 
-  MP_index_exp operator*(MP_index& i,const Constant& j) {
-    return new MP_index_mult(i,j);
-  }
+    MP_index_exp operator-(MP_index& i,const Constant& j) {
+	return new MP_index_dif(i,j);
+    }
+    
+    MP_index_exp operator-(MP_index& i,const int& j) {
+ 	return new MP_index_dif(i,Constant(j));
+    }
+
+    MP_index_exp operator*(MP_index& i,const Constant& j) {
+	return new MP_index_mult(i,j);
+    }
   
 
 } // End of namespace flopc
@@ -88,5 +120,8 @@ MP_index_exp::MP_index_exp(const Constant& c) :
     Handle<MP_index_base*>(new MP_index_constant(c)) {}
 
 MP_index_exp::MP_index_exp(MP_index& i) : 
-    Handle<MP_index_base*>(&i) { root->count++; }
+    Handle<MP_index_base*>(&i) { operator->()->count++; }
+
+MP_index_exp::MP_index_exp(const MP_index_exp &other):
+	Handle<MP_index_base*>((const Handle<MP_index_base*> &)other) {}
 

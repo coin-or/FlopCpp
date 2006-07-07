@@ -39,8 +39,8 @@ namespace flopc {
 	MP_boolean(bool b);
 	MP_boolean(const Constant& c); 
 	MP_boolean(SUBSETREF& c); 
-
 	MP_boolean(Boolean_base* r) : Handle<Boolean_base*>(r) {};
+
     };
 
     MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
@@ -58,6 +58,8 @@ namespace flopc {
     MP_boolean operator>(const Constant& e1, const Constant& e2);
     MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
     MP_boolean operator==(const Constant& e1, const Constant& e2);
+    MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
+    MP_boolean operator!=(const Constant& e1, const Constant& e2);
 
 } // End of namespace flopc
 #endif

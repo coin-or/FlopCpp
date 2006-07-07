@@ -7,6 +7,7 @@
 //****************************************************************************
 
 #include <iostream>
+#include <sstream>
 using std::cout;
 using std::endl;
 
@@ -17,6 +18,7 @@ using std::endl;
 #include "MP_data.hpp"
 
 using namespace flopc;
+
 
 void MP_constraint::operator=(const Constraint &v) {
    left = v.left;
@@ -42,8 +44,11 @@ MP_constraint::MP_constraint(
     RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
 //     pprice(MP_data(d1->getSet(),d2->getSet(),d3->getSet(),
 // 		   d4->getSet(),d5->getSet())),
+    M(MP_model::current_model),
+    offset(-1),
     S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),
-    I1(0),I2(0),I3(0),I4(0),I5(0) {
+    I1(0),I2(0),I3(0),I4(0),I5(0)
+{
     MP_model::current_model->add(*this);
 }
 
@@ -52,7 +57,7 @@ void MP_constraint::coefficients(GenerateFunctor& f) {
 
     vector<Constant> v;
 
-        if (I1.root!=0) {
+        if (I1.operator->()!=0) {
 	left->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,1.0);
  	right->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,-1.0);
 	 } else {
@@ -61,17 +66,21 @@ void MP_constraint::coefficients(GenerateFunctor& f) {
 }
 
 void MP_constraint::insertVariables(set<MP_variable*>& v) {
-    if (left.root!=0) {
+    if (left.operator->()!=0) {
 	left->insertVariables(v);
     }
-    if (right.root!=0) {
+    if (right.operator->()!=0) {
 	right->insertVariables(v);
     }
 }
 
 void MP_constraint::display(string s) const {
     cout<<s<<endl;
-    for (int i=offset; i<offset+size(); i++) {
+    if (offset >=0) {
+      for (int i=offset; i<offset+size(); i++) {
 	cout<<i<<"  "<<M->bl[i]<<"  "<<M->rowActivity[i]<<"  "<<M->bu[i]<<"  "<<M->rowPrice[i]<<endl;
+      }
+    } else {
+      cout<<"No solution available!"<<endl;
     }
 }

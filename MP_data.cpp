@@ -18,6 +18,7 @@ using std::endl;
 #include "MP_expression.hpp" 
 
 using namespace flopc;
+ double MP_data::outOfBoundData = 0;
 
 const DataRef& DataRef::operator=(const Constant& c) {
     C = c;
@@ -30,7 +31,7 @@ const DataRef& DataRef::operator=(const DataRef& r) {
 }
 
 void DataRef::operator()() const {
-    evaluate_lhs() = C->evaluate();
+    evaluate_lhs(C->evaluate());
 }
 
 DataRef& DataRef::such_that(const MP_boolean& b) {
@@ -54,17 +55,25 @@ double DataRef::evaluate() const {
     }
 }
 
-double& DataRef::evaluate_lhs() const {
-    return D->v[D->f(I1->evaluate(),I2->evaluate(),I3->evaluate(),
-		     I4->evaluate(),I5->evaluate())];
+void DataRef::evaluate_lhs(double v) const {
+    int i1 = D->S1.check(I1->evaluate());
+    int i2 = D->S2.check(I2->evaluate());
+    int i3 = D->S3.check(I3->evaluate());
+    int i4 = D->S4.check(I4->evaluate());
+    int i5 = D->S5.check(I5->evaluate());
+
+    int i = D->f(i1,i2,i3,i4,i5);
+    if (i != outOfBound) {
+	D->v[i] = v;
+    }
 }
 
 void MP_data::operator()() const {
-    if (&S1!=&MP_set::Empty) cout << i1.evaluate() << " ";
-    if (&S2!=&MP_set::Empty) cout << i2.evaluate() << " ";
-    if (&S3!=&MP_set::Empty) cout << i3.evaluate() << " ";
-    if (&S4!=&MP_set::Empty) cout << i4.evaluate() << " ";
-    if (&S5!=&MP_set::Empty) cout << i5.evaluate() << " ";
+    if (&S1!=&MP_set::getEmpty()) cout << i1.evaluate() << " ";
+    if (&S2!=&MP_set::getEmpty()) cout << i2.evaluate() << " ";
+    if (&S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
+    if (&S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
+    if (&S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
     cout<<"  "<<v[f(i1.evaluate(),i2.evaluate(),i3.evaluate(),
 		    i4.evaluate(),i5.evaluate())] << endl;
 }

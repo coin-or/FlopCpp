@@ -6,6 +6,7 @@
 // All Rights Reserved.
 //****************************************************************************
 
+#include <sstream>
 #include "MP_expression.hpp"
 #include "MP_constant.hpp"
 #include "MP_boolean.hpp"
@@ -17,6 +18,7 @@ namespace flopc {
 
 class Expression_constant : public TerminalExpression {
     friend class MP_expression;
+
 private:
     Expression_constant(const Constant& c) : C(c) {}
     double level() const { 
@@ -44,7 +46,7 @@ private:
 class Expression_plus : public Expression_operator {
     friend MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
     friend MP_expression operator+(const MP_expression& e1, const Constant& e2);
-    friend MP_expression operator+(const Constant& e1, const MP_expression& e2);
+    friend MP_expression operator+(const Constant& e1, const MP_expression& e2);	
 private:
     Expression_plus(const MP_expression& e1, const MP_expression& e2) : 
 	Expression_operator(e1,e2) {}
@@ -82,6 +84,7 @@ private:
 class Expression_mult : public MP_expression_base {
     friend MP_expression operator*(const Constant& e1, const MP_expression& e2); 
     friend MP_expression operator*(const MP_expression& e1, const Constant& e2);
+
 private:
     Expression_mult(const Constant& e1, const MP_expression& e2) : 
 	left(e1), right(e2) {}
@@ -169,6 +172,7 @@ MP_expression sum(const MP_domain& d, const MP_expression& e) {
 } // End of namespace flopc
 
 using namespace flopc;
+
 
 MP_expression::MP_expression(const Constant &c) :
     Handle<MP_expression_base*>(new Expression_constant(c)) {} 

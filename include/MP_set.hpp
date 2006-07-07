@@ -10,6 +10,7 @@
 #define _MP_set_hpp_
 
 #include <iostream>
+#include <sstream>
 using std::cout;
 using std::endl;
 
@@ -22,13 +23,14 @@ using std::string;
 
 namespace flopc {
 
-class MP_set_base : public MP_index {
+class MP_set_base : public MP_index , public Named {
 public:
     MP_set_base() : Cyclic(false) {}
 
     virtual int size() const = 0;
     virtual operator MP_domain() const = 0;
     virtual MP_domain operator()(const MP_index_exp& i) const = 0;
+    void display()const;
 
     int check(int i) const {
 	if ((i>=0) && (i<size())) {
@@ -64,8 +66,9 @@ public:
     virtual int size() const {
 	return cardinality;
     }
-    static MP_set Empty;
+	static MP_set &getEmpty();
 private:
+    static MP_set Empty;
     int cardinality;
 };
 
@@ -95,12 +98,28 @@ class MP_subset : public MP_set {
     friend class SubsetRef<nbr>;
 public:
     MP_subset(const MP_set& s1, 
-	      const MP_set& s2=MP_set::Empty, 
-	      const MP_set& s3=MP_set::Empty, 
-	      const MP_set& s4=MP_set::Empty, 
-	      const MP_set& s5=MP_set::Empty) {
+	      const MP_set& s2=MP_set::getEmpty(), 
+	      const MP_set& s3=MP_set::getEmpty(), 
+	      const MP_set& s4=MP_set::getEmpty(), 
+	      const MP_set& s5=MP_set::getEmpty()) {
 	S = makeVector<nbr,const MP_set*>(&s1,&s2,&s3,&s4,&s5);
     }
+	void display(const std::string& s = "") const 
+	{
+// 		Messenger &msgr = *MP_model::getCurrentModel()->getMessenger();
+// 		msgr.logMessage(5,s.c_str());
+// 		std::map<std::vector<int>, int>::const_iterator i;
+// 		for (i = elements.begin(); i != elements.end(); i++) 
+// 		{
+// 			std::stringstream ss;
+// 			for (int j=0; j<nbr; j++) 
+// 			{
+// 				ss<<(*i).first[j]<<"  ";
+// 			}
+// 			ss<<(*i).second<<std::ends;
+// 			msgr.logMessage(5,ss.str().c_str());
+// 		}
+	}
 
     MP_subset(vector<const MP_set*> s) : S(s) {}
 
@@ -117,10 +136,10 @@ public:
     }
 
     SubsetRef<nbr>& operator()(const MP_index_exp& i1, 
-			       const MP_index_exp& i2=MP_index::Empty,  
-			       const MP_index_exp& i3=MP_index::Empty,
-			       const MP_index_exp& i4=MP_index::Empty,
-			       const MP_index_exp& i5=MP_index::Empty) {
+			       const MP_index_exp& i2=MP_index::getEmpty(),  
+			       const MP_index_exp& i3=MP_index::getEmpty(),
+			       const MP_index_exp& i4=MP_index::getEmpty(),
+			       const MP_index_exp& i5=MP_index::getEmpty()) {
 	return *new SubsetRef<nbr>(this,i1,i2,i3,i4,i5);
     }
 
@@ -163,21 +182,11 @@ public:
 	insert(makeVector<nbr>(i1, i2, i3, i4, i5));
     }
     const InsertFunctor<nbr>& insert(MP_index_exp i1, 
-				     MP_index_exp i2=MP_index_exp::Empty, 
-				     MP_index_exp i3=MP_index_exp::Empty, 
-				     MP_index_exp i4=MP_index_exp::Empty, 
-				     MP_index_exp i5=MP_index_exp::Empty) {
+				     MP_index_exp i2=MP_index_exp::getEmpty(), 
+				     MP_index_exp i3=MP_index_exp::getEmpty(), 
+				     MP_index_exp i4=MP_index_exp::getEmpty(), 
+				     MP_index_exp i5=MP_index_exp::getEmpty()) {
 	return *new InsertFunctor<nbr>(this,makeVector<nbr>(i1, i2, i3, i4, i5));
-    }
-    void display(const string& s = "") const {
-	cout<<s<<endl;
-	std::map<vector<int>, int>::const_iterator i;
-	for (i = elements.begin(); i != elements.end(); i++) {
-	    for (int j=0; j<nbr; j++) {
-		cout<<(*i).first[j]<<"  ";
-	    }
-	    cout<<(*i).second<<endl;
-	}
     }
     virtual int size() const {
 	return elements.size();
@@ -185,7 +194,7 @@ public:
 
 private:
     vector<const MP_set*> S; 
-    map<vector<int>, int> elements;
+	std::map<std::vector<int>, int> elements;
 };
 
 
@@ -195,7 +204,7 @@ private:
 	    return 0;
 	}
 	virtual MP_domain getDomain(MP_set* s) const {
-	    return MP_domain::Empty;
+	    return MP_domain::getEmpty();
 	}
 	int evaluate() const {
 	    return 0;
@@ -212,6 +221,11 @@ private:
 		  const MP_index_exp& i4,
 		  const MP_index_exp& i5) : 
 	    S(s),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5) {} 
+	void display()const
+	{
+// 		Messenger &msgr=*MP_model::getCurrentModel()->getMessenger();
+// 		msgr.logMessage(5,toString().c_str());
+	}
     
 	operator MP_domain() const {
 // 	    MP_domain_base* base;

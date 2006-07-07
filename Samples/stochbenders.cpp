@@ -10,7 +10,7 @@ with stochastic demands. For details see: Erwin Kalvelagen:
 */
 
 
-main() {
+int main() {
     const int numScenarios = 3;
     const int numFactories = 3;
     const int numDistributionCenters = 5;

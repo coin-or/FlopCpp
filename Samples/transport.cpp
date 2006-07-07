@@ -3,8 +3,8 @@
 using namespace flopc;
 #include <OsiClpSolverInterface.hpp>
 
-main() {
-    MP_model::default_model.setSolver(new OsiClpSolverInterface);
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiClpSolverInterface);
     enum  {seattle, sandiego, numS}; 
     enum  {newyork, chicago, topeka,numD};
 
@@ -33,9 +33,12 @@ main() {
     COST(Link) = 90 * COST(Link) / 1000.0;
     
     MP_variable x(Link);
+    x.display("...");
 
     MP_constraint supply(S);
     MP_constraint demand(D);  
+
+    supply.display("...");
 
     supply(S) =  sum( Link(S,D), x(Link) ) <= SUPPLY(S);
     demand(D) =  sum( Link(S,D), x(Link) ) >= DEMAND(D);
@@ -43,11 +46,12 @@ main() {
     cout<<"Here"<<endl;
 
     minimize( sum(Link, COST(Link)*x(Link)) );
-    assert(MP_model::default_model->getNumRows()==5);
-    assert(MP_model::default_model->getNumCols()==4);
-    assert(MP_model::default_model->getNumElements()==8);
-    assert(MP_model::default_model->getObjValue()>=156.14 && MP_model::default_model->getObjValue()<=156.16);
+    assert(MP_model::getDefaultModel()->getNumRows()==5);
+    assert(MP_model::getDefaultModel()->getNumCols()==4);
+    assert(MP_model::getDefaultModel()->getNumElements()==8);
+    assert(MP_model::getDefaultModel()->getObjValue()>=156.14 && MP_model::getDefaultModel()->getObjValue()<=156.16);
     
     x.display("Optimal solution:");
+    supply.display("Supply dual solution");
     cout<<"Test transport passed."<<endl;
 }

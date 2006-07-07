@@ -7,6 +7,7 @@
 //****************************************************************************
 
 #include <iostream>
+#include <sstream>
 using std::cout;
 using std::endl;
 #include <algorithm>
@@ -19,6 +20,11 @@ using std::endl;
 #include "Timer.hpp"
 
 using namespace flopc;
+
+  MP_model& MP_model::default_model = *new MP_model(0);
+  MP_model* MP_model::current_model = &MP_model::default_model;
+  MP_model &MP_model::getDefaultModel() { return default_model;}
+  MP_model *MP_model::getCurrentModel() { return current_model;}
 
 void NormalMessenger::statistics(int bm, int m, int bn, int n, int nz) {
     cout<<"FLOPC++: Number of constraint blocks: " <<bm<<endl;
@@ -53,8 +59,9 @@ void VerboseMessenger::objectiveDebug(const vector<Coef>& cfs) {
 }
 
 MP_model::MP_model(OsiSolverInterface* s, Messenger* m) : 
-    messenger(m), Objective(0), Solver(s),  m(0), n(0), nz(0) {
-    MP_model::current_model = this;
+    solution(0), messenger(m), Objective(0), Solver(s), 
+    m(0), n(0), nz(0), bl(0) {
+  MP_model::current_model = this;
 }
 
 MP_model& MP_model::add(MP_constraint& c) {
@@ -86,8 +93,8 @@ void MP_model::addRow(const Constraint& c) {
     vector<Coef> cfs;
     vector<Constant> v;
     ObjectiveGenerateFunctor f(cfs);
-    c.left->generate(MP_domain::Empty,v,f,1.0);
-    c.right->generate(MP_domain::Empty,v,f,-1.0);
+    c.left->generate(MP_domain::getEmpty(),v,f,1.0);
+    c.right->generate(MP_domain::getEmpty(),v,f,-1.0);
     CoinPackedVector newRow;
     double rhs = 0.0;
     for (unsigned int j=0; j<cfs.size(); j++) {
@@ -242,7 +249,6 @@ void MP_model::generate() {
     }
     nz = coefs.size();
 
-
     messenger->statistics(Constraints.size(),m,Variables.size(),n,nz);
 
     Elm = new double[nz]; 
@@ -326,14 +332,14 @@ void MP_model::generate() {
     if (doAssemble == true) {
 	ObjectiveGenerateFunctor f(cfs);
 	coefs.erase(coefs.begin(),coefs.end());
-	Objective->generate(MP_domain::Empty, v, f, 1.0);
+	Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
 
 	messenger->objectiveDebug(cfs);
 	assemble(cfs,coefs);
     } else {
 	ObjectiveGenerateFunctor f(coefs);
 	coefs.erase(coefs.begin(),coefs.end());
-	Objective->generate(MP_domain::Empty, v, f, 1.0);
+	Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
     }	
 
     c =  new double[n]; 
@@ -365,6 +371,15 @@ void MP_model::generate() {
     // Instead of the 2 lines above we should be able to use
     // the line below, but due to a bug in OsiGlpk it does not work
     // Solver->loadProblem(n, m, Cst, Rnr, Elm, l, u, c, bl, bu);
+
+    delete [] Elm; 
+    delete [] Rnr;    
+    delete [] Cst;   
+    delete [] Clg;   
+    delete [] l;  
+    delete [] u;  
+    delete [] bl;  
+    delete [] bu;  
 
     bool isMIP = false;
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
@@ -421,3 +436,4 @@ void MP_model::generate() {
 	cout<<"FLOPC++: Solution process abandoned."<<endl;
     }
 }
+

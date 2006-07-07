@@ -40,9 +40,9 @@ void demandInsert(MP_data& demand, vector<double>& v, int c1, int c2, MP_subset<
     }
 }
 
-main() {
-    MP_model::default_model.setSolver(new OsiCbcSolverInterface);
-    MP_model::default_model.verbose();
+int main() {
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
+    MP_model::getDefaultModel().verbose();
     const int numTimeIntervals=48;
     enum {BO, NY, PH, WA, numCities};
 
@@ -105,7 +105,7 @@ main() {
     MP_index c1,c2,t1,t2;
 
     low(schedule) = ceil(demand(schedule));
-    high(schedule) = max (2, min (ceil(2*demand(schedule)), 
+    high(schedule) = maximum (2, minimum (ceil(2*demand(schedule)), 
 				  section*ceil(demand(schedule)/section) ));
     low.display("LOW");
     high.display("HIGH");
@@ -149,19 +149,19 @@ main() {
 
     minimize(cars);
 
-    assert(MP_model::default_model->getNumRows()==192);
-    assert(MP_model::default_model->getNumCols()==411);
-    assert(MP_model::default_model->getNumElements()==822);
-    assert(MP_model::default_model->getObjValue()==1143);
+    assert(MP_model::getDefaultModel()->getNumRows()==192);
+    assert(MP_model::getDefaultModel()->getNumCols()==411);
+    assert(MP_model::getDefaultModel()->getNumElements()==822);
+    assert(MP_model::getDefaultModel()->getObjValue()==1143);
 
     //cout<<cars.level()<<"  -----  "<<miles.level()<<endl;
 
     minimize(miles);
 
-    assert(MP_model::default_model->getNumRows()==192);
-    assert(MP_model::default_model->getNumCols()==411);
-    assert(MP_model::default_model->getNumElements()==822);
-    assert(MP_model::default_model->getObjValue()==163882);
+    assert(MP_model::getDefaultModel()->getNumRows()==192);
+    assert(MP_model::getDefaultModel()->getNumCols()==411);
+    assert(MP_model::getDefaultModel()->getNumElements()==822);
+    assert(MP_model::getDefaultModel()->getObjValue()==163882);
     //cout<<cars.level()<<"  -----  "<<miles.level()<<endl;
 
     cout<<"Test train passed."<<endl;

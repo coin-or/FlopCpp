@@ -34,7 +34,7 @@ namespace flopc {
 	double evaluate() const;
 	const DataRef& operator=(const DataRef& r); 
 	const DataRef& operator=(const Constant& c);
-	double& evaluate_lhs() const;
+	void evaluate_lhs(double v) const;
 	void operator()() const;
     private:
 	MP_data* D;
@@ -43,7 +43,7 @@ namespace flopc {
 	MP_boolean B;
     };
 
-    class MP_data : public RowMajor, public Functor {
+    class MP_data : public RowMajor, public Functor , public Named {
 	friend class MP_variable;
 	friend class DisplayData;
 	friend class DataRef;
@@ -55,11 +55,11 @@ namespace flopc {
 		v[i] = d;
 	    }
 	}
-	MP_data(const MP_set_base &s1 = MP_set::Empty, 
-		const MP_set_base &s2 = MP_set::Empty, 
-		const MP_set_base &s3 = MP_set::Empty,
-		const MP_set_base &s4 = MP_set::Empty, 
-		const MP_set_base &s5 = MP_set::Empty) :
+	MP_data(const MP_set_base &s1 = MP_set::getEmpty(), 
+		const MP_set_base &s2 = MP_set::getEmpty(), 
+		const MP_set_base &s3 = MP_set::getEmpty(),
+		const MP_set_base &s4 = MP_set::getEmpty(), 
+		const MP_set_base &s5 = MP_set::getEmpty()) :
 	    RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
 	    S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),
 	    v(new double[size()]), manageData(true) 
@@ -68,11 +68,11 @@ namespace flopc {
 	    }
 
 	MP_data(double* value,
-		const MP_set_base &s1 = MP_set::Empty, 
-		const MP_set_base &s2 = MP_set::Empty, 
-		const MP_set_base &s3 = MP_set::Empty,
-		const MP_set_base &s4 = MP_set::Empty, 
-		const MP_set_base &s5 = MP_set::Empty) :
+		const MP_set_base &s1 = MP_set::getEmpty(), 
+		const MP_set_base &s2 = MP_set::getEmpty(), 
+		const MP_set_base &s3 = MP_set::getEmpty(),
+		const MP_set_base &s4 = MP_set::getEmpty(), 
+		const MP_set_base &s5 = MP_set::getEmpty()) :
 	    RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
 	    S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),
 	    v(value), manageData(false) 
@@ -113,11 +113,11 @@ namespace flopc {
 	}
     
 	DataRef& operator() (
-	    const MP_index_exp& i1 = MP_index_exp::Empty,
-	    const MP_index_exp& i2 = MP_index_exp::Empty,
-	    const MP_index_exp& i3 = MP_index_exp::Empty,
-	    const MP_index_exp& i4 = MP_index_exp::Empty,
-	    const MP_index_exp& i5 = MP_index_exp::Empty
+	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i3 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i4 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i5 = MP_index_exp::getEmpty()
 	    ) {
 	    myrefs.push_back(new DataRef(this, i1, i2, i3, i4, i5));
 	    return *myrefs.back();

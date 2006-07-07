@@ -2,7 +2,6 @@
 #include "flopc.hpp"
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
-#include <utility>
 
 /* This is a FLOPC++ version of the model gapmin.gms from 
    the GAMS model library.

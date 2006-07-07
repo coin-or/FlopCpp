@@ -55,7 +55,7 @@ double DataRef::evaluate() const {
     }
 }
 
-double& DataRef::evaluate_lhs(double v) const {
+void DataRef::evaluate_lhs(double v) const {
     int i1 = D->S1.check(I1->evaluate());
     int i2 = D->S2.check(I2->evaluate());
     int i3 = D->S3.check(I3->evaluate());
@@ -63,18 +63,22 @@ double& DataRef::evaluate_lhs(double v) const {
     int i5 = D->S5.check(I5->evaluate());
 
     int i = D->f(i1,i2,i3,i4,i5);
-    if ( i != outOfBound ) {
-        return (D->v[i] = v);
+    if (i != outOfBound) {
+	D->v[i] = v;
     }
-    double d(0.0);
-    return d;
 }
 
 void MP_data::operator()() const {
-    v[f(i1.evaluate(),i2.evaluate(),i3.evaluate(),i4.evaluate(),i5.evaluate())];
+    if (&S1!=&MP_set::getEmpty()) cout << i1.evaluate() << " ";
+    if (&S2!=&MP_set::getEmpty()) cout << i2.evaluate() << " ";
+    if (&S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
+    if (&S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
+    if (&S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
+    cout<<"  "<<v[f(i1.evaluate(),i2.evaluate(),i3.evaluate(),
+		    i4.evaluate(),i5.evaluate())] << endl;
 }
 
 void MP_data::display(string s) {
     cout<<s<<endl;
-    //((S1)(i1)*(S2)(i2)*(S3)(i3)*(S4)(i4)*(S5)(i5)).Forall(this);
+    ((S1)(i1)*(S2)(i2)*(S3)(i3)*(S4)(i4)*(S5)(i5)).Forall(this);
 }

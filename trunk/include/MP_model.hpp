@@ -21,61 +21,59 @@ class OsiSolverInterface;
 
 namespace flopc {
 
-class MP_variable;
-//class MP_constraint;
-class MP_index;
-class MP_set;
+  class MP_variable;
+  class MP_index;
+  class MP_set;
 
-
-class Messenger {
-public:
-	virtual void logMessage(int level, const char * const msg){}
+  class Messenger {
+  public:
+    virtual void logMessage(int level, const char * const msg){}
     friend class MP_model;
-private:
+  private:
     virtual void constraintDebug(string name, const vector<Coef>& cfs) {}
     virtual void objectiveDebug(const vector<Coef>& cfs) {}
     virtual void statistics(int bm, int m, int bn, int n, int nz) {}
     virtual void generationTime(double t) {}
-protected:
+  protected:
     virtual ~Messenger() {}
-};
+  };
 
-class NormalMessenger : public Messenger {
+  class NormalMessenger : public Messenger {
     friend class MP_model;
-private:
+  private:
     virtual void statistics(int bm, int m, int bn, int n, int nz);
     virtual void generationTime(double t);
-};
+  };
 
-class VerboseMessenger : public NormalMessenger {
+  class VerboseMessenger : public NormalMessenger {
     friend class MP_model;
-private:
+  private:
     virtual void constraintDebug(string name, const vector<Coef>& cfs);
     virtual void objectiveDebug(const vector<Coef>& cfs);
-};
+  };
 
-class MP_model {
-   friend class MP_constraint;
-public:
+  class MP_model {
+    friend class MP_constraint;
+  public:
     MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
     ~MP_model() {
-	delete messenger;
+      delete messenger;
     }
     void silent() {
-	delete messenger;
-	messenger = new Messenger;
+      delete messenger;
+      messenger = new Messenger;
     }
     void verbose() {
-	delete messenger;
-	messenger = new VerboseMessenger;
+      delete messenger;
+      messenger = new VerboseMessenger;
     }
 
     void setSolver(OsiSolverInterface* s) {
-	Solver = s;
+      Solver = s;
     }
 
     OsiSolverInterface* operator->() {
-	return Solver;
+      return Solver;
     }
 
     MP_model& add(MP_constraint& c);
@@ -96,11 +94,12 @@ public:
     void add(MP_variable* v);
     void addRow(const Constraint& c); 
 
-	static MP_model &getDefaultModel();
-	static MP_model *getCurrentModel();
-	std::string toString()const;
-	Messenger *getMessenger(){ return messenger;}
-private:
+    static MP_model &getDefaultModel();
+    static MP_model *getCurrentModel();
+    Messenger *getMessenger(){ 
+      return messenger;
+    }
+  private:
     static MP_model& default_model;
     static MP_model* current_model;
     MP_model(const MP_model&);
@@ -115,9 +114,9 @@ private:
     MP_expression Objective;
     set<MP_constraint *> Constraints;
     set<MP_variable *> Variables;
-public:
+  public:
     OsiSolverInterface* Solver; 
-private:
+  private:
     int m;
     int n;
     int nz;
@@ -130,7 +129,7 @@ private:
     double *c;
     double *l;
     double *u;
-};
+  };
 
 } // End of namespace flopc
 #endif

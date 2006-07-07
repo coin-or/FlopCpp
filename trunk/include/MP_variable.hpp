@@ -26,7 +26,6 @@ namespace flopc {
 	friend class MP_variable;
     public:
 	int getColumn() const;
-	virtual std::string toString()const;
 
     private:
 	VariableRef(MP_variable* v, 
@@ -64,8 +63,8 @@ namespace flopc {
 		    const MP_set_base &s3 = MP_set::getEmpty(),
 		    const MP_set_base &s4 = MP_set::getEmpty(), 
 		    const MP_set_base &s5 = MP_set::getEmpty());
-		void display(const std::string &s = "");  
-		virtual std::string toString()const;
+
+        void display(const std::string &s = "");  
 
 	~MP_variable() {
 	}

@@ -22,14 +22,7 @@ namespace flopc {
 	    return B; 
 	}
 	bool B;
-    	public:
-	virtual std::string toString()const
-		{ 
-			if(evaluate())
-				return "BooleanBool::true";
-			return "BooleanBool::false";
-		}
-};
+    };
 
     class Boolean_Constant : public Boolean_base {
 	friend class MP_boolean;
@@ -39,14 +32,7 @@ namespace flopc {
 	    return C->evaluate(); 
 	}
 	Constant C;
- 	public:
-	virtual std::string toString()const
-		{ 
-			if(evaluate())
-				return "Boolean_Constant::true";
-			return "Boolean_Constant::false";
-		}
-   };
+    };
 
     class Boolean_SUBSETREF : public Boolean_base {
 	friend class MP_boolean;
@@ -60,13 +46,6 @@ namespace flopc {
 	    }
 	}
 	SUBSETREF* C;
-	public:
-	virtual std::string toString()const
-		{ 
-			if(evaluate())
-				return "Boolean_SUBSETREF::true";
-			return "Boolean_SUBSETREF::false";
-		}
     };
 
     class Boolean_and : public Boolean_base {
@@ -150,7 +129,7 @@ namespace flopc {
 	bool evaluate() const;
     };
 
-	    class Boolean_not_equal : public Comparison {
+    class Boolean_not_equal : public Comparison {
 	friend MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
 	friend MP_boolean operator!=(const Constant& e1, const Constant& e2);
     private:

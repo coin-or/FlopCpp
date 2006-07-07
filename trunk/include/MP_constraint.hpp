@@ -125,7 +125,6 @@ namespace flopc {
 	}
 
 	virtual ~MP_constraint() {}
-	virtual std::string toString()const ;
 
 	double price(int i1=0, int i2=0, int i3=0, int i4=0, int i5=0) const;
 

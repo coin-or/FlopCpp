@@ -26,11 +26,6 @@ namespace flopc {
     protected:
 	Boolean_base() : count(0) {}
 	virtual ~Boolean_base() {}
-	virtual std::string toString()const{ 
-		if(evaluate())
-			return "BooleanBase::true";
-		return "BooleanBase::false";
-	}
 
 	int count;
     };

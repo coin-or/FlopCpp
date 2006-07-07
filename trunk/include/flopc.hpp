@@ -21,7 +21,6 @@
 
 namespace flopc {
 
-
   // Global functions
   inline void forall(const MP_domain& d, const Functor& f) {
     d.Forall(&f);

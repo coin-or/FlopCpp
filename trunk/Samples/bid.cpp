@@ -73,8 +73,11 @@ int main() {
     qmax(VS(e,0)) =  42000;
     qmax(VS(e,1)) =  77000;
 
-    setup(VS(V,S+1)) = setup(VS(V,S)) +
-	qmax(VS(V,S))*(price(VS(V,S))-price(VS(V,S+1)));
+     setup(VS(V,S+1)) = setup(VS(V,S)) +
+ 	qmax(VS(V,S))*(price(VS(V,S))-price(VS(V,S+1)));
+
+//    setup(VS(V,S+1)) = setup(VS(V,S)) +
+//	qmax(VS(V,S))*(price(VS(V,S))-price(VS(V,S+1)));
 
     setup.display("setup");
 

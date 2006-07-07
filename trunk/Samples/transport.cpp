@@ -33,9 +33,12 @@ int main() {
     COST(Link) = 90 * COST(Link) / 1000.0;
     
     MP_variable x(Link);
+    x.display("...");
 
     MP_constraint supply(S);
     MP_constraint demand(D);  
+
+    supply.display("...");
 
     supply(S) =  sum( Link(S,D), x(Link) ) <= SUPPLY(S);
     demand(D) =  sum( Link(S,D), x(Link) ) >= DEMAND(D);
@@ -49,5 +52,6 @@ int main() {
     assert(MP_model::getDefaultModel()->getObjValue()>=156.14 && MP_model::getDefaultModel()->getObjValue()<=156.16);
     
     x.display("Optimal solution:");
+    supply.display("Supply dual solution");
     cout<<"Test transport passed."<<endl;
 }

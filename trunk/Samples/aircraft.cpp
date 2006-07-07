@@ -7,7 +7,6 @@ using namespace flopc;
 the expected profit when traffic demand is uncertain. Two different
 formulations are used, the delta and the lambda formualation.
 
-
 Dantzig, G B, Chapter 28. In Linear Programming and Extensions.
 Princeton University Press, Princeton, New Jersey, 1963.
 */
@@ -128,7 +127,6 @@ int main() {
     y.upperLimit.display("y upper");
 
     m1.add(ab).add(db).add(bcd1).add(ocd);
-	std::cout<<m1.toString()<<std::endl;
     m1.minimize(oc() + bc());
 
     assert(m1->getNumRows()==11);

@@ -30,8 +30,7 @@ public:
     virtual int size() const = 0;
     virtual operator MP_domain() const = 0;
     virtual MP_domain operator()(const MP_index_exp& i) const = 0;
-	virtual std::string toString()const;
-	void display()const;
+    void display()const;
 
     int check(int i) const {
 	if ((i>=0) && (i<size())) {
@@ -222,40 +221,10 @@ private:
 		  const MP_index_exp& i4,
 		  const MP_index_exp& i5) : 
 	    S(s),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5) {} 
-	virtual std::string toString()const
-	{
-		std::stringstream ss;
-		ss<<" nbr="<<nbr<<" S(size)="<<S->size()<<std::ends;
-		if(nbr==0)
-		{
-			ss<<"WOW, size = 0";
-		}
-		if(nbr>0)
-		{
-			ss<<" I1=<"<<I1.toString()<<">="<<I1->toString();
-		}
-		if(nbr>1)
-		{
-			ss<<" I2=<"<<I2.toString()<<">="<<I2->toString();
-		}
-		if(nbr>2)
-		{
-			ss<<" I3=<"<<I3.toString()<<">="<<I3->toString();
-		}
-		if(nbr>3)
-		{
-			ss<<" I4=<"<<I4.toString()<<">="<<I4->toString();
-		}
-		if(nbr>4)
-		{
-			ss<<" I5=<"<<I4.toString()<<">="<<I5->toString();
-		}
-		return ss.str();
-	}
 	void display()const
 	{
-//		Messenger &msgr=*MP_model::getCurrentModel()->getMessenger();
-//		msgr.logMessage(5,toString().c_str());
+// 		Messenger &msgr=*MP_model::getCurrentModel()->getMessenger();
+// 		msgr.logMessage(5,toString().c_str());
 	}
     
 	operator MP_domain() const {

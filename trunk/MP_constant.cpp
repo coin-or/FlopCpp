@@ -16,12 +16,6 @@
 
 namespace flopc {
 
-	std::string Constant_base::toString()const
-	{
-		std::stringstream ss;
-		ss<<"Constant";
-		return ss.str();
-	}
     class Constant_index : public Constant_base {
 	friend class Constant;
     private:

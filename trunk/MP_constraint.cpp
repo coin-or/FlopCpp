@@ -19,30 +19,6 @@ using std::endl;
 
 using namespace flopc;
 
-std::string MP_constraint::toString() const {
-	std::stringstream ss;
-	ss<<" S.T.: "<<getName();
-	for (size_t i=offset; i<offset+size(); i++) 
-	{
-		if(M->bl!=NULL)
-		{
-			ss<<"@"<<i<<" lb/ub:"<<M->bl[i]<<"/"<<M->bu[i];
-			if(M->rowActivity)
-				ss<<(M->rowActivity[i]!=0)?" active:":" inactive";
-			else
-				ss<<" No row info: solve not run";
-			if(M->rowPrice)
-				ss<<"  RowPrice:"<<M->rowPrice[i];
-			ss<<std::ends;
-		}
-		else
-		{
-			ss<<" Model not yet generated";
-		}
-		ss<<"-->"<<left->toString()<<" "<<right->toString()<<"<--";
-	}
-	return ss.str();
-}
 
 void MP_constraint::operator=(const Constraint &v) {
    left = v.left;
@@ -68,9 +44,11 @@ MP_constraint::MP_constraint(
     RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
 //     pprice(MP_data(d1->getSet(),d2->getSet(),d3->getSet(),
 // 		   d4->getSet(),d5->getSet())),
+    M(MP_model::current_model),
+    offset(-1),
     S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),
-    I1(0),I2(0),I3(0),I4(0),I5(0),
-	M(MP_model::current_model){
+    I1(0),I2(0),I3(0),I4(0),I5(0)
+{
     MP_model::current_model->add(*this);
 }
 
@@ -98,7 +76,11 @@ void MP_constraint::insertVariables(set<MP_variable*>& v) {
 
 void MP_constraint::display(string s) const {
     cout<<s<<endl;
-    for (int i=offset; i<offset+size(); i++) {
+    if (offset >=0) {
+      for (int i=offset; i<offset+size(); i++) {
 	cout<<i<<"  "<<M->bl[i]<<"  "<<M->rowActivity[i]<<"  "<<M->bu[i]<<"  "<<M->rowPrice[i]<<endl;
+      }
+    } else {
+      cout<<"No solution available!"<<endl;
     }
 }

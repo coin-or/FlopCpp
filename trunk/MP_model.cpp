@@ -59,8 +59,9 @@ void VerboseMessenger::objectiveDebug(const vector<Coef>& cfs) {
 }
 
 MP_model::MP_model(OsiSolverInterface* s, Messenger* m) : 
-    messenger(m), Objective(0), Solver(s),  m(0), n(0), nz(0), bl(0) {
-    MP_model::current_model = this;
+    solution(0), messenger(m), Objective(0), Solver(s), 
+    m(0), n(0), nz(0), bl(0) {
+  MP_model::current_model = this;
 }
 
 MP_model& MP_model::add(MP_constraint& c) {
@@ -248,7 +249,6 @@ void MP_model::generate() {
     }
     nz = coefs.size();
 
-
     messenger->statistics(Constraints.size(),m,Variables.size(),n,nz);
 
     Elm = new double[nz]; 
@@ -372,6 +372,15 @@ void MP_model::generate() {
     // the line below, but due to a bug in OsiGlpk it does not work
     // Solver->loadProblem(n, m, Cst, Rnr, Elm, l, u, c, bl, bu);
 
+    delete [] Elm; 
+    delete [] Rnr;    
+    delete [] Cst;   
+    delete [] Clg;   
+    delete [] l;  
+    delete [] u;  
+    delete [] bl;  
+    delete [] bu;  
+
     bool isMIP = false;
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
 	int begin = (*i)->offset;
@@ -426,22 +435,5 @@ void MP_model::generate() {
     } else {
 	cout<<"FLOPC++: Solution process abandoned."<<endl;
     }
-}
-
-std::string MP_model::toString()const
-{
-	std::stringstream ss;
-	ss<<"min/max:"<<Objective.toString()<<"\n";
-	for(std::set<MP_constraint *>::const_iterator cci = Constraints.begin();
-		cci != Constraints.end();cci++)
-	{
-		ss<<(*cci)->toString()<<"\n";
-	}
-	for(std::set<MP_variable *>::const_iterator vci = Variables.begin();
-		vci != Variables.end();vci++)
-	{
-		ss<<(*vci)->toString()<<"\n";
-	}
-	return ss.str();
 }
 

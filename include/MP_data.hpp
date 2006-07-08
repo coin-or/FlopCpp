@@ -4,7 +4,7 @@
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
 // Copyright (C) 2003 Tim Helge Hultberg
 // All Rights Reserved.
-//****************************************************************************
+// ****************************************************************************
 
 #ifndef _MP_data_hpp_
 #define _MP_data_hpp_
@@ -19,6 +19,11 @@ namespace flopc {
 
     class MP_data;
 
+    /** @brief Reference to a set of data
+        @ingroup INTERNAL_USE
+        @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
+     */
     class DataRef : public Constant_base, public Functor {
     public:
 	DataRef(MP_data* d, 
@@ -43,6 +48,21 @@ namespace flopc {
 	MP_boolean B;
     };
 
+    /** @brief Input data set.
+        @ingroup PublicInterface
+        This is one of the main public interface classes.  
+        It is normally directly constructed given a set of indices (domain)
+        over which it is valid. If the data is not bound at construction,
+        either the value() or initialize() method must be called
+        which (deep) copies in the actual data.  
+        If one wishes to refer to external data instead rather than
+        doing a deep copy, use the constructor which takes the value pointer
+        as an argument.  This copies the original data pointer value (rather than a deep copy).
+        <br> This is used for construction of :
+        @li objective coefficients
+        @li constraint coefficients
+        @li 'right hand sides'
+     */
     class MP_data : public RowMajor, public Functor , public Named {
 	friend class MP_variable;
 	friend class DisplayData;
@@ -50,11 +70,15 @@ namespace flopc {
 	friend class MP_model;
     public:
 	void operator()() const;
+    /// similar to value() but copies the same value to all entries.
 	void initialize(double d) {
 	    for (int i=0; i<size(); i++) {
 		v[i] = d;
 	    }
 	}
+    /** Constructs the MP_data object, and allocates space for data, but
+        does not initialize the data.
+    */
 	MP_data(const MP_set_base &s1 = MP_set::getEmpty(), 
 		const MP_set_base &s2 = MP_set::getEmpty(), 
 		const MP_set_base &s3 = MP_set::getEmpty(),
@@ -67,6 +91,9 @@ namespace flopc {
 		initialize(0); 
 	    }
 
+        /** Construct the object, and uses the data in the original array
+            (shallow copy)
+        */
 	MP_data(double* value,
 		const MP_set_base &s1 = MP_set::getEmpty(), 
 		const MP_set_base &s2 = MP_set::getEmpty(), 
@@ -81,22 +108,29 @@ namespace flopc {
 
 	~MP_data() {
 	    if (manageData == true) delete[] v;
+        /// @todo determine cause of seg fault.
 // 	    for (unsigned int i=0; i<myrefs.size(); i++) {
 // 		cout<<"# "<<i<<"   "<<myrefs[i]<<endl;
 // 		delete myrefs[i]; //Gives segmentation fault. I dont know why!
 // 	    }
 	}
     
+    /// Used to bind and deep copy data into the MP_data data structure.
 	void value(const double* d) {
 	    for (int i=0; i<size(); i++) {
 		v[i] = d[i];
 	    }
 	}
 
+    /// @todo purpose?
 	operator double() {
 	    return operator()(0);
 	}
     
+    /** Looks up the data based on the index values passed in.
+        @note this is used internally, but may also be useful for spot
+        checking data or in other expressions.
+     */
 	double& operator()(int i1, int i2=0, int i3=0, int i4=0, int i5=0) {
 	    i1 = S1.check(i1);
 	    i2 = S2.check(i2);
@@ -112,6 +146,10 @@ namespace flopc {
 	    }
 	}
     
+    /** returns a DataRef which refers into the MP_data.  
+        @note For internal use.
+        @todo can this be private?
+     */
 	DataRef& operator() (
 	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
 	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
@@ -123,6 +161,7 @@ namespace flopc {
 	    return *myrefs.back();
 	}
     
+    /// For displaying data in a human readable format.
 	void display(string s = "");
     private:
 	MP_data(const MP_data&); // Forbid copy constructor

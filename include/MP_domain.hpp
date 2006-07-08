@@ -22,6 +22,11 @@ class MP_index;
 
 template<int nbr> class MP_subset;
 
+    /** @brief Reference to a set of index values.
+        @ingroup INTERNAL_USE
+        @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
+     */
 class MP_domain_base : public Functor, public MP_index_base {
     friend class MP_domain;
     friend class Handle<MP_domain_base*>;

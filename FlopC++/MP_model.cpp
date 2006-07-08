@@ -17,7 +17,7 @@ using std::endl;
 #include "MP_model.hpp"
 #include "MP_variable.hpp"
 #include "MP_constraint.hpp"
-#include "Timer.hpp"
+#include <CoinTime.hpp>
 
 using namespace flopc;
 
@@ -212,8 +212,7 @@ void MP_model::minimize(const MP_expression &obj) {
 }
 
 void MP_model::generate() {
-    Timer t;
-    t.start();
+    double time = CoinCpuTime();
     m=0;
     n=0;
     vector<Coef> coefs;
@@ -393,8 +392,7 @@ void MP_model::generate() {
 	}
     }
 
-    t.stop();    
-    messenger->generationTime(t.time());
+    messenger->generationTime(time-CoinCpuTime());
 
     //Solver->setDblParam(OsiDualObjectiveLimit,1.0e50);
 

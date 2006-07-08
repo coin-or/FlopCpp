@@ -1,4 +1,4 @@
-CoinDir		= ..
+CoinDir		= /usr/local/coin/COIN
 FlopcDir	= .
 
 CXX     =  g++
@@ -79,7 +79,7 @@ $(TARGETDIR)/libflopc$(LIBEXT): $(LIBOBJ)
 
 doc :
 	@echo Running doxygen to create documentation
-	doxygen doxygenconfig
+	doxygen 
 
 clean :
 	@rm -rf $(DEPDIR)

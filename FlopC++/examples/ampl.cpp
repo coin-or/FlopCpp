@@ -2,6 +2,7 @@
 #include "flopc.hpp"
 using namespace flopc;
 #include <OsiCbcSolverInterface.hpp>
+#include <OsiClpSolverInterface.hpp>
 
 /*   A sample problem to demonstrate the power of modeling systems
 Fourer, R, Gay, D M, and Kernighan, B W, AMPL: A Mathematical Programming
@@ -9,8 +10,9 @@ Language. AT\&T Bell Laboratories, Murray Hill, New Jersey, 1987.
 */
 
 int main() {
-	MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
-    MP_model::getDefaultModel().verbose();
+    MP_model &model = MP_model::getDefaultModel();
+	model.setSolver(new OsiCbcSolverInterface(new OsiClpSolverInterface));
+    model.verbose();
 
     enum {iron, nickel, numRaw};
     enum {nuts, bolts, washers, numPrd};
@@ -60,6 +62,7 @@ int main() {
     profit.value(&cvalue[0][0]);
 
     MP_variable  x(prd,TL); // production level
+    x.setName("X");
     MP_variable  s(raw,TL); // storage at beginning of period
 
     MP_index p,r,t;
@@ -79,16 +82,16 @@ int main() {
 
     // MP_model::default_model.verbose();
 
-    maximize( 
+    model.maximize( 
 	sum(T(t), sum(prd(p), profit(p,t)*x(p,t)) -
 	          sum(raw(r), scost(r)*s(r,t) )) +
 	sum(raw(r), rvalue(r)*s(r,numT)) 
     );
 
-    assert(MP_model::getDefaultModel()->getNumRows()==14);
-    assert(MP_model::getDefaultModel()->getNumCols()==25);
-    assert(MP_model::getDefaultModel()->getNumElements()==60);
-    assert(MP_model::getDefaultModel()->getObjValue()>=79.3412 && MP_model::getDefaultModel()->getObjValue()<=79.3414);
+    assert(model.getNumRows()==14);
+    assert(model.getNumCols()==25);
+    assert(model.getNumElements()==60);
+    assert(model.getObjValue()>=79.3412 && model.getObjValue()<=79.3414);
 
     x.display();
     s.display();

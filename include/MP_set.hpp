@@ -4,7 +4,7 @@
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
 // Copyright (C) 2003 Tim Helge Hultberg
 // All Rights Reserved.
-//****************************************************************************
+// ****************************************************************************
 
 #ifndef _MP_set_hpp_
 #define _MP_set_hpp_
@@ -23,6 +23,10 @@ using std::string;
 
 namespace flopc {
 
+/** @brief Internal representation of a "set" 
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the calling code.
+*/
 class MP_set_base : public MP_index , public Named {
 public:
     MP_set_base() : Cyclic(false) {}
@@ -48,24 +52,48 @@ public:
 };
 
     
+/** @brief Representation of a set for indexing into some other construct.
+    @ingroup PublicInterface
+    This is one of the main public interface classes.  One uses this when
+    constructing MP_domains, and subsets.
+    It is frequent that one would directly construct sets of indices, then
+    use expressions to subset or slice the data.
+    @note term: cardinality is the number of elements in the set.
+    @note term: dimension is the number of indices used to reference into it.
+    @note there is a distince 'empty' MP_set
+*/
 class MP_set : public MP_set_base {
 public:
+    /// constructs a set with specific cardinality.
     MP_set(int i = 0): cardinality(i) {}
+    /** @brief Constructs an MP_domain on the stack given an index expression
+        into the set.
+        @todo is the internal use?
+     */
     MP_domain operator()(const MP_index_exp& i) const {
 	return i->getDomain(const_cast<MP_set*>(this));
     }
+    /// @brief constructs an MP_domain from the MP_set.
     operator MP_domain() const {
 	return new MP_domain_set(this,const_cast<MP_set*>(this));
     }
+    /** @brief constructs  a domain by subsetting this MP_set where
+        the MP_boolean evaluates to 'true'
+     */
     MP_domain such_that(const MP_boolean& b) {
 	return (MP_domain(new MP_domain_set(this,this))).such_that(b);
     }
+    /** setter for 'cyclic' property
+        @todo better explain the use of cyclic.
+     */
     void cyclic() {
 	Cyclic = true;
     }
+    /// getter for the cardinality of this MP_set.
     virtual int size() const {
 	return cardinality;
     }
+    /// gets the distinct 'empty' MP_set.
 	static MP_set &getEmpty();
 private:
     static MP_set Empty;
@@ -74,6 +102,11 @@ private:
 
 template <int nbr> class MP_subset;
 
+/** @brief Internal representation of a "set" 
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the calling code.
+*/
+class MP_set_base : public MP_index , public Named {
 template<int nbr> class InsertFunctor : public Functor {
 public:
     InsertFunctor( MP_subset<nbr>* s, vector<MP_index_exp> i) 
@@ -92,6 +125,14 @@ private:
 
 template <int nbr> class SubsetRef;
 
+/** @brief Internal representation of a "set" 
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
+    @note this is often implicitly created with many expressions which may
+    subset a set.
+*/
+class MP_set_base : public MP_index , public Named {
 template <int nbr>
 class MP_subset : public MP_set {
     friend class MP_domain_subset<nbr>;
@@ -197,6 +238,13 @@ private:
 	std::map<std::vector<int>, int> elements;
 };
 
+/** @brief Internal representation of a "set" 
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
+    @note this is often implicitly created with many expressions which may
+    subset a set.
+*/
 
     class SUBSETREF : public MP_index_base {
     public:
@@ -211,6 +259,13 @@ private:
 	}
     };
 
+/** @brief Internal representation of a "set" 
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
+    @note this is often implicitly created with many expressions which may
+    subset a set.
+*/
     template <int nbr>
     class SubsetRef : public SUBSETREF {
     public:

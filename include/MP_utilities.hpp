@@ -4,7 +4,7 @@
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
 // Copyright (C) 2003 Tim Helge Hultberg
 // All Rights Reserved.
-//****************************************************************************
+// ****************************************************************************
 
 #ifndef _MP_utilities_hpp_
 #define _MP_utilities_hpp_
@@ -17,6 +17,15 @@ using std::vector;
 
 namespace flopc {
 
+    /** @file This file contains several different useful utilities which are
+        used to simplify use of FlopC++.
+        @ingroup PublicInterface
+     */
+
+    /** @brief Function object.  Often used
+        @ingroup INTERNAL_USE
+        @note is the base class for passing a fucntion object around.
+    */
     class Functor {
     public:
 	virtual void operator()() const = 0;
@@ -28,6 +37,10 @@ namespace flopc {
 	Functor& operator=(const Functor&);
     };	
 
+    /** This template makes a vector of appropriate size out of the
+        variable number of arguments.
+        @ingroup INTERNAL_USE
+     */
     template<int nbr, class T>
     vector<T> makeVector(T i1, T i2=0, T i3=0, T i4=0, T i5=0) {
 	vector<T> S(nbr);
@@ -43,13 +56,19 @@ namespace flopc {
 	return S;
     }
 
+    /// return the strictly positive modulus of two integers
     inline int mod(int a, int b) {
 	int t = a % b;
 	return  (t>=0) ? t : t+b;
     }
 
+    /// Distinct return value on conditions where an index goes out of bounds.
     const int outOfBound = -2;    
 
+    /** Utility class to flatten multidimensional information into single
+        dimentional offset information.
+        @ingroup INTERNAL_USE
+    */
     class RowMajor {
     public:
 	int size() const { return size_; }
@@ -71,6 +90,10 @@ namespace flopc {
 	int size1,size2,size3,size4,size5,size_;
     };
 
+    /** @brief Utility interface class for adding a string name onto a
+        structure.
+        @ingroup INTERNAL_USE
+     */
     class Named {
     public:
 	string getName() const { return name; }
@@ -79,6 +102,9 @@ namespace flopc {
 	string name;
     };
 
+    /** @brief Utility for doing reference counted pointers.
+        @ingroup INTERNAL_USE
+     */
     template<class T> class Handle {
     public:
 	const T &operator->() const {

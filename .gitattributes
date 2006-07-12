@@ -47,7 +47,6 @@ FlopC++/src/MP_utilities.hpp -text
 FlopC++/src/MP_variable.cpp -text
 FlopC++/src/MP_variable.hpp -text
 FlopC++/src/Makefile -text
-FlopC++/src/Timer.hpp -text
 FlopC++/src/flopc.cpp -text
 FlopC++/src/flopc.hpp -text
 /INSTALL -text

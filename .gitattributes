@@ -29,7 +29,7 @@ FlopCpp/examples/train.dat -text
 FlopCpp/examples/transport.cpp -text
 FlopCpp/examples/xbsl.cpp -text
 FlopCpp/flopcpp_addlibs.txt.in -text
-FlopCpp/inc/config_FlopCpp.h.in -text
+FlopCpp/inc/config_flopcpp.h.in -text
 FlopCpp/src/FlopCppConfig.h -text
 FlopCpp/src/MP_boolean.cpp -text
 FlopCpp/src/MP_boolean.hpp -text

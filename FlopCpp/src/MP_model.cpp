@@ -1,4 +1,4 @@
-// ******************** flopc++ **********************************************
+// ******************** FlopCpp **********************************************
 // File: MP_model.cpp
 // $Id$
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
@@ -27,19 +27,19 @@ using namespace flopc;
   MP_model *MP_model::getCurrentModel() { return current_model;}
 
 void NormalMessenger::statistics(int bm, int m, int bn, int n, int nz) {
-    cout<<"FLOPC++: Number of constraint blocks: " <<bm<<endl;
-    cout<<"FLOPC++: Number of individual constraints: " <<m<<endl;
-    cout<<"FLOPC++: Number of variable blocks: " <<bn<<endl;
-    cout<<"FLOPC++: Number of individual variables: " <<n<<endl;
-    cout<<"FLOPC++: Number of non-zeroes (including rhs): " <<nz<<endl;
+    cout<<"FlopCpp: Number of constraint blocks: " <<bm<<endl;
+    cout<<"FlopCpp: Number of individual constraints: " <<m<<endl;
+    cout<<"FlopCpp: Number of variable blocks: " <<bn<<endl;
+    cout<<"FlopCpp: Number of individual variables: " <<n<<endl;
+    cout<<"FlopCpp: Number of non-zeroes (including rhs): " <<nz<<endl;
 }
 
 void NormalMessenger::generationTime(double t) {
-    cout<<"FLOPC++: Generation time: "<<t<<endl;
+    cout<<"FlopCpp: Generation time: "<<t<<endl;
 }
 
 void VerboseMessenger::constraintDebug(string name, const vector<Coef>& cfs) {
-    cout<<"FLOPC++: Constraint "<<name<<endl;
+    cout<<"FlopCpp: Constraint "<<name<<endl;
     for (unsigned int j=0; j<cfs.size(); j++) {
 	int col=cfs[j].col;
 	int row=cfs[j].row;
@@ -419,19 +419,19 @@ void MP_model::generate() {
     }
      
     if (Solver->isProvenOptimal() == true) {
-	cout<<"FLOPC++: Optimal obj. value = "<<Solver->getObjValue()<<endl;
-	cout<<"FLOPC++: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
+	cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
+	cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
 	    Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
 	solution = Solver->getColSolution();
 	reducedCost = Solver->getReducedCost();
 	rowPrice = Solver->getRowPrice();
 	rowActivity = Solver->getRowActivity();
     } else if (Solver->isProvenPrimalInfeasible() == true) {
-	cout<<"FLOPC++: Problem is primal infeasible."<<endl;
+	cout<<"FlopCpp: Problem is primal infeasible."<<endl;
     } else if (Solver->isProvenDualInfeasible() == true) {
-	cout<<"FLOPC++: Problem is dual infeasible."<<endl;
+	cout<<"FlopCpp: Problem is dual infeasible."<<endl;
     } else {
-	cout<<"FLOPC++: Solution process abandoned."<<endl;
+	cout<<"FlopCpp: Solution process abandoned."<<endl;
     }
 }
 

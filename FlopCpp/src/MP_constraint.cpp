@@ -1,4 +1,4 @@
-// ******************** flopc++ **********************************************
+// ******************** FlopCpp **********************************************
 // File: MP_constraint.cpp
 // $Id$
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
@@ -61,7 +61,7 @@ void MP_constraint::coefficients(GenerateFunctor& f) {
 	left->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,1.0);
  	right->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,-1.0);
 	 } else {
-		cout<<"FLOPC++ Warning: Constraint declared but not defined."<<endl;
+		cout<<"FlopCpp Warning: Constraint declared but not defined."<<endl;
 	}
 }
 

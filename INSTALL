@@ -1,4 +1,4 @@
-Any solver with an Osi-interface can be used together with FLOPC++.
+Any solver with an Osi-interface can be used together with FlopCpp.
 In the sample models, Cbc, is used. To compile these samples the 
 following components of COIN must be installed first:
    Osi, OsiClp, Clp, OsiCbc, Cbc, Coin and Cgl

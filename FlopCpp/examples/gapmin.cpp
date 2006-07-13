@@ -3,7 +3,7 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
-/* This is a FLOPC++ version of the model gapmin.gms from 
+/* This is a FlopCpp version of the model gapmin.gms from 
    the GAMS model library.
 */
 

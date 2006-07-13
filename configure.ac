@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([FlopC++],[0.1],[flopcpp@list.coin-or.org])
+AC_INIT([FlopCpp],[0.1],[flopcpp@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -54,7 +54,7 @@ AC_COIN_MAIN_SUBDIRS(Clp)
 AC_COIN_MAIN_SUBDIRS(Osi)
 AC_COIN_MAIN_SUBDIRS(Cgl)
 AC_COIN_MAIN_SUBDIRS(Cbc)
-AC_COIN_MAIN_SUBDIRS(FlopC++)
+AC_COIN_MAIN_SUBDIRS(FlopCpp)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

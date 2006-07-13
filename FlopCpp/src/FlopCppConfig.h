@@ -44,8 +44,8 @@
 /* Define to the debug sanity check level (0 is no test) */
 #define COIN_FLOPCPP_CHECKLEVEL 0
 
-/* Define to 1 if the FlopC++ package is used */
-#define COIN_HAS_FLOPC++ 1
+/* Define to 1 if the FlopCpp package is used */
+#define COIN_HAS_FLOPCPP 1
 
 /* Define to 1 if the Cbc package is used */
 #define COIN_HAS_CBC 1

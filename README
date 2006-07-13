@@ -36,6 +36,6 @@ case the first line of each makefile must be modified to reflect
 the location of COIN.
 
 
-To build FLOPC++ see INSTALL file.
+To build FlopCpp see INSTALL file.
 
 See http://www.mat.ua.pt/thh/flopc for further information.

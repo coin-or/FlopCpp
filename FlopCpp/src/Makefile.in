@@ -43,7 +43,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-LIBOBJDIR =
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -64,11 +63,12 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libCbc_la_LIBADD =
-am_libCbc_la_OBJECTS = MP_boolean.lo MP_constant.lo MP_constraint.lo \
-	MP_data.lo MP_domain.lo MP_expression.lo MP_index.lo \
-	MP_model.lo MP_set.lo MP_utilities.lo MP_variable.lo
-libCbc_la_OBJECTS = $(am_libCbc_la_OBJECTS)
+libFlopCpp_la_LIBADD =
+am_libFlopCpp_la_OBJECTS = MP_boolean.lo MP_constant.lo \
+	MP_constraint.lo MP_data.lo MP_domain.lo MP_expression.lo \
+	MP_index.lo MP_model.lo MP_set.lo MP_utilities.lo \
+	MP_variable.lo
+libFlopCpp_la_OBJECTS = $(am_libFlopCpp_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -87,8 +87,8 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libCbc_la_SOURCES)
-DIST_SOURCES = $(libCbc_la_SOURCES)
+SOURCES = $(libFlopCpp_la_SOURCES)
+DIST_SOURCES = $(libFlopCpp_la_SOURCES)
 includeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(include_HEADERS)
 ETAGS = etags
@@ -286,16 +286,16 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
-#                               libCbc                                 #
+#                               libFlopCpp                             #
 ########################################################################
 
 # Name of the library compiled in this directory.  We want it to be installed
 # in the 'lib' directory
-lib_LTLIBRARIES = libCbc.la
+lib_LTLIBRARIES = libFlopCpp.la
 
 # List all source files for this library, including headers
-libCbc_la_SOURCES = \
-	FlopcConfig.h \
+libFlopCpp_la_SOURCES = \
+	FlopCppConfig.h \
 	MP_boolean.cpp MP_boolean.hpp \
 	MP_constant.cpp MP_constant.hpp \
 	MP_constraint.cpp MP_constraint.hpp \
@@ -310,7 +310,7 @@ libCbc_la_SOURCES = \
 
 
 # This is for libtool (on Windows)
-#libFlopc_la_LDFLAGS = $(LT_LDFLAGS)
+#libFlopCpp_la_LDFLAGS = $(LT_LDFLAGS)
 
 ########################################################################
 #                        cbc-generic program                           #
@@ -482,7 +482,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(CGLSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CGLSRCDIR)/src/CglRedSplit` -I`$(CYGPATH_W) \
 	$(CGLSRCDIR)/src/CglTwomir` -I`$(CYGPATH_W) \
 	$(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) $(OSISRCDIR)/src` \
-	-DCOIN_NO_CLP_MESSAGE -DUSE_FLOPCCONFIG
+	-DCOIN_NO_CLP_MESSAGE -DUSE_FLOPCPPCONFIG
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -495,7 +495,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install'
 include_HEADERS = \
-	../inc/config_flopc.h \
+	../inc/config_FlopCpp.h \
 	MP_boolean.hpp \
 	MP_constan.hpp \
 	MP_contstraint.hpp \
@@ -514,7 +514,7 @@ include_HEADERS = \
 #############################################################################
 
 # You only need to adapt the following line
-ConfigHeader = FlopcConfig.h
+ConfigHeader = FlopCppConfig.h
 all: all-am
 
 .SUFFIXES:
@@ -575,8 +575,8 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libCbc.la: $(libCbc_la_OBJECTS) $(libCbc_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libCbc_la_LDFLAGS) $(libCbc_la_OBJECTS) $(libCbc_la_LIBADD) $(LIBS)
+libFlopCpp.la: $(libFlopCpp_la_OBJECTS) $(libFlopCpp_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(libdir) $(libFlopCpp_la_LDFLAGS) $(libFlopCpp_la_OBJECTS) $(libFlopCpp_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

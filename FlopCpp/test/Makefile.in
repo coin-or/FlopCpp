@@ -42,7 +42,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-LIBOBJDIR =
 noinst_PROGRAMS = unitTest$(EXEEXT)
 
 # Depending of what solvers are available, we add the corresponding files,

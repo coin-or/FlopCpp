@@ -220,10 +220,10 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install'
 include_HEADERS = \
-	../inc/config_FlopCpp.h \
+	../inc/config_flopcpp.h \
 	MP_boolean.hpp \
-	MP_constan.hpp \
-	MP_contstraint.hpp \
+	MP_constant.hpp \
+	MP_constraint.hpp \
 	MP_data.hpp \
 	MP_domain.hpp \
 	MP_expression.hpp \

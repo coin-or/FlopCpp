@@ -33,18 +33,18 @@ EXTRA_DIST = \
     examples/multiProduct.cpp \
     examples/train.cpp \
     examples/aircraft.cpp \
-    examples/cuttingStock.cpp \  
+    examples/cuttingStock.cpp \
     examples/train.dat \
     examples/ampl.cpp   \
-    examples/fixed.dat  \       
+    examples/fixed.dat  \
     examples/transport.cpp \
-    examples/bid.cpp    \ 
+    examples/bid.cpp    \
     examples/gapmin.cpp   \
     examples/sodoku.cpp   \
     examples/xbsl.cpp \
     examples/coex.cpp   \
     examples/magic.cpp  \
-    examples/stochbenders.cpp \  
+    examples/stochbenders.cpp \
     examples/coexx.cpp   \
     examples/mine.cpp  \
     examples/tap.cpp \

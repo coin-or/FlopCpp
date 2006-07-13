@@ -9,16 +9,16 @@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
-#                               libCbc                                 #
+#                               libFlopCpp                             #
 ########################################################################
 
 # Name of the library compiled in this directory.  We want it to be installed
 # in the 'lib' directory
-lib_LTLIBRARIES = libCbc.la
+lib_LTLIBRARIES = libFlopCpp.la
 
 # List all source files for this library, including headers
-libCbc_la_SOURCES = \
-	FlopcConfig.h \
+libFlopCpp_la_SOURCES = \
+	FlopCppConfig.h \
 	MP_boolean.cpp MP_boolean.hpp \
 	MP_constant.cpp MP_constant.hpp \
 	MP_constraint.cpp MP_constraint.hpp \
@@ -32,7 +32,7 @@ libCbc_la_SOURCES = \
 	MP_variable.cpp MP_variable.hpp 
 
 # This is for libtool (on Windows)
-#libFlopc_la_LDFLAGS = $(LT_LDFLAGS)
+#libFlopCpp_la_LDFLAGS = $(LT_LDFLAGS)
 
 ########################################################################
 #                        cbc-generic program                           #
@@ -207,7 +207,7 @@ AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src`
 
 # List additional defines
-AM_CPPFLAGS += -DCOIN_NO_CLP_MESSAGE -DUSE_FLOPCCONFIG
+AM_CPPFLAGS += -DCOIN_NO_CLP_MESSAGE -DUSE_FLOPCPPCONFIG
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -220,7 +220,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install'
 include_HEADERS = \
-	../inc/config_flopc.h \
+	../inc/config_FlopCpp.h \
 	MP_boolean.hpp \
 	MP_constan.hpp \
 	MP_contstraint.hpp \
@@ -238,7 +238,7 @@ include_HEADERS = \
 #############################################################################
 
 # You only need to adapt the following line
-ConfigHeader = FlopcConfig.h
+ConfigHeader = FlopCppConfig.h
 
 install-exec-local:
 	echo "#ifndef HAVE_CONFIG_H" >bla

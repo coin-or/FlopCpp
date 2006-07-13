@@ -2,6 +2,10 @@
 /AUTHORS -text
 /Doxyfile -text
 /Externals -text
+FlopC++/Makefile.am -text
+FlopC++/Makefile.in -text
+FlopC++/configure -text
+FlopC++/configure.ac -text
 FlopC++/examples/Makefile.in -text
 FlopC++/examples/aircraft.cpp -text
 FlopC++/examples/ampl.cpp -text
@@ -24,6 +28,7 @@ FlopC++/examples/train.cpp -text
 FlopC++/examples/train.dat -text
 FlopC++/examples/transport.cpp -text
 FlopC++/examples/xbsl.cpp -text
+FlopC++/flopcpp_addlibs.txt.in -text
 FlopC++/inc/config_flopcpp.h.in -text
 FlopC++/src/MP_boolean.cpp -text
 FlopC++/src/MP_boolean.hpp -text

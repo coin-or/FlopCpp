@@ -55,6 +55,11 @@ if COIN_HAS_CBC
   LIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
 endif
 
+if COIN_HAS_CGL
+  unitTest_LDADD += $(CGLOBJDIR)/src/libCgl.la
+  LIBS += `cat $(CGLOBJDIR)/cgl_addlibs.txt`
+endif
+
 if COIN_HAS_CPX
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`

@@ -1,7 +1,7 @@
 // $Id$
 #include "flopc.hpp"
 using namespace flopc;
-#include <OsiCbcSolverInterface.hpp>
+#include "OsiCbcSolverInterface.hpp"
 #include "CoinFloatEqual.hpp"
 
 

@@ -9,7 +9,7 @@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
-#                         unitTest for Coin                            #
+#                         unitTest for FlopCpp                         #
 ########################################################################
 
 noinst_PROGRAMS = unitTest
@@ -26,13 +26,7 @@ AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(srcdir)/../src` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/CglFlowCover` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/CglGomory` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/CglKnapsackCover` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/CglOddHole` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/CglProbing` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/CglSimpleRounding`
+	-I`$(CYGPATH_W) $(srcdir)/../src` 
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

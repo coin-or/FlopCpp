@@ -88,10 +88,10 @@ int main() {
 	sum(raw(r), rvalue(r)*s(r,numT)) 
     );
 
-    assert(model.getNumRows()==14);
-    assert(model.getNumCols()==25);
-    assert(model.getNumElements()==60);
-    assert(model.getObjValue()>=79.3412 && model.getObjValue()<=79.3414);
+    assert(model->getNumRows()==14);
+    assert(model->getNumCols()==25);
+    assert(model->getNumElements()==60);
+    assert(model->getObjValue()>=79.3412 && model->getObjValue()<=79.3414);
 
     x.display();
     s.display();

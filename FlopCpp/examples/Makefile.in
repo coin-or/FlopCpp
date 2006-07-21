@@ -13,7 +13,7 @@ IncDir	+= $(FlopcDir)/include
 LIBDIRS := $(CoinDir)/lib
 LIBDIRS += $(FlopcDir)/lib
 
-LIBS	:= -lflopc
+LIBS	:= -lFlopCpp
 LIBS 	+= -lOsi
 LIBS 	+= -lOsiClp
 LIBS 	+= -lClp

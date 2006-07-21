@@ -23,7 +23,7 @@ SUBDIRS = $(subdirs)
 ########################################################################
 
 test: all
-	cd test; make test
+	cd FlopCpp; make test
 
 unitTest: test
 

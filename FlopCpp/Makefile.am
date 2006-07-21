@@ -28,27 +28,7 @@ endif
 
 # Here we need include all files that are not mentioned in other Makefiles
 
-EXTRA_DIST = \
-    examples/cross.cpp \
-    examples/multiProduct.cpp \
-    examples/train.cpp \
-    examples/aircraft.cpp \
-    examples/cuttingStock.cpp \
-    examples/train.dat \
-    examples/ampl.cpp   \
-    examples/fixed.dat  \
-    examples/transport.cpp \
-    examples/bid.cpp    \
-    examples/gapmin.cpp   \
-    examples/sodoku.cpp   \
-    examples/xbsl.cpp \
-    examples/coex.cpp   \
-    examples/magic.cpp  \
-    examples/stochbenders.cpp \
-    examples/coexx.cpp   \
-    examples/mine.cpp  \
-    examples/tap.cpp \
-	examples/Makefile.in
+EXTRA_DIST = 
 
 ########################################################################
 #                           Extra Targets                              #

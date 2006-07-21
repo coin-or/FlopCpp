@@ -497,6 +497,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../inc/config_flopcpp.h \
+	flopc.hpp \
 	MP_boolean.hpp \
 	MP_constant.hpp \
 	MP_constraint.hpp \

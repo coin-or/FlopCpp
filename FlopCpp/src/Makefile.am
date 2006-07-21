@@ -18,6 +18,7 @@ lib_LTLIBRARIES = libFlopCpp.la
 
 # List all source files for this library, including headers
 libFlopCpp_la_SOURCES = \
+	flopc.hpp \
 	FlopCppConfig.h \
 	MP_boolean.cpp MP_boolean.hpp \
 	MP_constant.cpp MP_constant.hpp \

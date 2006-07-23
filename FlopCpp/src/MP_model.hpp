@@ -4,7 +4,7 @@
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
 // Copyright (C) 2003 Tim Helge Hultberg
 // All Rights Reserved.
-//****************************************************************************
+// ****************************************************************************
 
 #ifndef _MP_model_hpp_
 #define _MP_model_hpp_
@@ -25,6 +25,13 @@ namespace flopc {
   class MP_index;
   class MP_set;
 
+    /** @brief Inteface for hooking up to internal flopc++ message handling.
+        @ingroup PublicInterface
+        In more advanced use of FlopC++, it may be desirable to get access to
+        internal calls for messages.  In essence, sub-class this Messenger
+        class, and register it with the MP_model.  Also overload whichever
+        message events you wish to handle.
+    */
   class Messenger {
   public:
     virtual void logMessage(int level, const char * const msg){}
@@ -38,6 +45,9 @@ namespace flopc {
     virtual ~Messenger() {}
   };
 
+    /** Internal use: used when Normal output is selected. Uses cout.
+        @ingroup INTERNAL_USE
+    */
   class NormalMessenger : public Messenger {
     friend class MP_model;
   private:
@@ -45,6 +55,9 @@ namespace flopc {
     virtual void generationTime(double t);
   };
 
+    /** Internal use: used when Verbose output is selected. Uses cout.
+        @ingroup INTERNAL_USE
+    */
   class VerboseMessenger : public NormalMessenger {
     friend class MP_model;
   private:
@@ -52,50 +65,110 @@ namespace flopc {
     virtual void objectiveDebug(const vector<Coef>& cfs);
   };
 
+    /** @brief This is the anchor point for all constructs in a FlopC++ model.
+        @ingroup PublicInterface
+        The constructors take an OsiSolverInterface, and (optionally) a
+        replacemente for the Messenger class.
+        There are some built-in changes to the verbosity for output.
+        <br>
+        The main methods to use are:
+        @li add(MP_constraint & c)
+        @li add(MP_variable* v)
+        @li maximize() and minimize()
+        <br>
+        The main ideas are to construct a model, construct domains where
+        things are defined over, then construct variables, constraints, and
+        add them in.   Finally, one attaches data and the model is "complete".
+        Then minimize is called, the model is attached and the
+        OsiSolverInterface is called.
+        @note There are variations on adding objectives and maximize/minimize  
+        @see verbose()
+        @see silent().
+        @see Messenger
+     */
   class MP_model {
     friend class MP_constraint;
   public:
+    /// Constructs an MP_model from an OsiSolverInterface *.
     MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
     ~MP_model() {
       delete messenger;
     }
+    /// used to silence FlopC++
     void silent() {
       delete messenger;
       messenger = new Messenger;
     }
+    /// used to help understanding and debugging FlopC++'s behavior.
     void verbose() {
       delete messenger;
       messenger = new VerboseMessenger;
     }
 
+    /// allows for replacement of the solver used.
     void setSolver(OsiSolverInterface* s) {
       Solver = s;
     }
 
+    /// allows access to the OsiSolverInterface *
     OsiSolverInterface* operator->() {
       return Solver;
     }
 
+    /// Adds a constrataint block to the model.
     MP_model& add(MP_constraint& c);
 
+    /** Binds the data and calls the solver to maximize the current
+      objective expression
+    */
     void maximize();
+    /** Binds the data and calls the solver to maximize the parameter obj
+      objective expression
+    */
     void maximize(const MP_expression &obj);
+    /** Binds the data and calls the solver to minimize the current
+      objective expression
+    */
     void minimize();
+    /** Binds the data and calls the solver to minimize the parameter obj
+      objective expression
+    */
     void minimize(const MP_expression &obj);
    
+    /** Binds the data and calls the solver to minimize maximum value of
+        the parameter obj objective expression
+    */
     void minimize_max(MP_set& d, const MP_expression &obj);
+      /// sets the "current objective" to the parameter  o
     void setObjective(const MP_expression& o);
+      /** Accessors for the results after a call to maximize()/minimize()
+          @todo should these be private with accessors?  What if not set yet?
+          @todo what if not a complete result?  What if only one LP in the IP?
+      */
     const double* solution;
     const double* reducedCost;
     const double* rowPrice;
     const double* rowActivity;
+      /** Useful for getting an appropriate value to pass in as "infinity"
+          @note some solvers may be more or less sensitive to the value.
+       */
     double getInfinity() const;
 
+    /// Adds a variable to the MP_model.
     void add(MP_variable* v);
+    /// Adds a constratint to the MP_model
     void addRow(const Constraint& c); 
 
+    /** Can be used to get the default model
+        @todo explain the default and current model concepts.
+    */
     static MP_model &getDefaultModel();
+    /** Can be used to get the current model
+        @todo explain the default and current model concepts.
+    */
     static MP_model *getCurrentModel();
+      /** Gets the current messenger.
+       */
     Messenger *getMessenger(){ 
       return messenger;
     }
@@ -115,6 +188,7 @@ namespace flopc {
     set<MP_constraint *> Constraints;
     set<MP_variable *> Variables;
   public:
+      /// @todo should this be private?
     OsiSolverInterface* Solver; 
   private:
     int m;

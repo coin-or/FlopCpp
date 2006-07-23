@@ -4,7 +4,7 @@
 // Author: Tim Helge Hultberg (thh@mat.ua.pt)
 // Copyright (C) 2003 Tim Helge Hultberg
 // All Rights Reserved.
-//****************************************************************************
+// ****************************************************************************
 
 #ifndef _MP_constraint_hpp_
 #define _MP_constraint_hpp_
@@ -29,8 +29,16 @@ namespace flopc {
     class MP_model;
     class MP_variable;
 
+    /** @brief Enumeration for indicating direction of a constraint.
+        @ingroup INTERNAL_USE
+     */
     enum  Sense_enum {LE,GE,EQ};
 
+    /** Semantic representation of a constraint in a Math Program
+        @ingroup INTERNAL_USE
+        @see MP_constraint for a public interface.
+        @note of interest is the operator overloads which are 'friends'
+     */
     class Constraint {
 	friend class MP_constraint;
 	friend class MP_model;
@@ -56,41 +64,101 @@ namespace flopc {
 	Sense_enum sense;
     };
 
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator<=(const MP_expression& l, const MP_expression& r) {
 	return Constraint(l, r, LE);
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator<=(const Constant& l, const MP_expression& r) {
 	return operator<=(MP_expression(l), r);
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator<=(const MP_expression& l, const Constant& r){
 	return operator<=(l, MP_expression(r));
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator<=(const VariableRef& l, const VariableRef& r) {
 	return *new Constraint(l, r, LE);
     }
     
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator>=(const MP_expression& l, const MP_expression& r) {
 	return *new Constraint(l, r, GE);
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator>=(const Constant& l, const MP_expression& r){
 	return operator>=(MP_expression(l), r);
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator>=(const MP_expression& l, const Constant& r){
 	return operator>=(l, MP_expression(r));
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator>=(const VariableRef& l, const VariableRef& r) {
 	return *new Constraint(l, r, GE);
     }
     
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator==(const MP_expression& l, const MP_expression& r) {
 	return *new Constraint(l, r, EQ);
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator==(const Constant& l, const MP_expression& r){
 	return operator==(MP_expression(l), r);
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator==(const MP_expression& l, const Constant& r) {
 	return operator==(l, MP_expression(r));
     }
+    /** @brief Uses operator overloading to construct an Constraint 
+        @ingroup PublicInterface
+        Constucts a Constraint using operator overloading.
+        @see MP_constraint
+     */
     inline Constraint operator==(const VariableRef& l, const VariableRef& r) {
 	return *new Constraint(l, r, EQ);
     }
@@ -98,8 +166,37 @@ namespace flopc {
 
     class GenerateFunctor;
 
+    /** @brief Semantic representation of a linear constraint.
+    @ingroup PublicInterface
+    This is one of the main public interface classes.  It is always constructed
+    through operator overloading between expressions, constants, and
+    variables.  
+    There are many 'friend' overloaded operators to do the constuction.
+    The basic idea is to make the constraint look like a paper-model
+    constraint in C++ code.  Once constructed, it should be added to the model.
+
+    The snippet below is an overly simplistic example, but is ok for
+    illustration.
+    <code> <br>
+    MP_model aModel; // your model<br>
+    MP_set I; // the set the constraint is defined over. <br>
+    MP_variable x(I); // your variable<br>
+    ...<br>
+    MP_constraint cons(I); // construct the right number of constraints.<br>
+    cons = x <= 3;<br> // Assign in the semantic rep to it.
+    aModel.add(cons); // add it to the model <br>
+    </code>
+    <br>
+    There is quite a bit of C++ machinery going on there.
+	@li MP_expression(const VariableRef& v); converts the VariableRef x into an MP_expression.
+	@li MP_constraint cons(I); construct the right dimensioned sized bundle of constraints.<br>
+	@li friend Constraint operator<=(const MP_expression& l, const Constant& r);  converts the x <= 3 into an Constraint.
+    @todo more work on MP_constraint.
+    
+    */
     class MP_constraint : public RowMajor, public Named {
     public: 
+        /// construct the MP_constraint with appropriate sets for indexing.
 	MP_constraint(
 	    const MP_set_base &s1 = MP_set::getEmpty(), 
 	    const MP_set_base &s2 = MP_set::getEmpty(), 
@@ -145,7 +242,6 @@ namespace flopc {
 
 	MP_model* M;
 	int offset;
-        // MP_data pprice;
 	MP_expression left,right;
 	Sense_enum sense;
     private:

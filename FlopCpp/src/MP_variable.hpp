@@ -17,11 +17,18 @@
 
 namespace flopc {
 
+    /** @brief Enumeration for indicating variable type
+        @ingroup INTERNAL_USE
+     */
     enum variableType {continuous, discrete};
 
     class MP_model;
     class MP_variable;
 
+    /** Semantic representation of a variable in a Math Program
+        @ingroup INTERNAL_USE
+        @see MP_variable for a public interface.
+     */
     class VariableRef : public TerminalExpression {
 	friend class MP_variable;
     public:
@@ -53,6 +60,13 @@ namespace flopc {
     };
 
 
+    /** @brief Symantic representation of a variable.
+        @ingroup PublicInterface
+        This is one of the main public interface classes.  
+        It should be directly declared by clients of the FlopC++.  The
+        parametersof construction are MP_set s which specify the indexes
+        over which the variable is defined.
+    */
     class MP_variable : public RowMajor, public Functor , public Named{
 	friend class MP_model;
 	friend class DisplayVariable;
@@ -69,8 +83,10 @@ namespace flopc {
 	~MP_variable() {
 	}
 
+    /// Returns the value of the variable given the specific index values.
 	double level(int i1=0, int i2=0, int i3=0, int i4=0, int i5=0);
 
+    /// Interal use only.
 	const VariableRef& operator()(
 	    const MP_index_exp& d1 = MP_index_exp::getEmpty(), 
 	    const MP_index_exp& d2 = MP_index_exp::getEmpty(), 
@@ -83,16 +99,20 @@ namespace flopc {
     
 	//void display(string s = "");  
 
+    /// Call this method to turn the variable into a binary variable
 	void binary() { 
 	    upperLimit.initialize(1);
 	    type = discrete; 
 	}
 
+    /// Call this method to turn the MP_variable into an integer variable
 	void integer() { 
 	    type = discrete; 
 	}
  
+    /// Upper bound on the variable value.
 	MP_data upperLimit;
+    /// Lower bound on the variable value.
 	MP_data lowerLimit;
     private:
 	void operator()() const;
@@ -104,6 +124,10 @@ namespace flopc {
 	int offset;
     };
 
+    /** Specialized subclass of MP_variable where the variable is
+        pre-specified to be binary.
+        @ingroup PublicInterface
+     */
     class MP_binary_variable : public MP_variable {
     public:
 	MP_binary_variable(const MP_set_base &s1 = MP_set::getEmpty(), 

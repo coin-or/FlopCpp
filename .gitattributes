@@ -60,6 +60,7 @@ FlopCpp/test/unitTest.cpp -text
 /config.sub -text
 /configure -text
 /depcomp -text
+doxydoc/doxygen.conf -text
 /install-sh -text
 /ltmain.sh -text
 /missing -text

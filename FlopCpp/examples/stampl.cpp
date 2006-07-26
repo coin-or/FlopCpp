@@ -3,7 +3,15 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
-// NB NOT WORKING YET
+/* FLOPC++ implementation of a financial planning and control model from
+"StAMPL: A filtration-oriented modeling toll for stochastic programming" by Fourer and Lopes
+The FLOPC++ formulation is in many aspects similar to the StAMPL solution, it is however different in
+that the scenario generation is recursive and is not separated from the model.
+
+The formulation could off course be improoved by accepting data (4 and 80) as parameters, etc.. But it shows
+that multistage stochastic programs can conviently be formulated with FLOPC++ and that extensions or tools built
+on top of FLOPC++ could make the modelling of this type of models even easier
+*/
 
 enum { STOCKS, BONDS, numINSTR};
 
@@ -25,9 +33,7 @@ public:
 
 class Stage_1 : public Stage {
 public:
-//    MP_set INSTR;
     MP_data initial_wealth;
-    //    MP_variable Buy;
     MP_constraint InvestAll;
 
     Stage_1(int numINSTR, double w, MP_data& Good, MP_data& Bad, int n);
@@ -35,28 +41,20 @@ public:
 
 class Stage_i : public Stage {
 public:
-//    MP_set INSTR;
-    // MP_data Return;
-    // MP_variable Buy;
-    MP_constraint ReinvestAll, Def_Final_wealth;
-//    MP_expression Final_wealth;
+    MP_constraint ReinvestAll;
     
     Stage_i(int numINSTR, MP_data& Return, int n, Stage* p, MP_data& Good, MP_data& Bad); 
 };
 
 class Stage_n : public Stage {
 public:
-//    MP_set INSTR;
-//    MP_data Return;
-    //MP_data shortage_penalty, overage_reward, goal;
-
     MP_variable Shortage, Overage;
-    //  MP_expression Final_wealth;
-    MP_constraint ReinvestAll, Def_Final_wealth;
+    MP_constraint ReinvestAll;
 
     Stage_n(int numINSTR, MP_data& Return, double goal, Stage* p) : Stage(p,numINSTR)  {
 	ReinvestAll() =  sum(INSTR, parent->Buy(INSTR) * Return(INSTR)) ==  goal - Shortage() + Overage();
-	Final_wealth = pathprob*Overage() - pathprob*4*Shortage();
+
+	Final_wealth = pathprob*(Overage() - 4*Shortage());
     }
 };
 
@@ -64,7 +62,7 @@ public:
 Stage_1::Stage_1(int numINSTR, double w, MP_data& Good, MP_data& Bad, int n) : Stage(0, numINSTR, 1) {
     initial_wealth() = w;
     InvestAll() = sum(INSTR, Buy(INSTR)) == initial_wealth();
-    
+
     children.push_back(new Stage_i(numINSTR, Good, n-1, this, Good, Bad));
     children.push_back(new Stage_i(numINSTR, Bad, n-1, this, Good, Bad));
 
@@ -101,4 +99,18 @@ main() {
     BadReturn(BONDS) = 1.12;
 
     Stage_1 M(numINSTR, 55, GoodReturn, BadReturn, numStages);
+    M.Buy.display();
 }
+
+// part of the expected output
+// FlopCpp: Number of constraint blocks: 15
+// FlopCpp: Number of individual constraints: 15
+// FlopCpp: Number of variable blocks: 23
+// FlopCpp: Number of individual variables: 30
+// FlopCpp: Number of non-zeroes (including rhs): 67
+// FlopCpp: Generation time: 0
+// FlopCpp: Optimal obj. value = -1.51408
+// FlopCpp: Solver(m, n, nz) = 15  30  58
+// 0   41.4793
+// 1   13.5207
+

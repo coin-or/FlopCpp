@@ -152,7 +152,7 @@ namespace flopc {
     void setObjective(const MP_expression& o);
     void attach(OsiSolverInterface *solver=NULL);
     void detach();
-    MP_model::MP_condition MP_model::solve(const MP_model::MP_direction &dir);
+    MP_model::MP_condition solve(const MP_model::MP_direction &dir);
       /** Accessors for the results after a call to maximize()/minimize()
           @todo should these be private with accessors?  What if not set yet?
           @todo what if not a complete result?  What if only one LP in the IP?

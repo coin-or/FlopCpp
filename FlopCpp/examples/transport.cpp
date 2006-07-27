@@ -4,7 +4,8 @@ using namespace flopc;
 #include <OsiClpSolverInterface.hpp>
 
 int main() {
-    MP_model::getDefaultModel().setSolver(new OsiClpSolverInterface);
+    MP_model &model = MP_model::getDefaultModel();
+    model.setSolver(new OsiClpSolverInterface);
     enum  {seattle, sandiego, numS}; 
     enum  {newyork, chicago, topeka,numD};
 
@@ -43,9 +44,13 @@ int main() {
     supply(S) =  sum( Link(S,D), x(Link) ) <= SUPPLY(S);
     demand(D) =  sum( Link(S,D), x(Link) ) >= DEMAND(D);
     
-    cout<<"Here"<<endl;
+    model.setObjective(sum(Link, COST(Link)*x(Link)) );
+    model.attach();
+    model.Solver->writeMps("Transport");
+    /// you could do other stuff in here like SOS constraints, etc.
+    MP_model::MP_condition solverStatus = model.solve(MP_model::MINIMIZE);
+    std::cout<<solverStatus<<std::endl;
 
-    minimize( sum(Link, COST(Link)*x(Link)) );
     assert(MP_model::getDefaultModel()->getNumRows()==5);
     assert(MP_model::getDefaultModel()->getNumCols()==4);
     assert(MP_model::getDefaultModel()->getNumElements()==8);

@@ -175,8 +175,8 @@ void MP_model::assemble(vector<Coef>& v, vector<Coef>& av) {
 
 void MP_model::maximize() {
     if (Solver!=0) {
-	Solver->setObjSense(-1);
-	generate();
+	attach(Solver);
+    solve(MP_model::MAXIMIZE);
     } else {
 	cout<<"no solver specified"<<endl;
     }
@@ -185,8 +185,8 @@ void MP_model::maximize() {
 void MP_model::maximize(const MP_expression &obj) {
     if (Solver!=0) {
 	Objective = obj;
-	Solver->setObjSense(-1);
-	generate();
+	attach(Solver);
+    solve(MP_model::MAXIMIZE);
     } else {
 	cout<<"no solver specified"<<endl;
     }
@@ -194,8 +194,8 @@ void MP_model::maximize(const MP_expression &obj) {
 
 void MP_model::minimize() {
     if (Solver!=0) {
-	Solver->setObjSense(1);
-	generate();
+	attach(Solver);
+    solve(MP_model::MINIMIZE);
     } else {
 	cout<<"no solver specified"<<endl;
     }
@@ -204,14 +204,30 @@ void MP_model::minimize() {
 void MP_model::minimize(const MP_expression &obj) {
     if (Solver!=0) {
 	Objective = obj;
-	Solver->setObjSense(1);
-	generate();
+	attach(Solver);
+    solve(MP_model::MINIMIZE);
     } else {
 	cout<<"no solver specified"<<endl;
     }
 }
 
-void MP_model::generate() {
+void MP_model::attach(OsiSolverInterface *_solver) {
+    if(_solver==NULL)
+    {
+        if(Solver==NULL)
+        {
+            return;
+        }
+        // else use pre-attached solver.
+    }
+    else
+    {
+        if(Solver&&Solver!=_solver)
+        {
+            detach();
+        }
+        Solver=_solver;
+    }
     double time = CoinCpuTime();
     m=0;
     n=0;
@@ -380,24 +396,30 @@ void MP_model::generate() {
     delete [] bl;  
     delete [] bu;  
 
-    bool isMIP = false;
-    for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
-	int begin = (*i)->offset;
-	int end = (*i)->offset+(*i)->size();
-	if ((*i)->type == discrete) {
-	    isMIP = true;
-	    for (int k=begin; k<end; k++) {
-		Solver->setInteger(k);
-	    }
-	}
-    }
-
     messenger->generationTime(time-CoinCpuTime());
 
-    //Solver->setDblParam(OsiDualObjectiveLimit,1.0e50);
-
-    //Solver->writeMps("mps","mps",1);
-
+}
+void MP_model::detach()
+{
+    assert(Solver);
+    /// @todo strip all data out of the solver.
+    delete Solver;
+    Solver=NULL;
+}
+MP_model::MP_condition MP_model::solve(const MP_model::MP_direction &dir)
+{
+    Solver->setObjSense(dir);
+    bool isMIP = false;
+    for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
+	    int begin = (*i)->offset;
+	    int end = (*i)->offset+(*i)->size();
+	    if ((*i)->type == discrete) {
+	        isMIP = true;
+	        for (int k=begin; k<end; k++) {
+		    Solver->setInteger(k);
+	        }
+	    }
+    }
     if (isMIP == true) {
 	try {
 	    Solver->branchAndBound();
@@ -427,11 +449,53 @@ void MP_model::generate() {
 	rowPrice = Solver->getRowPrice();
 	rowActivity = Solver->getRowActivity();
     } else if (Solver->isProvenPrimalInfeasible() == true) {
-	cout<<"FlopCpp: Problem is primal infeasible."<<endl;
+        return MP_model::PRIM_INFEASIBLE;
+	//cout<<"FlopCpp: Problem is primal infeasible."<<endl;
     } else if (Solver->isProvenDualInfeasible() == true) {
-	cout<<"FlopCpp: Problem is dual infeasible."<<endl;
+        return MP_model::DUAL_INFEASIBLE;
+	//cout<<"FlopCpp: Problem is dual infeasible."<<endl;
     } else {
-	cout<<"FlopCpp: Solution process abandoned."<<endl;
+        return MP_model::ABANDONED;
+	//cout<<"FlopCpp: Solution process abandoned."<<endl;
+    }
+    return MP_model::OPTIMAL;
+}
+namespace flopc
+{
+    std::ostream &operator<<(std::ostream &os, const MP_model::MP_condition &condition)
+    {
+        switch(condition)
+        {
+        case MP_model::OPTIMAL:
+            os<<"OPTIMAL";
+            break;
+        case MP_model::PRIM_INFEASIBLE:
+            os<<"PRIM_INFEASIBLE";
+            break;
+        case MP_model::DUAL_INFEASIBLE:
+            os<<"DUAL_INFEASIBLE";
+            break;
+        case MP_model::ABANDONED:
+            os<<"ABANDONED";
+            break;
+        default:
+            os<<"UNKNOWN";
+        };
+        return os;
+    }
+    std::ostream &operator<<(std::ostream &os, const MP_model::MP_direction &direction)
+    {
+    switch(direction)
+        {
+        case MP_model::MINIMIZE:
+            os<<"MINIMIZE";
+            break;
+        case MP_model::MAXIMIZE:
+            os<<"MAXIMIZE";
+            break;
+        default:
+            os<<"UNKNOWN";
+        };
+        return os;
     }
 }
-

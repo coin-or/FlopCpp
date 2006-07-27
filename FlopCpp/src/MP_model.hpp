@@ -9,6 +9,7 @@
 #ifndef _MP_model_hpp_
 #define _MP_model_hpp_
 
+#include <ostream>
 #include <vector>
 #include <set>
 using std::vector;
@@ -89,6 +90,14 @@ namespace flopc {
   class MP_model {
     friend class MP_constraint;
   public:
+    /// used when calling the solve() method.  
+    typedef enum { MINIMIZE=1, MAXIMIZE=-1 } MP_direction;
+    /// Returns the state of the solution from solve() 
+    typedef enum {  OPTIMAL, 
+                    PRIM_INFEASIBLE, 
+                    DUAL_INFEASIBLE, 
+                    ABANDONED
+                    } MP_condition;
     /// Constructs an MP_model from an OsiSolverInterface *.
     MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
     ~MP_model() {
@@ -141,6 +150,9 @@ namespace flopc {
     void minimize_max(MP_set& d, const MP_expression &obj);
       /// sets the "current objective" to the parameter  o
     void setObjective(const MP_expression& o);
+    void attach(OsiSolverInterface *solver=NULL);
+    void detach();
+    MP_model::MP_condition MP_model::solve(const MP_model::MP_direction &dir);
       /** Accessors for the results after a call to maximize()/minimize()
           @todo should these be private with accessors?  What if not set yet?
           @todo what if not a complete result?  What if only one LP in the IP?
@@ -173,6 +185,8 @@ namespace flopc {
       return messenger;
     }
   private:
+    typedef std::set<MP_variable* >::iterator varIt;
+    typedef std::set<MP_constraint* >::iterator conIt;
     static MP_model& default_model;
     static MP_model* current_model;
     MP_model(const MP_model&);
@@ -180,7 +194,6 @@ namespace flopc {
 
     Messenger* messenger;
    
-    void generate();
     
     static void assemble(vector<Coef>& v, vector<Coef>& av);
     void add(MP_constraint* c);
@@ -204,6 +217,10 @@ namespace flopc {
     double *l;
     double *u;
   };
+  /// allows print of result from call to solve();
+  std::ostream &operator<<(std::ostream &os, const MP_model::MP_condition &condition);
+  /// allows print of direction used when calling solve. (MIN/MAX)
+  std::ostream &operator<<(std::ostream &os, const MP_model::MP_direction &direction);
 
 } // End of namespace flopc
 #endif

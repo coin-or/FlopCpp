@@ -94,7 +94,7 @@ namespace flopc {
         @see MP_constraint
      */
     inline Constraint operator<=(const VariableRef& l, const VariableRef& r) {
-	return *new Constraint(l, r, LE);
+	return *new Constraint(MP_expression(l), MP_expression(r), LE);
     }
     
     /** @brief Uses operator overloading to construct an Constraint 
@@ -127,7 +127,7 @@ namespace flopc {
         @see MP_constraint
      */
     inline Constraint operator>=(const VariableRef& l, const VariableRef& r) {
-	return *new Constraint(l, r, GE);
+	return *new Constraint(MP_expression(l), MP_expression(r), GE);
     }
     
     /** @brief Uses operator overloading to construct an Constraint 
@@ -160,7 +160,7 @@ namespace flopc {
         @see MP_constraint
      */
     inline Constraint operator==(const VariableRef& l, const VariableRef& r) {
-	return *new Constraint(l, r, EQ);
+	return *new Constraint(MP_expression(l), MP_expression(r), EQ);
     }
 
 

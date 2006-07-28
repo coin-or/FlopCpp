@@ -93,11 +93,12 @@ namespace flopc {
     /// used when calling the solve() method.  
     typedef enum { MINIMIZE=1, MAXIMIZE=-1 } MP_direction;
     /// Returns the state of the solution from solve() 
-    typedef enum {  OPTIMAL, 
-                    PRIM_INFEASIBLE, 
-                    DUAL_INFEASIBLE, 
-                    ABANDONED
-                    } MP_condition;
+    typedef enum {  
+		OPTIMAL, 
+		PRIM_INFEASIBLE, 
+		DUAL_INFEASIBLE, 
+		ABANDONED
+		} MP_condition;
     /// Constructs an MP_model from an OsiSolverInterface *.
     MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
     ~MP_model() {
@@ -148,10 +149,24 @@ namespace flopc {
         the parameter obj objective expression
     */
     void minimize_max(MP_set& d, const MP_expression &obj);
-      /// sets the "current objective" to the parameter  o
+    /// sets the "current objective" to the parameter  o
     void setObjective(const MP_expression& o);
+	/** @brief attaches the symantic representation of a model and data to a particular OsiSolverInterface
+		@note this is called as a part of minimize(), maximize(), and minimize_max();
+		This takes the symantic representation of the model, generates coefficients for the matrices and 
+		adds them into the OsiSolverInterface.  The OsiSolverInterface may be specified at construction time, 
+		or as late as the call to attach()
+	*/
     void attach(OsiSolverInterface *solver=NULL);
+	/** @brief detaches an OsiSolverInterface object from the symantic model.  
+	In essence, this will clean up any intermediate storage.  A model may then be attached to another solverInterface.
+	*/
     void detach();
+	/** calls the appropriate solving methods in the OsiSolverInterface.
+		@note this is called as a part of minimize(), maximize(), and minimize_max()
+		It expects that the object function is already set and only the direction is to be specified.
+		@todo should the direction be defaulted?
+	*/ 
     MP_model::MP_condition solve(const MP_model::MP_direction &dir);
       /** Accessors for the results after a call to maximize()/minimize()
           @todo should these be private with accessors?  What if not set yet?

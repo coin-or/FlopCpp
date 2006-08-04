@@ -52,10 +52,10 @@ default: all
 
 all :	aircraft transport ampl magic multiProduct tap \
         coex coexx cross xbsl cuttingStock gapmin stochbenders \
-	mine train bid sodoku
+	mine train bid sudoku stampl
 
 clean:	
 	@rm aircraft transport ampl magic multiProduct tap \
 	coex coexx cross xbsl cuttingStock gapmin stochbenders \
-	mine train bid sodoku
+	mine train bid sudoku stampl
 ###############################################################################

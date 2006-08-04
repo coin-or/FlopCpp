@@ -14,4 +14,5 @@
 ./runone stochbenders 
 ./runone mine 
 ./runone train
-./runone sodoku
+./runone sudoku
+./runone stampl

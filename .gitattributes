@@ -20,6 +20,7 @@ FlopCpp/examples/runone -text
 FlopCpp/examples/sodoku.cpp -text
 FlopCpp/examples/stampl.cpp -text
 FlopCpp/examples/stochbenders.cpp -text
+FlopCpp/examples/sudoku.cpp -text
 FlopCpp/examples/tap.cpp -text
 FlopCpp/examples/train.cpp -text
 FlopCpp/examples/train.dat -text

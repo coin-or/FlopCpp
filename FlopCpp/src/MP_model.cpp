@@ -60,7 +60,9 @@ void VerboseMessenger::objectiveDebug(const vector<Coef>& cfs) {
 
 MP_model::MP_model(OsiSolverInterface* s, Messenger* m) : 
     solution(0), messenger(m), Objective(0), Solver(s), 
-    m(0), n(0), nz(0), bl(0) {
+    m(0), n(0), nz(0), bl(0),
+    mSolverState(((s==NULL)?(MP_model::DETACHED):(MP_model::SOLVER_ONLY)))
+    {
   MP_model::current_model = this;
 }
 
@@ -216,6 +218,7 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     {
         if(Solver==NULL)
         {
+            mSolverState = MP_model::DETACHED;
             return;
         }
         // else use pre-attached solver.
@@ -396,28 +399,37 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     delete [] bl;  
     delete [] bu;  
 
+    for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
+	    int begin = (*i)->offset;
+	    int end = (*i)->offset+(*i)->size();
+	    if ((*i)->type == discrete) {
+	        for (int k=begin; k<end; k++) {
+		    Solver->setInteger(k);
+	        }
+	    }
+    }
+    mSolverState = MP_model::ATTACHED;
     messenger->generationTime(time-CoinCpuTime());
 
 }
 void MP_model::detach()
 {
     assert(Solver);
+    mSolverState=MP_model::DETACHED;
     /// @todo strip all data out of the solver.
     delete Solver;
     Solver=NULL;
 }
-MP_model::MP_condition MP_model::solve(const MP_model::MP_direction &dir)
+MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir)
 {
+    assert(Solver);
+    assert(mSolverState != MP_model::DETACHED&& mSolverState != MP_model::SOLVER_ONLY);
     Solver->setObjSense(dir);
     bool isMIP = false;
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
-	    int begin = (*i)->offset;
-	    int end = (*i)->offset+(*i)->size();
 	    if ((*i)->type == discrete) {
 	        isMIP = true;
-	        for (int k=begin; k<end; k++) {
-		    Solver->setInteger(k);
-	        }
+            break;
 	    }
     }
     if (isMIP == true) {
@@ -449,20 +461,20 @@ MP_model::MP_condition MP_model::solve(const MP_model::MP_direction &dir)
 	rowPrice = Solver->getRowPrice();
 	rowActivity = Solver->getRowActivity();
     } else if (Solver->isProvenPrimalInfeasible() == true) {
-        return MP_model::PRIM_INFEASIBLE;
+        return mSolverState=MP_model::PRIM_INFEASIBLE;
 	//cout<<"FlopCpp: Problem is primal infeasible."<<endl;
     } else if (Solver->isProvenDualInfeasible() == true) {
-        return MP_model::DUAL_INFEASIBLE;
+        return mSolverState=MP_model::DUAL_INFEASIBLE;
 	//cout<<"FlopCpp: Problem is dual infeasible."<<endl;
     } else {
-        return MP_model::ABANDONED;
+        return mSolverState=MP_model::ABANDONED;
 	//cout<<"FlopCpp: Solution process abandoned."<<endl;
     }
-    return MP_model::OPTIMAL;
+    return mSolverState=MP_model::OPTIMAL;
 }
 namespace flopc
 {
-    std::ostream &operator<<(std::ostream &os, const MP_model::MP_condition &condition)
+    std::ostream &operator<<(std::ostream &os, const MP_model::MP_status &condition)
     {
         switch(condition)
         {

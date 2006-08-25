@@ -92,17 +92,39 @@ namespace flopc {
   public:
     /// used when calling the solve() method.  
     typedef enum { MINIMIZE=1, MAXIMIZE=-1 } MP_direction;
-    /// Returns the state of the solution from solve() 
+    /** @brief Reflects the state of the solution from solve() 
+
+    */
     typedef enum {  
+        /// if the solve() method is called and the optimal solution is found.
 		OPTIMAL, 
+        /// if the solve() method is called and the solver finds the model primal infeasible.
 		PRIM_INFEASIBLE, 
+        /// if the solve() method is called and the solver finds the model dual infeasible.
 		DUAL_INFEASIBLE, 
-		ABANDONED
-		} MP_condition;
+        /// if the solve() method is called and the solver abandons the problem (time?, iter limit?)
+		ABANDONED,
+        /// A solver is placed in the constructor, but it is not yet attached or solved.
+        SOLVER_ONLY,
+        /// A solver is attached, but not yet solved
+        ATTACHED,
+        /// No solver is attached.
+        DETACHED
+		} MP_status;
     /// Constructs an MP_model from an OsiSolverInterface *.
     MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
     ~MP_model() {
       delete messenger;
+    }
+    /** @brief Returns the current status of the model-solver interaction.
+    This method will return the current understanding of the model in regard to the solver's state.  
+    @note It is not kept up to date if a call is made directly to the solver.  Only if the MP_model interface is used.
+    @see MP_status
+    */
+
+    MP_status getStatus()const
+    {
+        return mSolverState;
     }
     /// used to silence FlopC++
     void silent() {
@@ -160,6 +182,8 @@ namespace flopc {
     void attach(OsiSolverInterface *solver=NULL);
 	/** @brief detaches an OsiSolverInterface object from the symantic model.  
 	In essence, this will clean up any intermediate storage.  A model may then be attached to another solverInterface.
+    @note a solver may only be attached to one solver at a time
+    @todo verify that on "attach", old solver is detached.
 	*/
     void detach();
 	/** calls the appropriate solving methods in the OsiSolverInterface.
@@ -167,7 +191,7 @@ namespace flopc {
 		It expects that the object function is already set and only the direction is to be specified.
 		@todo should the direction be defaulted?
 	*/ 
-    MP_model::MP_condition solve(const MP_model::MP_direction &dir);
+    MP_model::MP_status solve(const MP_model::MP_direction &dir);
       /** Accessors for the results after a call to maximize()/minimize()
           @todo should these be private with accessors?  What if not set yet?
           @todo what if not a complete result?  What if only one LP in the IP?
@@ -231,9 +255,10 @@ namespace flopc {
     double *c;
     double *l;
     double *u;
+    MP_status mSolverState;
   };
   /// allows print of result from call to solve();
-  std::ostream &operator<<(std::ostream &os, const MP_model::MP_condition &condition);
+  std::ostream &operator<<(std::ostream &os, const MP_model::MP_status &condition);
   /// allows print of direction used when calling solve. (MIN/MAX)
   std::ostream &operator<<(std::ostream &os, const MP_model::MP_direction &direction);
 

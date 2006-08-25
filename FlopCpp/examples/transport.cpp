@@ -48,7 +48,7 @@ int main() {
     model.attach();
     model.Solver->writeMps("Transport");
     /// you could do other stuff in here like SOS constraints, etc.
-    MP_model::MP_condition solverStatus = model.solve(MP_model::MINIMIZE);
+    MP_model::MP_status solverStatus = model.solve(MP_model::MINIMIZE);
     std::cout<<solverStatus<<std::endl;
 
     assert(MP_model::getDefaultModel()->getNumRows()==5);

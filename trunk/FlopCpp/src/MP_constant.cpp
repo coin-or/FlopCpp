@@ -45,6 +45,9 @@ namespace flopc {
 	}    
 	Constant C;
     };
+    /** @brief  constructs a constant from the absolute value of a constant.
+    @ingroup PublicInterface
+    */
     Constant abs(const Constant& c) {
 	return new Constant_abs(c);
     }
@@ -63,6 +66,9 @@ namespace flopc {
 	}    
 	Constant C;
     };
+    /** @brief  constructs a constant from the value if positive, or zero if negative.
+    @ingroup PublicInterface
+    */
     Constant pos(const Constant& c) {
 	return new Constant_pos(c);
     }
@@ -76,10 +82,16 @@ namespace flopc {
 	}
 	Constant C;
     };
+    /** @brief  ceil rounds up a constant and returns a constant.
+    @ingroup PublicInterface
+    */
     Constant ceil(const Constant& c) {
 	return new Constant_ceil(c);
     }
 
+    /** @brief  floor rounds down a constant and returns a constant.
+    @ingroup PublicInterface
+    */
     class Constant_floor : public Constant_base {
 	friend Constant floor(const Constant& c);
     private:
@@ -108,6 +120,9 @@ namespace flopc {
 	}
     };
 
+    /** @brief returns a constant which represents the minimum of two constants.
+    @ingroup PublicInterface
+    */
     Constant minimum(const Constant& a, const Constant& b) {
 	return new Constant_min_2(a,b);
     }
@@ -121,6 +136,9 @@ namespace flopc {
 	}
     };
 
+    /** @brief returns a constant which represents the maximum of two constants.
+    @ingroup PublicInterface
+    */
     Constant maximum(const Constant& a, const Constant& b) {
 	return new Constant_max_2(a,b);
     }
@@ -135,9 +153,16 @@ namespace flopc {
 	}
     };
 
+    /** @brief   returns a constant which represents the sum of two Constant objects
+    @ingroup PublicInterface
+    */
+
     Constant operator+(const Constant& a, const Constant& b) {
 	return new Constant_plus(a,b);
     }
+    /** @brief   returns a constant which represents the sum of two MP_index values.
+    @ingroup PublicInterface
+    */
     Constant operator+(MP_index& a, MP_index& b) {
 	return new Constant_plus(Constant(a),Constant(b));
     }
@@ -152,10 +177,16 @@ namespace flopc {
 	}
     };
 
+    /** @brief   returns a constant which represents the difference between two Constant objects
+    @ingroup PublicInterface
+    */
     Constant operator-(const Constant& a, const Constant& b) {
 	return new Constant_minus(a,b);
     }
 
+    /** @brief  returns a constant which represents the difference between two MP_index objects
+    @ingroup PublicInterface
+    */
     Constant operator-(MP_index& a, MP_index& b) {
 	return new Constant_minus(Constant(a),Constant(b));
     }
@@ -169,6 +200,9 @@ namespace flopc {
 	}
     };
 
+    /** @brief  returns a constant which represents the product of two Constant objects
+    @ingroup PublicInterface
+    */
     Constant operator*(const Constant& a, const Constant& b) {
 	return new Constant_mult(a,b);
     }
@@ -182,6 +216,9 @@ namespace flopc {
 	}
     };
 
+    /** @brief  returns a constant which represents the division of a Constant object by another.
+    @ingroup PublicInterface
+    */
     Constant operator/(const Constant& a, const Constant& b) {
 	return new Constant_div(a,b);
     }
@@ -264,28 +301,52 @@ namespace flopc {
 	mutable double the_product;
     };
 
+    /** @brief  Returns a constant which represents the maximum value of the constant value across the domain.
+    @ingroup PublicInterface
+    */
     Constant maximum(const MP_domain& i, const Constant& e) {
 	return new Constant_max(i,e);
     }
+    /** @brief  Returns a constant which represents the minimum value of the constant value across the domain.
+    @ingroup PublicInterface
+    */
     Constant minimum(const MP_domain& i, const Constant& e) {
 	return new Constant_min(i,e);
     }
+    /** @brief  Returns a constant which represents the sum of the constant value across the domain.
+    @ingroup PublicInterface
+    */
     Constant sum(const MP_domain& i, const Constant& e) {
 	return new Constant_sum(i,e);
     }
+    /** @brief  Returns a constant which represents the product of the constant value across the domain.
+    @ingroup PublicInterface
+    */
     Constant product(const MP_domain& i, const Constant& e) {
 	return new Constant_product(i,e);
     }
 
+    /** @brief  Constructs a Constant from a DataRef
+    @ingroup PublicInterface
+    */
     Constant::Constant(const DataRef& d) : 
 	Handle<Constant_base*>(const_cast<DataRef*>(&d)) {}
 
+    /** @brief  Constructs a Constant from an index expression
+    @ingroup PublicInterface
+    */
     Constant::Constant(const MP_index_exp& i) :
 	Handle<Constant_base*>(new Constant_index(i)){}
 
+    /** @brief  Constructs a Constant from a double constant
+    @ingroup PublicInterface
+    */
     Constant::Constant(double d) :
 	Handle<Constant_base*>(new Constant_double(d)) {}
 
+    /** @brief  Constructs a Constant from an integer constant
+    @ingroup PublicInterface
+    */
     Constant::Constant(int d) :
 	Handle<Constant_base*>(new Constant_double(d)) {}
  

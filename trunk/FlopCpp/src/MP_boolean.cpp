@@ -137,50 +137,94 @@ namespace flopc {
 	bool evaluate() const;
     };
 
-
+    /** @brief returns an MP_boolean which evaulates to true always.
+    @ingroup PublicInterface
+    */
     MP_boolean alltrue(const MP_domain& d, const MP_boolean& b) {
 	return new Boolean_alltrue(d,b);
     }
 
+    /** @brief returns an MP_boolean which will evaluate true when both MP_boolean argument expressions are true.
+    @ingroup PublicInterface
+    */
     MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2) {
 	return new Boolean_and(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when either MP_boolean argument expressions is true.
+    @ingroup PublicInterface
+    */
     MP_boolean operator||(const MP_boolean& e1, const MP_boolean& e2) {
 	return new Boolean_or(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left MP_index_exp is less than or equal to the right MP_index_exp 
+    @ingroup PublicInterface
+    */
     MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2) {
 	return new Boolean_lessEq(e1, e2);
     } 
+    /** @brief returns an MP_boolean which will evaluate true when the left Constnat is less than or equal to the right Constant
+    @ingroup PublicInterface
+    */
     MP_boolean operator<=(const Constant& e1, const Constant& e2) {
 	return new Boolean_lessEq(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left MP_index is less than the right MP_index 
+    @ingroup PublicInterface
+    */
     MP_boolean operator<(const MP_index_exp& e1, const MP_index_exp& e2) {
 	return new Boolean_less(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left Constnat is less than the right Constant
+    @ingroup PublicInterface
+    */
     MP_boolean operator<(const Constant& e1, const Constant& e2) {
 	return new Boolean_less(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left MP_index_exp is greater than or equal to the right MP_index_exp 
+    @ingroup PublicInterface
+    */
     MP_boolean operator>=(const MP_index_exp& e1, const MP_index_exp& e2) {
 	return new Boolean_greaterEq(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left Constant is greater than or equal to the right Constant  
+    @ingroup PublicInterface
+    */
     MP_boolean operator>=(const Constant& e1, const Constant& e2) {
 	return new Boolean_greaterEq(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left MP_index_exp is greater than the right MP_index_exp 
+    @ingroup PublicInterface
+    */
     MP_boolean operator>(const MP_index_exp& e1, const MP_index_exp& e2) {
 	return new Boolean_greater(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left Constant is greater than the right Constant  
+    @ingroup PublicInterface
+    */
     MP_boolean operator>(const Constant& e1, const Constant& e2) {
 	return new Boolean_greater(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left MP_index_exp is equal to the right MP_index_exp 
+    @ingroup PublicInterface
+    */
     MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2) {
 	return new Boolean_equal(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left MP_index_exp is NOT equal to the right MP_index_exp 
+    @ingroup PublicInterface
+    */
     MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2) {
 	return new Boolean_not_equal(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left Constant is equal to the right Constant 
+    @ingroup PublicInterface
+    */
     MP_boolean operator==(const Constant& e1, const Constant& e2) {
 	return new Boolean_equal(e1, e2);
     }
+    /** @brief returns an MP_boolean which will evaluate true when the left Constant is NOT equal to the right Constant 
+    @ingroup PublicInterface
+    */
     MP_boolean operator!=(const Constant& e1, const Constant& e2) {
 	return new Boolean_not_equal(e1, e2);
     }

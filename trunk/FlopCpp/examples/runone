@@ -1,0 +1,4 @@
+echo "Starting test: " $1
+./$1 > $1.output
+grep -i assert $1.output 
+grep passed $1.output 

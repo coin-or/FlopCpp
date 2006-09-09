@@ -49,21 +49,21 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 
 # Depending of what solvers are available, we add the corresponding files,
 # libraries and include dirs
-@COIN_HAS_CLP_TRUE@am__append_1 = -I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
+@COIN_HAS_CBC_TRUE@am__append_1 = -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
+@COIN_HAS_CBC_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc`
+
+@COIN_HAS_CBC_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+@COIN_HAS_CBC_TRUE@	$(CBCOBJDIR)/src/libCbc.la
+
+@COIN_HAS_CBC_TRUE@am__append_3 = `cat $(CBCOBJDIR)/cbc_addlibs.txt`
+@COIN_HAS_CLP_TRUE@am__append_4 = -I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
 @COIN_HAS_CLP_TRUE@	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
 @COIN_HAS_CLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp`
 
-@COIN_HAS_CLP_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+@COIN_HAS_CLP_TRUE@am__append_5 = $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 @COIN_HAS_CLP_TRUE@	$(CLPOBJDIR)/src/libClp.la
 
-@COIN_HAS_CLP_TRUE@am__append_3 = `cat $(CLPOBJDIR)/clp_addlibs.txt`
-@COIN_HAS_CBC_TRUE@am__append_4 = -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
-@COIN_HAS_CBC_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc`
-
-@COIN_HAS_CBC_TRUE@am__append_5 = $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-@COIN_HAS_CBC_TRUE@	$(CBCOBJDIR)/src/libCbc.la
-
-@COIN_HAS_CBC_TRUE@am__append_6 = `cat $(CBCOBJDIR)/cbc_addlibs.txt`
+@COIN_HAS_CLP_TRUE@am__append_6 = `cat $(CLPOBJDIR)/clp_addlibs.txt`
 @COIN_HAS_CGL_TRUE@am__append_7 = $(CGLOBJDIR)/src/libCgl.la
 @COIN_HAS_CGL_TRUE@am__append_8 = `cat $(CGLOBJDIR)/cgl_addlibs.txt`
 @COIN_HAS_CPX_TRUE@am__append_9 = -I`$(CYGPATH_W) $(CPXINCDIR)` \
@@ -121,12 +121,12 @@ CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am_unitTest_OBJECTS = unitTest.$(OBJEXT)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
-@COIN_HAS_CLP_TRUE@am__DEPENDENCIES_1 =  \
-@COIN_HAS_CLP_TRUE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-@COIN_HAS_CLP_TRUE@	$(CLPOBJDIR)/src/libClp.la
-@COIN_HAS_CBC_TRUE@am__DEPENDENCIES_2 =  \
+@COIN_HAS_CBC_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_CBC_TRUE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 @COIN_HAS_CBC_TRUE@	$(CBCOBJDIR)/src/libCbc.la
+@COIN_HAS_CLP_TRUE@am__DEPENDENCIES_2 =  \
+@COIN_HAS_CLP_TRUE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+@COIN_HAS_CLP_TRUE@	$(CLPOBJDIR)/src/libClp.la
 @COIN_HAS_CGL_TRUE@am__DEPENDENCIES_3 = $(CGLOBJDIR)/src/libCgl.la
 @COIN_HAS_CPX_TRUE@am__DEPENDENCIES_4 =  \
 @COIN_HAS_CPX_TRUE@	$(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la

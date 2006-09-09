@@ -482,8 +482,10 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(CGLSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CGLSRCDIR)/src/CglProbing` -I`$(CYGPATH_W) \
 	$(CGLSRCDIR)/src/CglRedSplit` -I`$(CYGPATH_W) \
 	$(CGLSRCDIR)/src/CglTwomir` -I`$(CYGPATH_W) \
-	$(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) $(OSISRCDIR)/src` \
-	-DCOIN_NO_CLP_MESSAGE -DUSE_FLOPCPPCONFIG
+	$(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
+	$(COINUTILSOBJDIR)/inc` -I`$(CYGPATH_W) $(OSISRCDIR)/src` \
+	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` -DCOIN_NO_CLP_MESSAGE \
+	-DUSE_FLOPCPPCONFIG
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

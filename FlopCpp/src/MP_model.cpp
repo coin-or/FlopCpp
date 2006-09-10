@@ -392,11 +392,7 @@ void MP_model::generate() {
 	}
     }
 
-    messenger->generationTime(time-CoinCpuTime());
-
-    //Solver->setDblParam(OsiDualObjectiveLimit,1.0e50);
-
-    //Solver->writeMps("mps","mps",1);
+    messenger->generationTime(CoinCpuTime()-time);
 
     if (isMIP == true) {
 	try {

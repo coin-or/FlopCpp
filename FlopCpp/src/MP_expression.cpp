@@ -30,6 +30,9 @@ private:
     int getColumn() const {
 	return -1;
     }
+    int getStage() const {
+	return 0; //NB to be changed
+    }
     void generate(const MP_domain& domain,
 		  vector<Constant> multiplicators,
 		  GenerateFunctor& f,
@@ -189,11 +192,14 @@ void GenerateFunctor::operator()() const {
     for (unsigned int i=0; i<multiplicators.size(); i++) {
 	multiplicator *= multiplicators[i]->evaluate();
     }
-    int colNumber = C->getColumn();
-    if ( colNumber != outOfBound ) {
-	double val = multiplicator*C->getValue();
-	if (val != 0) {
-	    Coefs.push_back(Coef(colNumber, row_number(), val));
+    int rowNumber = row_number();
+    if (rowNumber != outOfBound) {
+	int colNumber = C->getColumn();
+	if ( colNumber != outOfBound  ) {
+	    double val = multiplicator*C->getValue();
+	    if (val != 0) {
+		Coefs.push_back(Coef(colNumber, rowNumber, val));
+	    }
 	}
     }
 }

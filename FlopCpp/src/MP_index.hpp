@@ -104,6 +104,7 @@ namespace flopc {
 	bool instantiated;
     };
 
+
     /// returns a Constant as a result of addition of two MP_index values.
     Constant operator+(MP_index& a, MP_index& b);
     /// returns a Constant as a result of a difference of two MP_index values.

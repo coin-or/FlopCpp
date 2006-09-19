@@ -26,9 +26,20 @@ void MP_constraint::operator=(const Constraint &v) {
    sense = v.sense;
 }
 
-int MP_constraint::row_number() const { 
-    return offset + f(I1->evaluate(),I2->evaluate(),I3->evaluate(),
-		      I4->evaluate(),I5->evaluate()); 
+int MP_constraint::row_number() const {
+    int i1 = S1.check(I1->evaluate());
+    int i2 = S2.check(I2->evaluate());
+    int i3 = S3.check(I3->evaluate());
+    int i4 = S4.check(I4->evaluate());
+    int i5 = S5.check(I5->evaluate());
+    
+    if (i1==outOfBound || i2==outOfBound || i3==outOfBound ||
+	i4==outOfBound || i5==outOfBound) {
+	return outOfBound;
+    } else {
+	return offset + f(I1->evaluate(),I2->evaluate(),I3->evaluate(),
+			  I4->evaluate(),I5->evaluate()); 
+    }
 }
 
 double MP_constraint::price(int i1, int i2, int i3, int i4, int i5) const {

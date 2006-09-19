@@ -33,7 +33,6 @@ namespace flopc {
 	friend class MP_variable;
     public:
 	int getColumn() const;
-
     private:
 	VariableRef(MP_variable* v, 
 		    const MP_index_exp& i1,
@@ -49,6 +48,9 @@ namespace flopc {
 	}
 	double getValue() const { 
 	    return 1.0;
+	}
+	int getStage() const { 
+	    return 0;
 	}
 	void generate(const MP_domain& domain,
 		      vector<Constant> multiplicators,

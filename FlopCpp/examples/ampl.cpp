@@ -90,7 +90,7 @@ int main() {
 
     assert(model->getNumRows()==14);
     assert(model->getNumCols()==25);
-    assert(model->getNumElements()==60);
+    assert(model->getNumElements()==52);
     assert(model->getObjValue()>=79.3412 && model->getObjValue()<=79.3414);
 
     x.display();

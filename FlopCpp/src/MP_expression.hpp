@@ -34,8 +34,9 @@ namespace flopc {
         calling code.
     */
     struct Coef {
-	Coef(int c, int r, double v) : col(c), row(r), val(v) {}
-	int col, row;
+	Coef(int c, int r, double v, int s = 0) : 
+	    col(c), row(r), stage(s), val(v)  {}
+	int col, row, stage;
 	double val;
     };
 
@@ -146,6 +147,7 @@ namespace flopc {
     public:
 	virtual double getValue() const = 0; 
 	virtual int getColumn() const = 0;
+	virtual int getStage() const = 0;
     };
 
     /** @brief The base class for all expressions.

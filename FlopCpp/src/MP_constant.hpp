@@ -22,6 +22,9 @@ namespace flopc {
 	friend class Handle<Constant_base*>;
     public:
 	virtual double evaluate() const = 0;
+	virtual int stage() const {
+	    return 0;
+	}
     protected:
 	Constant_base() : count(0) {}
 	virtual ~Constant_base() {}

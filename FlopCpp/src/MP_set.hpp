@@ -93,11 +93,26 @@ public:
     virtual int size() const {
 	return cardinality;
     }
+    ///
+    virtual int isStage() {
+	return 0;
+    }
+    int last() {
+	return cardinality-1;
+    }
     /// gets the distinct 'empty' MP_set.
-	static MP_set &getEmpty();
+    static MP_set &getEmpty();
 private:
     static MP_set Empty;
     int cardinality;
+};
+    
+class MP_stage : public MP_set {
+public:
+    MP_stage(int i = 0): MP_set(i) {}
+    virtual int isStage() {
+	return 1;
+    }
 };
 
 template <int nbr> class MP_subset;

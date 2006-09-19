@@ -55,6 +55,11 @@ double DataRef::evaluate() const {
     }
 }
 
+int DataRef::stage() const {
+    return 1; //NB to be changed
+}
+
+
 void DataRef::evaluate_lhs(double v) const {
     int i1 = D->S1.check(I1->evaluate());
     int i2 = D->S2.check(I2->evaluate());

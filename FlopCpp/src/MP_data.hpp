@@ -22,8 +22,8 @@ namespace flopc {
     /** @brief Reference to a set of data
         @ingroup INTERNAL_USE
         @note FOR INTERNAL USE: This is not normally used directly by the
-    calling code.
-     */
+	calling code.
+    */
     class DataRef : public Constant_base, public Functor {
     public:
 	DataRef(MP_data* d, 
@@ -37,6 +37,7 @@ namespace flopc {
 	~DataRef() {} 
 	DataRef& such_that(const MP_boolean& b);
 	double evaluate() const;
+	int stage() const;
 	const DataRef& operator=(const DataRef& r); 
 	const DataRef& operator=(const Constant& c);
 	void evaluate_lhs(double v) const;
@@ -62,7 +63,7 @@ namespace flopc {
         @li objective coefficients
         @li constraint coefficients
         @li 'right hand sides'
-     */
+    */
     class MP_data : public RowMajor, public Functor , public Named {
 	friend class MP_variable;
 	friend class DisplayData;
@@ -70,15 +71,15 @@ namespace flopc {
 	friend class MP_model;
     public:
 	void operator()() const;
-    /// similar to value() but copies the same value to all entries.
+	/// similar to value() but copies the same value to all entries.
 	void initialize(double d) {
 	    for (int i=0; i<size(); i++) {
 		v[i] = d;
 	    }
 	}
-    /** Constructs the MP_data object, and allocates space for data, but
-        does not initialize the data.
-    */
+	/** Constructs the MP_data object, and allocates space for data, but
+	    does not initialize the data.
+	*/
 	MP_data(const MP_set_base &s1 = MP_set::getEmpty(), 
 		const MP_set_base &s2 = MP_set::getEmpty(), 
 		const MP_set_base &s3 = MP_set::getEmpty(),
@@ -108,29 +109,29 @@ namespace flopc {
 
 	~MP_data() {
 	    if (manageData == true) delete[] v;
-        /// @todo determine cause of seg fault.
+	    /// @todo determine cause of seg fault.
 // 	    for (unsigned int i=0; i<myrefs.size(); i++) {
 // 		cout<<"# "<<i<<"   "<<myrefs[i]<<endl;
 // 		delete myrefs[i]; //Gives segmentation fault. I dont know why!
 // 	    }
 	}
     
-    /// Used to bind and deep copy data into the MP_data data structure.
+	/// Used to bind and deep copy data into the MP_data data structure.
 	void value(const double* d) {
 	    for (int i=0; i<size(); i++) {
 		v[i] = d[i];
 	    }
 	}
 
-    /// @todo purpose?
+	/// @todo purpose?
 	operator double() {
 	    return operator()(0);
 	}
     
-    /** Looks up the data based on the index values passed in.
-        @note this is used internally, but may also be useful for spot
-        checking data or in other expressions.
-     */
+	/** Looks up the data based on the index values passed in.
+	    @note this is used internally, but may also be useful for spot
+	    checking data or in other expressions.
+	*/
 	double& operator()(int i1, int i2=0, int i3=0, int i4=0, int i5=0) {
 	    i1 = S1.check(i1);
 	    i2 = S2.check(i2);
@@ -146,10 +147,10 @@ namespace flopc {
 	    }
 	}
     
-    /** returns a DataRef which refers into the MP_data.  
-        @note For internal use.
-        @todo can this be private?
-     */
+	/** returns a DataRef which refers into the MP_data.  
+	    @note For internal use.
+	    @todo can this be private?
+	*/
 	DataRef& operator() (
 	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
 	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
@@ -161,7 +162,17 @@ namespace flopc {
 	    return *myrefs.back();
 	}
     
-    /// For displaying data in a human readable format.
+	virtual int getStage(
+	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i3 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i4 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i5 = MP_index_exp::getEmpty()
+	    ) {
+	    return 0;
+	}
+
+	/// For displaying data in a human readable format.
 	void display(string s = "");
     private:
 	MP_data(const MP_data&); // Forbid copy constructor
@@ -174,6 +185,26 @@ namespace flopc {
 	const MP_set_base &S1,&S2,&S3,&S4,&S5;
 	double* v;
 	bool manageData;
+    };
+
+    class MP_stochastic_data : public MP_data {
+    public:
+	MP_stochastic_data(const MP_set_base &s1 = MP_set::getEmpty(), 
+			   const MP_set_base &s2 = MP_set::getEmpty(), 
+			   const MP_set_base &s3 = MP_set::getEmpty(),
+			   const MP_set_base &s4 = MP_set::getEmpty(), 
+			   const MP_set_base &s5 = MP_set::getEmpty()) :
+	    MP_data(s1,s2,s3,s4,s5) {}
+
+	virtual int getStage(
+	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i3 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i4 = MP_index_exp::getEmpty(),
+	    const MP_index_exp& i5 = MP_index_exp::getEmpty()
+	    ) {
+	    return 1;
+	}
     };
 
 } // End of namespace flopc

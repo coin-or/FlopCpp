@@ -3,6 +3,7 @@
 /Doxyfile -text
 /Externals -text
 FlopCpp/configure -text
+FlopCpp/examples/CEPFlopCppModel.cpp -text
 FlopCpp/examples/aircraft.cpp -text
 FlopCpp/examples/ampl.cpp -text
 FlopCpp/examples/bid.cpp -text

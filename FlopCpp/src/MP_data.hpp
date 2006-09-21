@@ -31,13 +31,14 @@ namespace flopc {
 		const MP_index_exp& i2,
 		const MP_index_exp& i3,
 		const MP_index_exp& i4,
-		const MP_index_exp& i5) : 
-	    D(d),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),C(0) {}
+		const MP_index_exp& i5,
+		int s = 0) : 
+	    D(d),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),C(0),stochastic(s) {}
 
 	~DataRef() {} 
 	DataRef& such_that(const MP_boolean& b);
 	double evaluate() const;
-	int stage() const;
+	int getStage() const;
 	const DataRef& operator=(const DataRef& r); 
 	const DataRef& operator=(const Constant& c);
 	void evaluate_lhs(double v) const;
@@ -46,6 +47,7 @@ namespace flopc {
 	MP_data* D;
 	MP_index_exp I1,I2,I3,I4,I5;
 	Constant C;
+	int stochastic;
 	MP_boolean B;
     };
 
@@ -162,25 +164,17 @@ namespace flopc {
 	    return *myrefs.back();
 	}
     
-	virtual int getStage(
-	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
-	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
-	    const MP_index_exp& i3 = MP_index_exp::getEmpty(),
-	    const MP_index_exp& i4 = MP_index_exp::getEmpty(),
-	    const MP_index_exp& i5 = MP_index_exp::getEmpty()
-	    ) {
-	    return 0;
-	}
 
 	/// For displaying data in a human readable format.
 	void display(string s = "");
+    protected:
+	vector<DataRef*> myrefs;
     private:
 	MP_data(const MP_data&); // Forbid copy constructor
 	MP_data& operator=(const MP_data&); // Forbid assignment
 
 	static double outOfBoundData;
 
-	vector<DataRef*> myrefs;
 	MP_index i1,i2,i3,i4,i5;
 	const MP_set_base &S1,&S2,&S3,&S4,&S5;
 	double* v;
@@ -196,14 +190,15 @@ namespace flopc {
 			   const MP_set_base &s5 = MP_set::getEmpty()) :
 	    MP_data(s1,s2,s3,s4,s5) {}
 
-	virtual int getStage(
+	DataRef& operator() (
 	    const MP_index_exp& i1 = MP_index_exp::getEmpty(),
 	    const MP_index_exp& i2 = MP_index_exp::getEmpty(),
 	    const MP_index_exp& i3 = MP_index_exp::getEmpty(),
 	    const MP_index_exp& i4 = MP_index_exp::getEmpty(),
 	    const MP_index_exp& i5 = MP_index_exp::getEmpty()
 	    ) {
-	    return 1;
+	    myrefs.push_back(new DataRef(this, i1, i2, i3, i4, i5, 1));
+	    return *myrefs.back();
 	}
     };
 

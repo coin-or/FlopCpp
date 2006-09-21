@@ -55,8 +55,24 @@ double DataRef::evaluate() const {
     }
 }
 
-int DataRef::stage() const {
-    return 1; //NB to be changed
+
+
+int DataRef::getStage() const {
+    int i1 = D->S1.checkStage(I1->evaluate());
+    int i2 = D->S2.checkStage(I2->evaluate());
+    int i3 = D->S3.checkStage(I3->evaluate());
+    int i4 = D->S4.checkStage(I4->evaluate());
+    int i5 = D->S5.checkStage(I5->evaluate());
+
+    int stage = 0;
+    if (i1>stage) stage = i1;
+    if (i2>stage) stage = i2;
+    if (i3>stage) stage = i3;
+    if (i4>stage) stage = i4;
+    if (i5>stage) stage = i5;
+
+    // might need to add outofbound check here
+    return stage+stochastic; 
 }
 
 

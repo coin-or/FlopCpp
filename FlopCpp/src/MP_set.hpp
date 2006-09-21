@@ -47,6 +47,21 @@ public:
 	    }
 	}
     }
+    int checkStage(int i) const {
+	if ((i>=0) && (i<size())) {
+	    return i*isStage();
+	} else {
+	    if (Cyclic == true) {
+		return mod(i,size())*isStage();
+	    } else {
+		return outOfBound;
+	    }
+	}
+    }
+    ///
+    virtual int isStage() const {
+	return 0;
+    }
 
     bool Cyclic;
 };
@@ -93,10 +108,6 @@ public:
     virtual int size() const {
 	return cardinality;
     }
-    ///
-    virtual int isStage() {
-	return 0;
-    }
     int last() {
 	return cardinality-1;
     }
@@ -110,7 +121,7 @@ private:
 class MP_stage : public MP_set {
 public:
     MP_stage(int i = 0): MP_set(i) {}
-    virtual int isStage() {
+    virtual int isStage() const {
 	return 1;
     }
 };

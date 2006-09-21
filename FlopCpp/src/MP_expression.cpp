@@ -31,7 +31,7 @@ private:
 	return -1;
     }
     int getStage() const {
-	return 0; //NB to be changed
+	return C->getStage(); //NB to be changed
     }
     void generate(const MP_domain& domain,
 		  vector<Constant> multiplicators,
@@ -189,17 +189,26 @@ int GenerateFunctor::row_number() const {
 
 void GenerateFunctor::operator()() const {
     double multiplicator = m_;
+    int stage = 0;
     for (unsigned int i=0; i<multiplicators.size(); i++) {
 	multiplicator *= multiplicators[i]->evaluate();
+	if (multiplicators[i]->getStage() > stage) {
+	    stage = multiplicators[i]->getStage();
+	}
     }
     int rowNumber = row_number();
     if (rowNumber != outOfBound) {
 	int colNumber = C->getColumn();
 	if ( colNumber != outOfBound  ) {
 	    double val = multiplicator*C->getValue();
-	    if (val != 0) {
-		Coefs.push_back(Coef(colNumber, rowNumber, val));
+	    int tstage = C->getStage();
+	    if (tstage > stage) {
+		stage = tstage;
 	    }
+	    // For the SP core it might be usefull to generate zero coefs
+	    // if (val != 0) {
+	    Coefs.push_back(Coef(colNumber, rowNumber, val, stage));
+	    //}
 	}
     }
 }

@@ -22,6 +22,9 @@ namespace flopc {
 	friend class Handle<Constant_base*>;
     public:
 	virtual double evaluate() const = 0;
+	virtual int getStage() const {
+	    return 0;
+	}
 	virtual int stage() const {
 	    return 0;
 	}
@@ -46,7 +49,7 @@ namespace flopc {
     public:
 	Constant(Constant_base* r) : Handle<Constant_base*>(r) {}
 	Constant(const MP_index_exp& i);
-    Constant(const DataRef& d);
+	Constant(const DataRef& d);
 	Constant(double d);
 	Constant(int d);
     };

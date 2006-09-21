@@ -44,7 +44,8 @@ void VerboseMessenger::constraintDebug(string name, const vector<Coef>& cfs) {
 	int col=cfs[j].col;
 	int row=cfs[j].row;
 	double elm=cfs[j].val;
-	cout<<row<<"   "<<col<<"  "<<elm<<endl;
+	int stage=cfs[j].stage;
+	cout<<row<<"   "<<col<<"  "<<elm<<"  "<<stage<<endl;
     }
 }
 
@@ -157,19 +158,23 @@ public:
 
 void MP_model::assemble(vector<Coef>& v, vector<Coef>& av) {
     std::sort(v.begin(),v.end(),CoefLess());
-    int c,r;
+    int c,r,s;
     double val;
     std::vector<Coef>::const_iterator i = v.begin();
     while (i!=v.end()) {
 	c = i->col;
 	r = i->row;
 	val = i->val;
+	s = i->stage;
 	i++;
 	while (i!=v.end() && c==i->col && r==i->row) {
 	    val += i->val;
+	    if (i->stage>s) {
+		s = i->stage;
+	    }
 	    i++;
 	}
-	av.push_back(Coef(c,r,val));
+	av.push_back(Coef(c,r,val,s));
     }
 }
 
@@ -247,6 +252,11 @@ void MP_model::generate() {
 	}
     }
     nz = coefs.size();
+
+//     cout<<"---------------"<<endl;
+//     for (int i=0; i<nz; i++) {
+// 	cout<<i<<" "<<coefs[i].row<<" "<<coefs[i].col<<" "<<coefs[i].val<<"  "<<coefs[i].stage<<endl;
+//     }
 
     messenger->statistics(Constraints.size(),m,Variables.size(),n,nz);
 

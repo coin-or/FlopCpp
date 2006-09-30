@@ -56,12 +56,11 @@ namespace flopc {
 
     };
 
-    /** @brief For computing the logical AND of two booleans
+    /** @brief For computing the logical negation of a boolean
     @ingroup PublicInterface
     This is used in the normal formation of an expression.
-    @param e1 first boolean 
-    @param e2 second boolean 
-    @returns A boolean which evaluates to true of both booleans are true.
+    @param b boolean 
+    @returns A boolean which evaluates to the negation of the input expression.
     @todo true? haven't used it.
     */
     MP_boolean operator!(const MP_boolean& b);

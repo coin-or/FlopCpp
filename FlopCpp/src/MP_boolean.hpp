@@ -64,6 +64,16 @@ namespace flopc {
     @returns A boolean which evaluates to true of both booleans are true.
     @todo true? haven't used it.
     */
+    MP_boolean operator!(const MP_boolean& b);
+
+    /** @brief For computing the logical AND of two booleans
+    @ingroup PublicInterface
+    This is used in the normal formation of an expression.
+    @param e1 first boolean 
+    @param e2 second boolean 
+    @returns A boolean which evaluates to true of both booleans are true.
+    @todo true? haven't used it.
+    */
     MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
     /** @brief For computing the logical OR of two booleans
     @ingroup PublicInterface

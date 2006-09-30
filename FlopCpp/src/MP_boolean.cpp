@@ -48,6 +48,16 @@ namespace flopc {
 	SUBSETREF* C;
     };
 
+    class Boolean_negate : public Boolean_base {
+	friend MP_boolean operator!(const MP_boolean& b);
+    private:
+	Boolean_negate(const MP_boolean& b) : B(b) {}
+	bool evaluate() const {
+	    return !(B->evaluate());
+	}
+	MP_boolean B;
+    };
+
     class Boolean_and : public Boolean_base {
 	friend MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
     private:
@@ -142,6 +152,9 @@ namespace flopc {
 	return new Boolean_alltrue(d,b);
     }
 
+    MP_boolean operator!(const MP_boolean& b) {
+	return new Boolean_negate(b);
+    }
     MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2) {
 	return new Boolean_and(e1, e2);
     }

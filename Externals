@@ -3,6 +3,6 @@ Cgl           https://projects.coin-or.org/svn/Cgl/trunk/Cgl
 Clp           https://projects.coin-or.org/svn/Clp/trunk/Clp
 Osi           https://projects.coin-or.org/svn/Osi/trunk/Osi
 Cbc           https://projects.coin-or.org/svn/Cbc/trunk/Cbc
-Cbc           https://projects.coin-or.org/svn/Smi/trunk/Smi
+Smi           https://projects.coin-or.org/svn/Smi/trunk/Smi
 MSVisualStudio   https://projects.coin-or.org/svn/MSVisualStudio/trunk/ExternalsDirs/FlopCpp
 BuildTools    https://projects.coin-or.org/svn/BuildTools/trunk

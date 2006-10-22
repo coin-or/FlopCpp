@@ -117,9 +117,7 @@ namespace flopc {
         /// Constructs an MP_model from an OsiSolverInterface *.
         MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
 
-        ~MP_model() {
-            delete messenger;
-        }
+        ~MP_model();
 
         /** @brief Returns the current status of the model-solver interaction.
             This method will return the current understanding of the model in

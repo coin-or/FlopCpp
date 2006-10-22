@@ -198,6 +198,10 @@ namespace flopc {
         forms a new MP_expression
      */
     MP_expression operator*(const MP_expression& e1, const Constant& e2);
+    /** forms an expression which divides an expression by a Constant.
+        
+    */
+    MP_expression operator/(const MP_expression& e1, const Constant& e2);
     /** forms an expression by summing an expression over a domain.
         @note it's expected that the expression is defined over that domain.
      */

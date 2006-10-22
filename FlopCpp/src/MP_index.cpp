@@ -14,26 +14,22 @@
 namespace flopc {
     // Initialization of static member data
     MP_index& MP_index::Empty = *new MP_index();
-    MP_index& MP_index::Any = *new MP_index();
+    MP_index& MP_index::Any_index = *new MP_index();
     MP_index_exp MP_index_exp::Empty =  *new MP_index_exp(Constant(0.0));
 
     MP_index &MP_index::getEmpty() {
 	return Empty;
     }
+    MP_index &MP_index::Any() {
+	return Any_index;
+    }
     const MP_index_exp &MP_index_exp::getEmpty() {
 	return Empty;
-    }
-
-    void MP_index_base::display()const {
-	/// MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
     }
 
     class MP_index_constant : public MP_index_base {
 	friend class MP_index_exp;
     public:
-	void display()const {
-	    /// MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
-	}
     private:
 	MP_index_constant(const Constant& c) : C(c) {}
 	int evaluate() const {
@@ -50,10 +46,6 @@ namespace flopc {
 
     class MP_index_subsetRef : public MP_index_base {
 	friend class MP_index_exp;
-    public:
-	void display()const {
-	    /// MP_model::getCurrentModel()->getMessenger()->logMessage(5,toString().c_str());
-	}
     private:
 	MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
 	int evaluate() const {

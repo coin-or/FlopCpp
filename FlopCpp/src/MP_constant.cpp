@@ -291,5 +291,3 @@ namespace flopc {
  
 } // End of namespace flopc
 
-using namespace flopc;
-

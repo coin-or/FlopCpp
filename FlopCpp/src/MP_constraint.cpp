@@ -11,6 +11,7 @@
 using std::cout;
 using std::endl;
 
+#include <OsiSolverInterface.hpp>
 #include "MP_constraint.hpp"
 #include "MP_expression.hpp"
 #include "MP_model.hpp"
@@ -21,9 +22,9 @@ using namespace flopc;
 
 
 void MP_constraint::operator=(const Constraint &v) {
-   left = v.left;
-   right = v.right;
-   sense = v.sense;
+    left = v.left;
+    right = v.right;
+    sense = v.sense;
 }
 
 int MP_constraint::row_number() const {
@@ -53,8 +54,6 @@ MP_constraint::MP_constraint(
     const MP_set_base &s4, 
     const MP_set_base &s5) :
     RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
-//     pprice(MP_data(d1->getSet(),d2->getSet(),d3->getSet(),
-// 		   d4->getSet(),d5->getSet())),
     M(MP_model::current_model),
     offset(-1),
     S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),
@@ -65,15 +64,15 @@ MP_constraint::MP_constraint(
 
 void MP_constraint::coefficients(GenerateFunctor& f) {
     f.setConstraint(this);
-
+    
     vector<Constant> v;
-
-        if (I1.operator->()!=0) {
+    
+    if (I1.operator->()!=0) {
 	left->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,1.0);
  	right->generate(S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5).such_that(B),v,f,-1.0);
-	 } else {
-		cout<<"FlopCpp Warning: Constraint declared but not defined."<<endl;
-	}
+    } else {
+        cout<<"FlopCpp Warning: Constraint declared but not defined."<<endl;
+    }
 }
 
 void MP_constraint::insertVariables(set<MP_variable*>& v) {
@@ -89,7 +88,7 @@ void MP_constraint::display(string s) const {
     cout<<s<<endl;
     if (offset >=0) {
       for (int i=offset; i<offset+size(); i++) {
-	cout<<i<<"  "<<M->bl[i]<<"  "<<M->rowActivity[i]<<"  "<<M->bu[i]<<"  "<<M->rowPrice[i]<<endl;
+	cout<<i<<"  "<<M->Solver->getRowLower()[i]<<"  "<<M->rowActivity[i]<<"  "<<M->Solver->getRowUpper()[i]<<"  "<<M->rowPrice[i]<<endl;
       }
     } else {
       cout<<"No solution available!"<<endl;

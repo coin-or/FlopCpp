@@ -60,7 +60,8 @@ namespace flopc {
         which (deep) copies in the actual data.  
         If one wishes to refer to external data instead rather than
         doing a deep copy, use the constructor which takes the value pointer
-        as an argument.  This copies the original data pointer value (rather than a deep copy).
+        as an argument.  This copies the original data pointer value 
+        (rather than a deep copy).
         <br> This is used for construction of :
         @li objective coefficients
         @li constraint coefficients
@@ -106,18 +107,12 @@ namespace flopc {
 	    RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
 	    S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),
 	    v(value), manageData(false) 
-	    {
-	    }
+	    { }
 
 	~MP_data() {
 	    if (manageData == true) delete[] v;
-	    /// @todo determine cause of seg fault.
-// 	    for (unsigned int i=0; i<myrefs.size(); i++) {
-// 		cout<<"# "<<i<<"   "<<myrefs[i]<<endl;
-// 		delete myrefs[i]; //Gives segmentation fault. I dont know why!
-// 	    }
 	}
-    
+        
 	/// Used to bind and deep copy data into the MP_data data structure.
 	void value(const double* d) {
 	    for (int i=0; i<size(); i++) {

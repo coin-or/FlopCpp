@@ -30,7 +30,7 @@ namespace flopc {
 	virtual int evaluate() const = 0;
 	virtual MP_index* getIndex() const = 0;
 	virtual MP_domain getDomain(MP_set* s) const = 0;
-	virtual void display()const;
+//	virtual void display()const;
     protected:
 	MP_index_base() : count(0) {}
 	virtual ~MP_index_base() {}
@@ -51,55 +51,51 @@ namespace flopc {
         extra dimensions which are unused.
     */
     class MP_index : public MP_index_base {
+        friend class MP_domain_set;
+        template<int nbr> friend class MP_domain_subset;
     public:
         /// Default constructor. 
 	MP_index() : index(0), instantiated(false) {}
 	int evaluate() const { 
 	    return index; 
 	}
-    /** interrogate state of instatiation of data.
-        @todo should this be private?
-    */
+        /// returns a reference to the distinct "empty" index.
+	static MP_index &getEmpty();
+        /// returns a reference to the distinct "wildcard" index.
+	static MP_index &Any();
+    private:
+       /** interrogate state of instatiation of data.
+        */
 	bool isInstantiated() const { 
 	    return instantiated; 
 	}
-    /** Setter for the index.
-        @todo should this be private?
-        @todo should this assert "instatiated"?
-    */
+        /** Setter for the index.
+            @todo should this assert "instatiated"?
+        */
 	void assign(int i) { 
 	    index = i;
 	}
-    /** unsetter for instatiated.
-        @todo should this be private?
-    */
+        /** unsetter for instatiated.
+        */
 	void unInstantiate() {
 	    instantiated = false; 
 	}
-    /** setter for instatiated.
-        @todo should this be private?
-    */
+        /** setter for instatiated.
+        */
 	void instantiate() {
 	    instantiated = true; 
 	}
-    /** getter for MP_index * data type.  
-        @todo should this be private?
-        @todo should this be virtual?
-    */
+        /** getter for MP_index * data type.  
+            @todo should this be virtual?
+        */
 	MP_index* getIndex() const {
 	    return const_cast<MP_index*>(this);
 	}
-    /// Getter for domain over which this index is applied.
+        /// Getter for domain over which this index is applied.
 	virtual MP_domain getDomain(MP_set* s) const;
-    /** @todo should this be private?
-        @todo doc purpose.
-    */
-	static MP_index& Any;
-    /// returns a reference to the distinct "empty" index.
-	static MP_index &getEmpty();
 
-    private:
 	static MP_index& Empty;
+	static MP_index& Any_index;
 	int index;
 	bool instantiated;
     };
@@ -144,22 +140,22 @@ namespace flopc {
     */
     class MP_index_exp : public Handle<MP_index_base*> {
     public:
-    /// For internal use.
+        /// For internal use.
 	MP_index_exp(MP_index_base* r) : Handle<MP_index_base*>(r) {} 
-    /// create an index expression from a constant integer.
+        /// create an index expression from a constant integer.
 	MP_index_exp(int i=0); 
-    /// create an index expression from a Constant
+        /// create an index expression from a Constant
 	MP_index_exp(const Constant& c);
-    /// create an index expression from an MP_index.
+        /// create an index expression from an MP_index.
 	MP_index_exp(MP_index& i);
-    /** create an index expression from a SUBSETREF
+        /** create an index expression from a SUBSETREF
             @todo internal? or explain?
-    */
+        */
 	MP_index_exp(const SUBSETREF& d);
-    /// copy constructor from another MP_index_exp
+        /// copy constructor from another MP_index_exp
 	MP_index_exp(const MP_index_exp& other);
 	virtual ~MP_index_exp() {}
-    /// Return the unique empty expression.
+        /// Return the unique empty expression.
 	static const MP_index_exp &getEmpty();
     private:
 	static MP_index_exp Empty;

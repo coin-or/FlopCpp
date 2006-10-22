@@ -10,7 +10,7 @@
 #include "MP_constant.hpp"
 #include "MP_domain.hpp"
 #include "MP_set.hpp"
-
+#include "MP_index.hpp"
 
 namespace flopc {
 

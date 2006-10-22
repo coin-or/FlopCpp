@@ -13,8 +13,8 @@
 using std::vector;
 
 #include "MP_index.hpp"
-#include "MP_constant.hpp"
-#include "MP_utilities.hpp"
+//#include "MP_constant.hpp"
+//#include "MP_utilities.hpp"
 
 namespace flopc {
 
@@ -89,8 +89,8 @@ namespace flopc {
     This is used in the normal formation of an expression.
     @param d MP_domain to evaluate with
     @param b boolean expression to evaluate.
-    @returns A boolean which evaluates to true all domain evaluations of the boolean evaluate to true.
-    @todo true? haven't used it.
+    @returns A boolean which evaluates to true all domain evaluations of the boolean
+    evaluate to true.
     */
     MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
 
@@ -98,7 +98,7 @@ namespace flopc {
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
         This is useful when combining index expressions.
-        @param e1 is an index expression involving an MP_index
+        @param e1 is an index expression 
         @param e2 second index expression
         @li used in forming sets of tuples of index values, or subsets.
         @todo improve this a bit?

@@ -108,6 +108,28 @@ private:
     MP_expression right;
 };
 
+class Expression_div : public MP_expression_base {
+    friend MP_expression operator/(const MP_expression& e1, const Constant& e2);
+private:
+    Expression_div(const MP_expression& e, const Constant& c) : 
+	left(e), right(c) {}
+    double level() const { 
+	return left->level()/right->evaluate(); 
+    }
+    void generate(const MP_domain& domain,
+		  vector<Constant> multiplicators,
+		  GenerateFunctor& f,
+		  double m) const {
+	multiplicators.push_back(1/right);
+	left->generate(domain, multiplicators, f, m);
+    }
+    void insertVariables(set<MP_variable*>& v) const {
+	left->insertVariables(v);
+    }
+    MP_expression left;
+    Constant right;
+};
+    
 class Expression_sum : public MP_expression_base, public Functor {
     friend MP_expression sum(const MP_domain& d, const MP_expression& e);
 private:
@@ -166,6 +188,9 @@ MP_expression operator*(const Constant& e1, const MP_expression& e2) {
 }
 MP_expression operator*(const MP_expression& e1, const Constant& e2) {
 	return new Expression_mult(e2, e1);
+}
+MP_expression operator/(const MP_expression& e1, const Constant& e2) {
+	return new Expression_div(e1, e2);
 }
 
 MP_expression sum(const MP_domain& d, const MP_expression& e) {

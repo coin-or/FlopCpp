@@ -66,6 +66,14 @@ MP_model::MP_model(OsiSolverInterface* s, Messenger* m) :
     MP_model::current_model = this;
 }
 
+MP_model::~MP_model() {
+    delete messenger;
+    if (Solver!=0) {
+        delete Solver;
+    }
+}
+
+
 MP_model& MP_model::add(MP_constraint& c) {
     Constraints.insert(&c);
     return *this;
@@ -410,6 +418,7 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     messenger->generationTime(time-CoinCpuTime());
 
 }
+
 void MP_model::detach() {
     assert(Solver);
     mSolverState=MP_model::DETACHED;

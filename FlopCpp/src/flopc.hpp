@@ -89,7 +89,6 @@ namespace flopc {
     This calls the OsiSolverInterface to execute the solver with the
     objective of  MINIMIZING THE MAXIMUM of the MP_expression evaluation
     of the MP_set
-    @todo true?
     @li Assumes that the OsiSolverInterface is already set
     @li Assumes a model is already loaded (and is the default model)
     */

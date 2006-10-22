@@ -41,7 +41,8 @@ namespace flopc {
 
     /** @brief Reference counted class for all "constant" types of data.
     @ingroup INTERNAL_USE
-    @note FOR INTERNAL USE: This is not normally used directly by the calling code.
+    @note FOR INTERNAL USE: This is not normally used directly by the calling 
+    code.
     This contains counters to ConstantBase pointers.
     These pointers may be of any of the Constant_base * type.  
     */

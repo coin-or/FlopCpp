@@ -85,9 +85,9 @@ int main() {
     MP_index p,o,d;
 
     // Set "projections"
-    Suppliers(p,o) <<= Routes(p, o, MP_index::Any);
-    Customers(p,d) <<= Routes(p, MP_index::Any, d);
-    Connections(o,d) <<= Routes(MP_index::Any, o, d);
+    Suppliers(p,o) <<= Routes(p, o, MP_index::Any());
+    Customers(p,d) <<= Routes(p, MP_index::Any(), d);
+    Connections(o,d) <<= Routes(MP_index::Any(), o, d);
 
     cout<<Suppliers.size()<<endl;
     cout<<Customers.size()<<endl;

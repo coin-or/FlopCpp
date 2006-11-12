@@ -1,1 +1,24 @@
 * text=auto !eol
+FlopCpp/examples/aircraft.cpp -text
+FlopCpp/src/MP_boolean.cpp -text
+FlopCpp/src/MP_boolean.hpp -text
+FlopCpp/src/MP_constant.cpp -text
+FlopCpp/src/MP_constant.hpp -text
+FlopCpp/src/MP_constraint.cpp -text
+FlopCpp/src/MP_constraint.hpp -text
+FlopCpp/src/MP_data.cpp -text
+FlopCpp/src/MP_data.hpp -text
+FlopCpp/src/MP_domain.cpp -text
+FlopCpp/src/MP_domain.hpp -text
+FlopCpp/src/MP_expression.cpp -text
+FlopCpp/src/MP_expression.hpp -text
+FlopCpp/src/MP_index.cpp -text
+FlopCpp/src/MP_index.hpp -text
+FlopCpp/src/MP_model.cpp -text
+FlopCpp/src/MP_model.hpp -text
+FlopCpp/src/MP_set.cpp -text
+FlopCpp/src/MP_set.hpp -text
+FlopCpp/src/MP_utilities.hpp -text
+FlopCpp/src/MP_variable.cpp -text
+FlopCpp/src/MP_variable.hpp -text
+MSVisualStudio/v8/FlopCpp/unitTest/unitTest.vcproj -text

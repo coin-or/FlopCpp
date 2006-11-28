@@ -37,7 +37,13 @@ main() {
     GoodReturn(STOCKS) = 1.25;   GoodReturn(BONDS) = 1.14;
     BadReturn(STOCKS)  = 1.06;   BadReturn(BONDS)  = 1.12;
  
-    Return(T,INSTR) = 1.33;
+    Return(T,INSTR).probability(0.5) = GoodReturn(INSTR);
+    Return(T,INSTR).probability(0.5) = BadReturn(INSTR);
+
+//     forall(T,
+// 	   Return(T,INSTR).probability(0.5) = GoodReturn(INSTR));
+//     forall(T,
+// 	   Return(T,INSTR).probability(0.5) = BadReturn(INSTR));
 
     //   Return(T,INSTR) = GoodReturn(INSTR).probability(0.5);
     //   Return(T,INSTR) = BadReturn(INSTR).probability(0.5);

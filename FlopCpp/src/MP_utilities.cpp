@@ -8,4 +8,3 @@
 
 #include "MP_utilities.hpp"
 using namespace flopc;
-

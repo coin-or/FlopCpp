@@ -9,5 +9,4 @@
 #include "flopc.hpp"
 
 namespace flopc {
-
 }

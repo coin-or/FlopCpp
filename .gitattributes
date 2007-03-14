@@ -20,6 +20,8 @@ FlopCpp/examples/runall -text
 FlopCpp/examples/runone -text
 FlopCpp/examples/stampl.cpp -text
 FlopCpp/examples/stampl2.cpp -text
+FlopCpp/examples/stampl_implicit.cpp -text
+FlopCpp/examples/stampl_nonanticip.cpp -text
 FlopCpp/examples/stochbenders.cpp -text
 FlopCpp/examples/sudoku.cpp -text
 FlopCpp/examples/tap.cpp -text

@@ -16,12 +16,36 @@ const double R2 = 1.12;
 
 class MP_tree {
 public:
-  MP_tree() {}
-  
-  int nStages() {return 0;}
-  int nScenarios() {return 0;}
-
+    MP_tree() {}
+    
+    virtual int nStages() {return 0;}
+    virtual int nScenarios(int stage) {return 0;}
+    virtual int getindex(int rs, int cs, int q) {return 0;}
 };
+
+
+
+class MP_binarytree : public MP_tree {
+public:
+    MP_binarytree(int depth) : D(depth) {}
+    
+    virtual int nStages() {
+        return D+1;
+    }
+    
+    virtual int nScenarios(int stage) {
+        return int(pow(2,stage));
+    }
+
+    virtual int getindex(int rs, int cs, int q) {
+        return q / int(pow(2,(rs-cs)));
+    }
+
+    int D;
+};
+
+
+
 
 
 class MP_problem {
@@ -40,32 +64,76 @@ public:
   double *u;
 };
 
+struct Cof {
+    Cof(int c, int r, double v) : 
+        col(c), row(r), val(v)  {}
+    int col, row;
+    double val;
+};
 
 
 void loadStochasticProblem(
-  int m,
-  int n,
-  int nz,
-  int *Cst,
-  int *Rnr,
-  double *Elm,
-  int *ElmLng,
-  double *bl,
-  double *bu,
-  double *c,
-  double *l,
-  double *u,
-  int *rstage,
-  int *cstage,
-  MP_tree& T
-  ) {
+    int m,
+    int n,
+    int nz,
+    int *Cst,
+    int *Rnr,
+    double *Elm,
+    int *ElmLng,
+    double *bl,
+    double *bu,
+    double *c,
+    double *l,
+    double *u,
+    int *rstage,
+    int *cstage,
+    MP_tree& T) 
+{
+    MP_problem DE;
+    
+    int *m_off = new int[m];
+    int *n_off = new int[n];
 
-  MP_problem DE;
-  
-  DE.m = 0;
+    DE.m = 0;
+    for (int i=0; i<m; i++) {
+        m_off[i] = DE.m;
+        DE.m += T.nScenarios(rstage[i]);
+    }
+    DE.n = 0;
+    for (int j=0; j<n; j++) {
+        n_off[j] = DE.n;
+        DE.n += T.nScenarios(cstage[j]); 
+    }
+    
+    vector<Cof> coeficients;
 
-  
-
+    int k = 0;
+    int ke = 0;
+    for (int j=0; j<n; j++) {
+        int cs = cstage[j];
+        for ( ; k<Cst[j+1]; k++) {
+            int i = Rnr[k];
+            int s = rstage[i];
+            if (ElmLng[k] == 1) { 
+                for (int q=0; q<T.nScenarios(s); q++) {
+                    coeficients.push_back(Cof(m_off[i]+q,
+                                              n_off[j]+T.getindex(s,cs,q),
+                                              Elm[ke]));
+                }
+                ke++;
+            } else {
+                for (int q=0; q<T.nScenarios(s); q++) {
+                    coeficients.push_back(Cof(m_off[i]+q,
+                                              n_off[j]+T.getindex(s,cs,q),
+                                              Elm[ke]));
+                    ke++;
+                }
+            }
+        }
+    }
+                
+                
+    cout<<coeficients.size()<<endl;
 
 }
 
@@ -131,7 +199,7 @@ main() {
 
 
 
-  MP_tree T;
+  MP_binarytree T(3);
 
   loadStochasticProblem(m,n,nz,Cst,Rnr,Elm,ElmLng,bl,bu,c,l,u,rstage,cstage,T);
   cout<<"done"<<endl;

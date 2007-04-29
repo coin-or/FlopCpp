@@ -21,6 +21,7 @@ public:
     virtual int nStages() {return 0;}
     virtual int nScenarios(int stage) {return 0;}
     virtual int getindex(int rs, int cs, int q) {return 0;}
+  virtual double probability(int stage, int q) {return 1;}
 };
 
 
@@ -41,6 +42,10 @@ public:
         return q / int(pow(2,(rs-cs)));
     }
 
+    virtual double probability(int stage, int q) {
+        return 1.0 / double(nScenarios(stage));
+    }
+
     int D;
 };
 
@@ -55,6 +60,7 @@ public:
   int n;
   int nz;
   int *Cst;
+  int *Clg;
   int *Rnr;
   double *Elm;
   double *bl;
@@ -132,9 +138,71 @@ void loadStochasticProblem(
         }
     }
                 
+    DE.nz = coeficients.size();
                 
     cout<<coeficients.size()<<endl;
 
+    if (DE.nz>0) {    
+      DE.Elm = new double[DE.nz]; 
+      DE.Rnr = new int[DE.nz];    
+    }
+    DE.Cst = new int[DE.n+1];   
+    DE.Clg = new int[DE.n];   
+    for (int j=0; j<DE.n; j++) {
+      DE.Clg[j] = 0;
+    }
+    for (int i=0; i<DE.nz; i++) {
+      int col = coeficients[i].col;
+      DE.Clg[col]++;
+    }
+    DE.Cst[0]=0;
+    for (int j=0; j<DE.n; j++) {
+      DE.Cst[j+1]=DE.Cst[j]+DE.Clg[j]; 
+    }
+    for (int i=0; i<DE.n; i++) {
+      DE.Clg[i]=0;
+    }
+    
+    for (int i=0; i<DE.nz; i++) {
+      int col = coeficients[i].col;
+      int row = coeficients[i].row;
+      double elm = coeficients[i].val;
+      DE.Elm[DE.Cst[col]+DE.Clg[col]] = elm;
+      DE.Rnr[DE.Cst[col]+DE.Clg[col]] = row;
+      DE.Clg[col]++;
+    }
+
+    DE.bl = new double[DE.m];
+    DE.bu = new double[DE.m];
+    k = 0;
+    for (int i=0; i<m; i++) {
+      for (int q=0; q<T.nScenarios(rstage[i]); q++) {
+        DE.bl[k] = bl[i];
+        DE.bu[k] = bu[i];
+        k++;
+      }
+    }
+
+    DE.c = new double[DE.n];
+    DE.l = new double[DE.n];
+    DE.u = new double[DE.n];
+    k = 0;
+    for (int j=0; j<n; j++) {
+      for (int q=0; q<T.nScenarios(cstage[j]); q++) {
+        DE.l[k] = l[j];
+        DE.u[k] = u[j];
+        DE.c[k] = c[j] * T.probability(cstage[j],q);
+        k++;
+      }
+    }
+
+    OsiSolverInterface* Solver = new OsiClpSolverInterface;
+
+    Solver->loadProblem(DE.n, DE.m, DE.Cst, DE.Rnr, DE.Elm, DE.l, DE.u, DE.c, 
+                        DE.bl, DE.bu);
+
+    Solver->setObjSense(-1);
+    Solver->initialSolve();
 }
 
 void determininistic() {
@@ -157,6 +225,7 @@ void determininistic() {
   Solver->setObjSense(-1);
   Solver->initialSolve();
   
+
   if (Solver->isProvenOptimal() == true) {
     cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
     cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<

@@ -71,10 +71,12 @@ public:
 };
 
 struct Cof {
-    Cof(int c, int r, double v) : 
-        col(c), row(r), val(v)  {}
-    int col, row;
-    double val;
+  Cof(int r, int c, double v) : 
+    row(r), col(c), val(v)  { 
+    cout<<row<<" "<<col<<" "<<val<<endl;
+  }
+  int col, row;
+  double val;
 };
 
 
@@ -172,6 +174,9 @@ void loadStochasticProblem(
       DE.Clg[col]++;
     }
 
+
+    cout<<DE.Cst[DE.n]<<"="<<DE.nz<<endl;
+
     DE.bl = new double[DE.m];
     DE.bu = new double[DE.m];
     k = 0;
@@ -179,9 +184,12 @@ void loadStochasticProblem(
       for (int q=0; q<T.nScenarios(rstage[i]); q++) {
         DE.bl[k] = bl[i];
         DE.bu[k] = bu[i];
+        cout<<k<<" .."<<DE.bu[k]<<endl;
         k++;
       }
     }
+
+    cout<<k<<"="<<DE.m<<endl;
 
     DE.c = new double[DE.n];
     DE.l = new double[DE.n];
@@ -192,15 +200,19 @@ void loadStochasticProblem(
         DE.l[k] = l[j];
         DE.u[k] = u[j];
         DE.c[k] = c[j] * T.probability(cstage[j],q);
+        cout<<DE.c[k]<<endl;
         k++;
       }
     }
+
+    cout<<k<<"="<<DE.n<<endl;
 
     OsiSolverInterface* Solver = new OsiClpSolverInterface;
 
     Solver->loadProblem(DE.n, DE.m, DE.Cst, DE.Rnr, DE.Elm, DE.l, DE.u, DE.c, 
                         DE.bl, DE.bu);
 
+    Solver->writeMps("stampl_mat","mps",-1.0);
     Solver->setObjSense(-1);
     Solver->initialSolve();
 }
@@ -213,8 +225,8 @@ void determininistic() {
   
   int Rnr[] = {0,1,0,1,1,2,1,2,2,3,2,3,3,3};
   double Elm[] = {1, r1, 1, r2, -1, r1, -1, r2, -1, r1, -1, r2, -1, 1};
-  double bl[] = {50,0,0,80};
-  double bu[] = {50,0,0,80};
+  double bl[] = {55,0,0,80};
+  double bu[] = {55,0,0,80};
   double c[] = {0,0,0,0,0,0,1,-4};
   double l[] = {0,0,0,0,0,0,0,0};
   double u[] = {inf,inf,inf,inf,inf,inf,inf,inf};
@@ -245,8 +257,8 @@ main() {
   double Elm[] = {1, r1, R1, 1, r2, R2, -1, r1, R1, r1, R1, -1, r2, R2, r2, R2,
                   -1, r1, R1, r1, R1, r1, R1, r1, R1, -1, r2, R2, r2, R2, r2, R2, r2, R2, -1, 1};
   int ElmLng[] = {1,2,1,2,1,4,1,4,1,8,1,8,1,1};
-  double bl[] = {50,0,0,80};
-  double bu[] = {50,0,0,80};
+  double bl[] = {55,0,0,80};
+  double bu[] = {55,0,0,80};
   double c[] = {0,0,0,0,0,0,1,-4};
   double l[] = {0,0,0,0,0,0,0,0};
   double u[] = {inf,inf,inf,inf,inf,inf,inf,inf};

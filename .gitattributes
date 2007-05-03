@@ -13,6 +13,9 @@ FlopCpp/examples/cross.cpp -text
 FlopCpp/examples/cuttingStock.cpp -text
 FlopCpp/examples/fixed.dat -text
 FlopCpp/examples/gapmin.cpp -text
+FlopCpp/examples/huang.cpp -text
+FlopCpp/examples/huang.hpp -text
+FlopCpp/examples/huang_main.cpp -text
 FlopCpp/examples/magic.cpp -text
 FlopCpp/examples/mine.cpp -text
 FlopCpp/examples/multiProduct.cpp -text

@@ -286,6 +286,7 @@ void MP_model::attach(OsiSolverInterface *_solver) {
   if (n>0) {
     l =   new double[n];  
     u =   new double[n];  
+    c =  new double[n]; 
   }
   if (m>0) {
     bl  = new double[m];  
@@ -375,7 +376,6 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
   }     
 
-  c =  new double[n]; 
   for (int j=0; j<n; j++) {
     c[j] = 0.0;
   }
@@ -409,6 +409,7 @@ void MP_model::attach(OsiSolverInterface *_solver) {
   if (n>0) {
     delete [] l;  
     delete [] u;  
+    delete [] c;
   }
   if (m>0) {
     delete [] bl;  

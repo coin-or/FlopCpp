@@ -49,7 +49,6 @@ namespace flopc {
   private:
     MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
     int evaluate() const {
-      cout<<"eval subsetref "<<S->evaluate()<<endl;
       return int(S->evaluate()); 
     }
     MP_index* getIndex() const {

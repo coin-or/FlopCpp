@@ -339,7 +339,6 @@ namespace flopc {
       if (pos==S->elements.end()) {
         return outOfBound;
       } else {
-        cout<<pos->second<<endl;
         return pos->second;
       }
 

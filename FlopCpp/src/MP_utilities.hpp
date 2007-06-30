@@ -32,8 +32,8 @@ namespace flopc {
   protected:
     Functor() {}
     virtual ~Functor() {}
-  private:
     Functor(const Functor&);
+  private:
     Functor& operator=(const Functor&);
   };    
 

@@ -60,9 +60,9 @@ void VerboseMessenger::objectiveDebug(const vector<Coef>& cfs) {
 }
 
 MP_model::MP_model(OsiSolverInterface* s, Messenger* m) : 
-  solution(0), messenger(m), Objective(0), Solver(s), 
+  messenger(m), Objective(0), Solver(s), 
   m(0), n(0), nz(0), bl(0),
-  mSolverState(((s==NULL)?(MP_model::DETACHED):(MP_model::SOLVER_ONLY))) {
+  mSolverState(((s==0)?(MP_model::DETACHED):(MP_model::SOLVER_ONLY))) {
   MP_model::current_model = this;
 }
 
@@ -105,8 +105,8 @@ void MP_model::addRow(const Constraint& c) {
   vector<Coef> cfs;
   vector<Constant> v;
   ObjectiveGenerateFunctor f(cfs);
-  c.left->generate(MP_domain::getEmpty(),v,f,1.0);
-  c.right->generate(MP_domain::getEmpty(),v,f,-1.0);
+  c->left->generate(MP_domain::getEmpty(),v,f,1.0);
+  c->right->generate(MP_domain::getEmpty(),v,f,-1.0);
   CoinPackedVector newRow;
   double rhs = 0.0;
   for (unsigned int j=0; j<cfs.size(); j++) {
@@ -126,7 +126,7 @@ void MP_model::addRow(const Constraint& c) {
   double bu = -rhs;
 
   double inf = Solver->getInfinity();
-  switch (c.sense) {
+  switch (c->sense) {
       case LE:
         bl = - inf;
         break;
@@ -228,8 +228,8 @@ void MP_model::minimize(const MP_expression &obj) {
 }
 
 void MP_model::attach(OsiSolverInterface *_solver) {
-  if (_solver==NULL) {
-    if (Solver==NULL) {
+  if (_solver == 0) {
+    if (Solver == 0) {
       mSolverState = MP_model::DETACHED;
       return;
     }  
@@ -431,10 +431,9 @@ void MP_model::attach(OsiSolverInterface *_solver) {
 
 void MP_model::detach() {
   assert(Solver);
-  mSolverState=MP_model::DETACHED;
-  /// @todo strip all data out of the solver.
+  mSolverState = MP_model::DETACHED;
   delete Solver;
-  Solver=NULL;
+  Solver = 0;
 }
 
 MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
@@ -473,19 +472,15 @@ MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
     cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
     cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
       Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
-    solution = Solver->getColSolution();
-    reducedCost = Solver->getReducedCost();
-    rowPrice = Solver->getRowPrice();
-    rowActivity = Solver->getRowActivity();
   } else if (Solver->isProvenPrimalInfeasible() == true) {
     return mSolverState=MP_model::PRIMAL_INFEASIBLE;
-    //cout<<"FlopCpp: Problem is primal infeasible."<<endl;
+    cout<<"FlopCpp: Problem is primal infeasible."<<endl;
   } else if (Solver->isProvenDualInfeasible() == true) {
     return mSolverState=MP_model::DUAL_INFEASIBLE;
-    //cout<<"FlopCpp: Problem is dual infeasible."<<endl;
+    cout<<"FlopCpp: Problem is dual infeasible."<<endl;
   } else {
     return mSolverState=MP_model::ABANDONED;
-    //cout<<"FlopCpp: Solution process abandoned."<<endl;
+    cout<<"FlopCpp: Solution process abandoned."<<endl;
   }
   return mSolverState=MP_model::OPTIMAL;
 }

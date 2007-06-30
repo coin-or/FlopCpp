@@ -29,12 +29,12 @@ VariableRef::VariableRef(MP_variable* v,
 }
 
 double VariableRef::level() const {
-  return  V->M->solution[V->offset +
-                         V->f(V->S1->evaluate(),
-                              V->S2->evaluate(),
-                              V->S3->evaluate(),
-                              V->S4->evaluate(),
-                              V->S5->evaluate())];
+  return  V->M->Solver->getColSolution()[V->offset +
+                                         V->f(V->S1->evaluate(),
+                                              V->S2->evaluate(),
+                                              V->S3->evaluate(),
+                                              V->S4->evaluate(),
+                                              V->S5->evaluate())];
 }
 
 int VariableRef::getColumn() const { 
@@ -78,7 +78,7 @@ MP_variable::MP_variable(const MP_set_base &s1,
 }    
 
 double MP_variable::level(int i1, int i2, int i3, int i4, int i5) {
-  return M->solution[offset +  f(i1,i2,i3,i4,i5)];
+  return M->Solver->getColSolution()[offset +  f(i1,i2,i3,i4,i5)];
 }
 
 void MP_variable::operator()() const {
@@ -87,12 +87,12 @@ void MP_variable::operator()() const {
   if (S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
   if (S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
   if (S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
-  cout<<"  "<< M->solution[offset +
-                           f(i1.evaluate(),
-                             i2.evaluate(),
-                             i3.evaluate(),
-                             i4.evaluate(),
-                             i5.evaluate())]<<endl;
+  cout<<"  "<< M->Solver->getColSolution()[offset +
+                                           f(i1.evaluate(),
+                                             i2.evaluate(),
+                                             i3.evaluate(),
+                                             i4.evaluate(),
+                                             i5.evaluate())]<<endl;
 }
 
 void MP_variable::display(const std::string &s) {

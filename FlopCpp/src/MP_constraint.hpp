@@ -39,9 +39,21 @@ namespace flopc {
       @see MP_constraint for a public interface.
       @note of interest is the operator overloads which are 'friends'
   */
-  class Constraint {
+  class Constraint_base {
+  public:
+    Constraint_base(const MP_expression& l, const MP_expression& r, Sense_enum s) : 
+      left(l), right(r), sense(s), count(0) {}
+
+    MP_expression left,right;
+    Sense_enum sense;
+//  protected:
+    int count;
+  };
+
+  class Constraint : public Handle<Constraint_base*> {
     friend class MP_constraint;
     friend class MP_model;
+    friend class Constraint_base;
     friend Constraint operator<=(const MP_expression& l, const MP_expression& r);
     friend Constraint operator<=(const Constant& l, const MP_expression& r); 
     friend Constraint operator<=(const MP_expression& l, const Constant& r); 
@@ -56,12 +68,10 @@ namespace flopc {
     friend Constraint operator==(const Constant& l, const MP_expression& r); 
     friend Constraint operator==(const MP_expression& l, const Constant& r); 
     friend Constraint operator==(const VariableRef& l, const VariableRef& r); 
-  private:
-    Constraint(const MP_expression& l, const MP_expression& r, Sense_enum s) : 
-      left(l), right(r), sense(s) {}
-
-    MP_expression left,right;
-    Sense_enum sense;
+  public:
+    Constraint() : Handle<Constraint_base*>(0) {}
+    Constraint(Constraint_base* r) : Handle<Constraint_base*>(r) {}
+    // MP_expression getLeft() {return root->left;}
   };
 
   /** @brief Uses operator overloading to construct an Constraint 
@@ -70,7 +80,7 @@ namespace flopc {
       @see MP_constraint
   */
   inline Constraint operator<=(const MP_expression& l, const MP_expression& r) {
-    return Constraint(l, r, LE);
+    return new Constraint_base(l, r, LE);
   }
   /** @brief Uses operator overloading to construct an Constraint 
       @ingroup PublicInterface
@@ -94,7 +104,7 @@ namespace flopc {
       @see MP_constraint
   */
   inline Constraint operator<=(const VariableRef& l, const VariableRef& r) {
-    return *new Constraint(l, r, LE);
+    return new Constraint_base(l, r, LE);
   }
     
   /** @brief Uses operator overloading to construct an Constraint 
@@ -103,7 +113,7 @@ namespace flopc {
       @see MP_constraint
   */
   inline Constraint operator>=(const MP_expression& l, const MP_expression& r) {
-    return *new Constraint(l, r, GE);
+    return new Constraint_base(l, r, GE);
   }
   /** @brief Uses operator overloading to construct an Constraint 
       @ingroup PublicInterface
@@ -127,7 +137,7 @@ namespace flopc {
       @see MP_constraint
   */
   inline Constraint operator>=(const VariableRef& l, const VariableRef& r) {
-    return *new Constraint(l, r, GE);
+    return new Constraint_base(l, r, GE);
   }
     
   /** @brief Uses operator overloading to construct an Constraint 
@@ -136,7 +146,7 @@ namespace flopc {
       @see MP_constraint
   */
   inline Constraint operator==(const MP_expression& l, const MP_expression& r) {
-    return *new Constraint(l, r, EQ);
+    return new Constraint_base(l, r, EQ);
   }
   /** @brief Uses operator overloading to construct an Constraint 
       @ingroup PublicInterface
@@ -160,7 +170,7 @@ namespace flopc {
       @see MP_constraint
   */
   inline Constraint operator==(const VariableRef& l, const VariableRef& r) {
-    return *new Constraint(l, r, EQ);
+    return new Constraint_base(l, r, EQ);
   }
 
 

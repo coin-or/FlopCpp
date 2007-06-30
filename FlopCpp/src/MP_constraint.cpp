@@ -22,9 +22,9 @@ using namespace flopc;
 
 
 void MP_constraint::operator=(const Constraint &v) {
-  left = v.left;
-  right = v.right;
-  sense = v.sense;
+  left = v->left;
+  right = v->right;
+  sense = v->sense;
 }
 
 int MP_constraint::row_number() const {
@@ -44,7 +44,7 @@ int MP_constraint::row_number() const {
 }
 
 double MP_constraint::price(int i1, int i2, int i3, int i4, int i5) const {
-  return  M->rowPrice[offset + f(i1,i2,i3,i4,i5)];
+  return  M->Solver->getRowPrice()[offset + f(i1,i2,i3,i4,i5)];
 }
  
 MP_constraint::MP_constraint(
@@ -87,7 +87,7 @@ void MP_constraint::display(string s) const {
   cout<<s<<endl;
   if (offset >=0) {
     for (int i=offset; i<offset+size(); i++) {
-      cout<<i<<"  "<<M->Solver->getRowLower()[i]<<"  "<<M->rowActivity[i]<<"  "<<M->Solver->getRowUpper()[i]<<"  "<<M->rowPrice[i]<<endl;
+      cout<<i<<"  "<<M->Solver->getRowLower()[i]<<"  "<<M->Solver->getRowActivity()[i]<<"  "<<M->Solver->getRowUpper()[i]<<"  "<<M->Solver->getRowPrice()[i]<<endl;
     }
   } else {
     cout<<"No solution available!"<<endl;

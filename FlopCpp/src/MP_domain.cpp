@@ -43,10 +43,10 @@ namespace flopc {
 
 using namespace flopc;
 
-const MP_domain* MP_domain::Empty = NULL;
+const MP_domain* MP_domain::Empty = 0;
 
 const MP_domain& MP_domain::getEmpty() {
-  if(Empty==NULL) {
+  if(Empty == 0) {
     Empty= new MP_domain(new MP_domain_set(&MP_set::getEmpty(),&MP_set::getEmpty()));
   }
   return *Empty;
@@ -57,7 +57,7 @@ MP_domain_base::MP_domain_base() : count(0), donext(0) {}
 MP_domain_base::~MP_domain_base() {}
 
 Functor* MP_domain_base::makeInsertFunctor() const {
-  return NULL;
+  return 0;
 }
 
 size_t MP_domain_base::size() const { 

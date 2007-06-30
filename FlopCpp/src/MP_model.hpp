@@ -187,7 +187,7 @@ namespace flopc {
         be specified at construction time, 
         or as late as the call to attach()
     */
-    void attach(OsiSolverInterface *solver=NULL);
+    void attach(OsiSolverInterface *solver = 0);
     /** @brief detaches an OsiSolverInterface object from the model.  
         In essence, this will clean up any intermediate storage. A model 
         may then be attached to another solverInterface.
@@ -207,10 +207,6 @@ namespace flopc {
         @todo should these be private with accessors?  What if not set yet?
         @todo what if not a complete result? What if only one LP in the IP?
     */
-    const double* solution;
-    const double* reducedCost;
-    const double* rowPrice;
-    const double* rowActivity;
     /** Useful for getting an appropriate value to pass in as "infinity"
         @note some solvers may be more or less sensitive to the value.
     */

@@ -91,7 +91,7 @@ int main() {
     double pat[numWidths];
     double ob;
     do {
-	ob = knapsack(numWidths, tabWidth, &Paper.rowPrice[demC.offset], maxWidth, pat);
+	ob = knapsack(numWidths, tabWidth, Paper.Solver->getRowPrice()+demC.offset, maxWidth, pat);
 
 	CoinPackedVector Pat;	
 	Pat.setFull(numWidths, pat);

@@ -426,7 +426,7 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     }
   }
   mSolverState = MP_model::ATTACHED;
-  messenger->generationTime(time-CoinCpuTime());
+  messenger->generationTime(CoinCpuTime()-time);
 }
 
 void MP_model::detach() {

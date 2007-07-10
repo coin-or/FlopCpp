@@ -155,9 +155,11 @@ int main() {
     // Optimal objective value m1: 1566.04
     // Optimal objective value m2: 1566.04 (like m1)
     assert(m2->getObjValue()>=1566.03 && m2->getObjValue()<=1566.05);
-    CoinRelFltEq eq;
-    assert( eq(m2->getObjValue(),1566.04) );
-    assert( eq(m1->getObjValue(),1566.04) );
+    CoinRelFltEq eq(1.e-05);
+    float m1ObjValue=m1->getObjValue();
+    float m2ObjValue=m2->getObjValue();
+    assert( eq(m2ObjValue,1566.04) );
+    assert( eq(m1ObjValue,1566.04) );
 
     y.display("y second model");
   }

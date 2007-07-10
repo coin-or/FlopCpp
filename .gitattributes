@@ -27,6 +27,7 @@ FlopCpp/MSVisualStudio/v7/libflopc.vcproj -text
 FlopCpp/MSVisualStudio/v8/FlopCpp.sln -text
 FlopCpp/MSVisualStudio/v8/FlopCpp.suo -text
 FlopCpp/MSVisualStudio/v8/FlopCpp/FlopCpp.vcproj -text
+FlopCpp/MSVisualStudio/v8/FlopCpp/unitTest/unitTest.vcproj -text
 FlopCpp/MSVisualStudio/v8/examples/aircraft/aircraft.vcproj -text
 FlopCpp/MSVisualStudio/v8/examples/ampl/ampl.vcproj -text
 FlopCpp/MSVisualStudio/v8/examples/bid/bid.vcproj -text

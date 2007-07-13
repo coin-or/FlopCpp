@@ -97,12 +97,15 @@ namespace flopc {
   };
 
   class Boolean_lessEq : public Comparison {
-    friend MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2);
+    friend MP_boolean operator<=(const MP_index_exp& e1,const MP_index_exp& e2);
     friend MP_boolean operator<=(const Constant& e1, const Constant& e2);
   private:
-    Boolean_lessEq(const Constant& e1, const Constant& e2) : Comparison(e1,e2) {}
-    bool evaluate() const;
+    Boolean_lessEq(const Constant& e1, const Constant& e2):Comparison(e1,e2) {}
+    bool evaluate() const {
+      return (left->evaluate() <= right->evaluate());
+    }
   };
+
 
   class Boolean_less : public Comparison {
     friend MP_boolean operator<(const MP_index_exp& e1, 
@@ -110,7 +113,9 @@ namespace flopc {
     friend MP_boolean operator<(const Constant& e1, const Constant& e2); 
   private:
     Boolean_less(const Constant& e1, const Constant& e2) : Comparison(e1,e2) {}
-    bool evaluate() const; 
+    bool evaluate() const {
+      return (left->evaluate() < right->evaluate());
+    }
   };
 
   class Boolean_greaterEq : public Comparison {
@@ -121,7 +126,9 @@ namespace flopc {
   private:
     Boolean_greaterEq(const Constant& e1, const Constant& e2) : 
       Comparison(e1,e2) {}
-    bool evaluate() const;
+    bool evaluate() const { 
+      return (left->evaluate() >= right->evaluate());
+    }
   };
 
   class Boolean_greater : public Comparison {
@@ -129,7 +136,9 @@ namespace flopc {
     friend MP_boolean operator>(const Constant& e1, const Constant& e2);
   private:
     Boolean_greater(const Constant& e1, const Constant& e2): Comparison(e1,e2) {}
-    bool evaluate() const;
+    bool evaluate() const {
+      return (left->evaluate() > right->evaluate());
+    }
   };
 
   class Boolean_equal : public Comparison {
@@ -137,15 +146,20 @@ namespace flopc {
     friend MP_boolean operator==(const Constant& e1, const Constant& e2);
   private:
     Boolean_equal(const Constant& e1, const Constant& e2) : Comparison(e1,e2) {}
-    bool evaluate() const;
+    bool evaluate() const {
+      return (left->evaluate() == right->evaluate());
+    }
   };
+
 
   class Boolean_not_equal : public Comparison {
     friend MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
     friend MP_boolean operator!=(const Constant& e1, const Constant& e2);
   private:
     Boolean_not_equal(const Constant& e1, const Constant& e2) : Comparison(e1,e2) {}
-    bool evaluate() const;
+    bool evaluate() const { 
+      return (left->evaluate() != right->evaluate());
+    }
   };
 
 
@@ -210,24 +224,4 @@ MP_boolean::MP_boolean(const Constant& c) :
 
 MP_boolean::MP_boolean(SUBSETREF& c) : 
   Handle<Boolean_base*>(new Boolean_SUBSETREF(c)) {}
-
-bool  Boolean_lessEq::evaluate() const {
-  return (left->evaluate() <= right->evaluate());
-}
-bool  Boolean_less::evaluate() const {
-  return (left->evaluate() < right->evaluate());
-}
-bool Boolean_greaterEq::evaluate() const {
-  return (left->evaluate() >= right->evaluate());
-}
-bool Boolean_greater::evaluate() const {
-  return (left->evaluate() > right->evaluate());
-}
-bool Boolean_equal::evaluate() const {
-  return (left->evaluate() == right->evaluate());
-} 
-bool Boolean_not_equal::evaluate() const {
-  return (left->evaluate() != right->evaluate());
-} 
-
 

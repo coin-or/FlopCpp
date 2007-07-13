@@ -232,7 +232,7 @@ namespace flopc {
     }
     double evaluate() const {    
       the_max = DBL_MIN;
-      d.Forall(this);
+      d.forall(this);
       return the_max;
     }
     
@@ -253,7 +253,7 @@ namespace flopc {
     }
     double evaluate() const {    
       the_min = DBL_MAX;
-      d.Forall(this);
+      d.forall(this);
       return the_min;
     }
 
@@ -271,7 +271,7 @@ namespace flopc {
     }
     double evaluate() const {  
       the_sum = 0;
-      d.Forall(this);
+      d.forall(this);
       return the_sum;
     }
 
@@ -289,7 +289,7 @@ namespace flopc {
     }
     double evaluate() const {  
       the_product = 1;
-      d.Forall(this);
+      d.forall(this);
       return the_product;
     }
 

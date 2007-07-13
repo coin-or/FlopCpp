@@ -53,7 +53,7 @@ namespace flopc {
       @ingroup PublicInterface
   */
   inline void forall(const MP_domain& d, const Functor& f) {
-    d.Forall(&f);
+    d.forall(&f);
   }
     
   /** @brief Global function for performing a Functor without having a set
@@ -70,7 +70,7 @@ namespace flopc {
       @ingroup PublicInterface
   */
   inline void operator<<=(const MP_domain& s, const MP_domain& d) {
-    d.Forall( s->makeInsertFunctor());
+    d.forall( s->makeInsertFunctor());
   }
 
   /** @brief This is one of the main entry points for execution 

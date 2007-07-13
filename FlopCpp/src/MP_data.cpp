@@ -22,7 +22,7 @@ double MP_data::outOfBoundData = 0;
 
 const DataRef& DataRef::operator=(const Constant& c) {
   C = c;
-  ((D->S1(I1)*D->S2(I2)*D->S3(I3)*D->S4(I4)*D->S5(I5)).such_that(B)).Forall(this);
+  ((D->S1(I1)*D->S2(I2)*D->S3(I3)*D->S4(I4)*D->S5(I5)).such_that(B)).forall(this);
   return *this;;
 }
 
@@ -101,5 +101,5 @@ void MP_data::operator()() const {
 
 void MP_data::display(string s) {
   cout<<s<<endl;
-  ((S1)(i1)*(S2)(i2)*(S3)(i3)*(S4)(i4)*(S5)(i5)).Forall(this);
+  ((S1)(i1)*(S2)(i2)*(S3)(i3)*(S4)(i4)*(S5)(i5)).forall(this);
 }

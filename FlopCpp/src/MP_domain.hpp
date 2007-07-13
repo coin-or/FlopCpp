@@ -86,7 +86,7 @@ namespace flopc {
         
     This method will call the functor for each member of the MP_domain.
     */
-    void Forall(const Functor* op) const;
+    void forall(const Functor* op) const;
     /// returns number of elements in the domain.
     size_t size() const;
     /// returns a reference to the "empty" set.

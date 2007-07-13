@@ -58,7 +58,7 @@ void VariableRef::generate(const MP_domain& domain,
 			   double m)  const {
   f.setMultiplicator(multiplicators,m);
   f.setTerminalExpression(this);
-  domain.Forall(&f);
+  domain.forall(&f);
 }
  
 MP_variable::MP_variable(const MP_set_base &s1, 
@@ -98,7 +98,7 @@ void MP_variable::operator()() const {
 void MP_variable::display(const std::string &s) {
   cout<<s<<endl;
   if (offset >= 0) {
-    ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).Forall(this);
+    ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).forall(this);
   } else {
     cout<<"No solution available!"<<endl;
   }

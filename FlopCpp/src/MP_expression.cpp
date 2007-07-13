@@ -39,7 +39,7 @@ namespace flopc {
 		  double m) const {
       f.setMultiplicator(multiplicators,m);
       f.setTerminalExpression(this);
-      domain.Forall(&f);
+      domain.forall(&f);
     }
     void insertVariables(set<MP_variable*>& v) const {}
 
@@ -140,7 +140,7 @@ namespace flopc {
     }
     double level() const {
       the_sum = 0;
-      D.Forall(this);
+      D.forall(this);
       return the_sum;
     } 
     void generate(const MP_domain& domain,

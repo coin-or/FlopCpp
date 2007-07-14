@@ -41,17 +41,31 @@ namespace flopc {
       These pointers may be of any of the Boolean_base * type.  
       This can be a constant valued boolean as well.  
       @TODO explain SUBSETREF
-      @TODO explain using pointer in -- should be private?
   */
   class MP_boolean : public Handle<Boolean_base*> {
-    friend class MP_domain_base_;
+    friend MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
+    friend MP_boolean operator!(const MP_boolean& b);
+    friend MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
+    friend MP_boolean operator||(const MP_boolean& e1, const MP_boolean& e2);
+    friend MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2);
+    friend MP_boolean operator<=(const Constant& e1, const Constant& e2);
+    friend MP_boolean operator<(const MP_index_exp& e1,const MP_index_exp& e2);
+    friend MP_boolean operator<(const Constant& e1, const Constant& e2); 
+    friend MP_boolean operator>=(const MP_index_exp& e1,const MP_index_exp& e2);
+    friend MP_boolean operator>=(const Constant& e1, const Constant& e2);
+    friend MP_boolean operator>(const MP_index_exp& e1,const MP_index_exp& e2);
+    friend MP_boolean operator>(const Constant& e1, const Constant& e2);
+    friend MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
+    friend MP_boolean operator==(const Constant& e1, const Constant& e2);
+    friend MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
+    friend MP_boolean operator!=(const Constant& e1, const Constant& e2);
   public:
     MP_boolean() : Handle<Boolean_base*>(0) {}
     MP_boolean(bool b);
     MP_boolean(const Constant& c); 
     MP_boolean(SUBSETREF& c); 
+  private:
     MP_boolean(Boolean_base* r) : Handle<Boolean_base*>(r) {};
-
   };
 
   /** @brief For computing the logical negation of a boolean

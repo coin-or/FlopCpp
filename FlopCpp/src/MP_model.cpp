@@ -38,7 +38,7 @@ void NormalMessenger::generationTime(double t) {
   cout<<"FlopCpp: Generation time: "<<t<<endl;
 }
 
-void VerboseMessenger::constraintDebug(string name, const vector<Coef>& cfs) {
+void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs) {
   cout<<"FlopCpp: Constraint "<<name<<endl;
   for (unsigned int j=0; j<cfs.size(); j++) {
     int col=cfs[j].col;
@@ -49,7 +49,7 @@ void VerboseMessenger::constraintDebug(string name, const vector<Coef>& cfs) {
   }
 }
 
-void VerboseMessenger::objectiveDebug(const vector<Coef>& cfs) {
+void VerboseMessenger::objectiveDebug(const vector<MP::Coef>& cfs) {
   cout<<"Objective "<<endl;
   for (unsigned int j=0; j<cfs.size(); j++) {
     int col=cfs[j].col;
@@ -102,9 +102,9 @@ void MP_model::add(MP_variable* v) {
 }
 
 void MP_model::addRow(const Constraint& c) {
-  vector<Coef> cfs;
+  vector<MP::Coef> cfs;
   vector<Constant> v;
-  ObjectiveGenerateFunctor f(cfs);
+  MP::GenerateFunctor f(0,cfs);
   c->left->generate(MP_domain::getEmpty(),v,f,1.0);
   c->right->generate(MP_domain::getEmpty(),v,f,-1.0);
   CoinPackedVector newRow;
@@ -154,24 +154,11 @@ void MP_model::minimize_max(MP_set &s, const MP_expression  &obj) {
 } 
 
 
-class flopc::CoefLess {
-public:
-  bool operator() (const Coef& a, const Coef& b) const {
-    if (a.col < b.col) {
-      return true;
-    } else if (a.col == b.col && a.row < b.row) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-};
-
-void MP_model::assemble(vector<Coef>& v, vector<Coef>& av) {
-  std::sort(v.begin(),v.end(),CoefLess());
+void MP_model::assemble(vector<MP::Coef>& v, vector<MP::Coef>& av) {
+  std::sort(v.begin(),v.end(),MP::CoefLess());
   int c,r,s;
   double val;
-  std::vector<Coef>::const_iterator i = v.begin();
+  std::vector<MP::Coef>::const_iterator i = v.begin();
   while (i!=v.end()) {
     c = i->col;
     r = i->row;
@@ -185,7 +172,7 @@ void MP_model::assemble(vector<Coef>& v, vector<Coef>& av) {
       }
       i++;
     }
-    av.push_back(Coef(c,r,val,s));
+    av.push_back(MP::Coef(c,r,val,s));
   }
 }
 
@@ -242,8 +229,8 @@ void MP_model::attach(OsiSolverInterface *_solver) {
   double time = CoinCpuTime();
   m=0;
   n=0;
-  vector<Coef> coefs;
-  vector<Coef> cfs;
+  vector<MP::Coef> coefs;
+  vector<MP::Coef> cfs;
 
   typedef std::set<MP_variable* >::iterator varIt;
   typedef std::set<MP_constraint* >::iterator conIt;
@@ -258,20 +245,11 @@ void MP_model::attach(OsiSolverInterface *_solver) {
   }
 
   // Generate coefficient matrix and right hand side
-  bool doAssemble = true;
-  if (doAssemble == true) {
-    GenerateFunctor f(cfs);
-    for (conIt i=Constraints.begin(); i!=Constraints.end(); i++) {
-      (*i)->coefficients(f);
-      messenger->constraintDebug((*i)->getName(),cfs);
-      assemble(cfs,coefs);
-      cfs.erase(cfs.begin(),cfs.end());
-    }
-  } else {
-    GenerateFunctor f(coefs);
-    for (conIt i=Constraints.begin(); i!=Constraints.end(); i++) {
-      (*i)->coefficients(f);
-    }
+  for (conIt i=Constraints.begin(); i!=Constraints.end(); i++) {
+    (*i)->coefficients(cfs);
+    messenger->constraintDebug((*i)->getName(),cfs);
+    assemble(cfs,coefs);
+    cfs.erase(cfs.begin(),cfs.end());
   }
   nz = coefs.size();
 
@@ -363,19 +341,13 @@ void MP_model::attach(OsiSolverInterface *_solver) {
 
   // Generate objective function coefficients
   vector<Constant> v;
-  if (doAssemble == true) {
-    ObjectiveGenerateFunctor f(cfs);
-    coefs.erase(coefs.begin(),coefs.end());
-    Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
-
-    messenger->objectiveDebug(cfs);
-    assemble(cfs,coefs);
-  } else {
-    ObjectiveGenerateFunctor f(coefs);
-    coefs.erase(coefs.begin(),coefs.end());
-    Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
-  }     
-
+  MP::GenerateFunctor f(0,cfs);
+  coefs.erase(coefs.begin(),coefs.end());
+  Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
+  
+  messenger->objectiveDebug(cfs);
+  assemble(cfs,coefs);
+  
   for (int j=0; j<n; j++) {
     c[j] = 0.0;
   }

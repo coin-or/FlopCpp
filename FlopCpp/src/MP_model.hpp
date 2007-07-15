@@ -38,8 +38,8 @@ namespace flopc {
     virtual void logMessage(int level, const char * const msg){}
     friend class MP_model;
   private:
-    virtual void constraintDebug(string name, const vector<Coef>& cfs) {}
-    virtual void objectiveDebug(const vector<Coef>& cfs) {}
+    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs) {}
+    virtual void objectiveDebug(const vector<MP::Coef>& cfs) {}
     virtual void statistics(int bm, int m, int bn, int n, int nz) {}
     virtual void generationTime(double t) {}
   protected:
@@ -62,8 +62,8 @@ namespace flopc {
   class VerboseMessenger : public NormalMessenger {
     friend class MP_model;
   private:
-    virtual void constraintDebug(string name, const vector<Coef>& cfs);
-    virtual void objectiveDebug(const vector<Coef>& cfs);
+    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs);
+    virtual void objectiveDebug(const vector<MP::Coef>& cfs);
   };
 
   /** @brief This is the anchor point for all constructs in a FlopC++ model.
@@ -241,7 +241,7 @@ namespace flopc {
     Messenger* messenger;
    
     
-    static void assemble(vector<Coef>& v, vector<Coef>& av);
+    static void assemble(vector<MP::Coef>& v, vector<MP::Coef>& av);
     void add(MP_constraint* c);
     MP_expression Objective;
     set<MP_constraint *> Constraints;
@@ -263,6 +263,7 @@ namespace flopc {
     double *l;
     double *u;
     MP_status mSolverState;
+
   };
     
   /// allows print of result from call to solve();

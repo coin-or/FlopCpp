@@ -81,8 +81,8 @@ namespace flopc {
         v[i] = d;
       }
     }
-    /** Constructs the MP_data object, and allocates space for data, but
-        does not initialize the data.
+    /** Constructs the MP_data object, and allocates space for data, and
+        initialize the data to zero.
     */
     MP_data(const MP_set_base &s1 = MP_set::getEmpty(), 
             const MP_set_base &s2 = MP_set::getEmpty(), 

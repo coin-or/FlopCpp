@@ -12,7 +12,6 @@
 #include "MP_set.hpp"
 #include "MP_index.hpp"
 
-
 namespace flopc {
 
   class Boolean_bool : public Boolean_base {
@@ -79,16 +78,16 @@ namespace flopc {
     MP_boolean left, right;
   };
 
-  class Boolean_alltrue : public Boolean_base {
-    friend MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
-  private:
-    Boolean_alltrue(const MP_domain& d, const MP_boolean& b) : D(d), B(b) {}
-    bool evaluate() const {
-      return true;
-    }
-    MP_domain D;
-    MP_boolean B;
-  };
+//   class Boolean_alltrue : public Boolean_base {
+//     friend MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
+//   private:
+//     Boolean_alltrue(const MP_domain& d, const MP_boolean& b) : D(d), B(b) {}
+//     bool evaluate() const {
+//       return true;
+//     }
+//     MP_domain D;
+//     MP_boolean B;
+//   };
 
   class Comparison : public Boolean_base {
   protected:
@@ -105,7 +104,6 @@ namespace flopc {
       return (left->evaluate() <= right->evaluate());
     }
   };
-
 
   class Boolean_less : public Comparison {
     friend MP_boolean operator<(const MP_index_exp& e1, 
@@ -151,7 +149,6 @@ namespace flopc {
     }
   };
 
-
   class Boolean_not_equal : public Comparison {
     friend MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
     friend MP_boolean operator!=(const Constant& e1, const Constant& e2);
@@ -162,10 +159,9 @@ namespace flopc {
     }
   };
 
-
-  MP_boolean alltrue(const MP_domain& d, const MP_boolean& b) {
-    return new Boolean_alltrue(d,b);
-  }
+//   MP_boolean alltrue(const MP_domain& d, const MP_boolean& b) {
+//     return new Boolean_alltrue(d,b);
+//   }
 
   MP_boolean operator!(const MP_boolean& b) {
     return new Boolean_negate(b);
@@ -219,9 +215,6 @@ using namespace flopc;
 
 MP_boolean::MP_boolean(bool b) : Handle<Boolean_base*>(new Boolean_bool(b)) {} 
 
-MP_boolean::MP_boolean(const Constant& c) : 
-  Handle<Boolean_base*>(new Boolean_Constant(c)) {}
+MP_boolean::MP_boolean(const Constant& c) : Handle<Boolean_base*>(new Boolean_Constant(c)) {}
 
-MP_boolean::MP_boolean(SUBSETREF& c) : 
-  Handle<Boolean_base*>(new Boolean_SUBSETREF(c)) {}
-
+MP_boolean::MP_boolean(SUBSETREF& c) :  Handle<Boolean_base*>(new Boolean_SUBSETREF(c)) {}

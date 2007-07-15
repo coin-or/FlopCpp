@@ -18,48 +18,6 @@ using std::endl;
 #include "MP_model.hpp"
 using namespace flopc;
 
-VariableRef::VariableRef(MP_variable* v, 
-			 const MP_index_exp& i1,
-			 const MP_index_exp& i2,
-			 const MP_index_exp& i3,
-			 const MP_index_exp& i4,
-			 const MP_index_exp& i5) :
-  V(v),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5) { 
-  offset = v->offset; 
-}
-
-double VariableRef::level() const {
-  return  V->M->Solver->getColSolution()[V->offset +
-                                         V->f(V->S1->evaluate(),
-                                              V->S2->evaluate(),
-                                              V->S3->evaluate(),
-                                              V->S4->evaluate(),
-                                              V->S5->evaluate())];
-}
-
-int VariableRef::getColumn() const { 
-  int i1 = V->S1->check(I1->evaluate());
-  int i2 = V->S2->check(I2->evaluate());
-  int i3 = V->S3->check(I3->evaluate());
-  int i4 = V->S4->check(I4->evaluate());
-  int i5 = V->S5->check(I5->evaluate());
-    
-  if (i1==outOfBound || i2==outOfBound || i3==outOfBound ||
-      i4==outOfBound || i5==outOfBound) {
-    return outOfBound;
-  } else {
-    return V->offset +  V->f(i1,i2,i3,i4,i5);
-  }
-}
-
-void VariableRef::generate(const MP_domain& domain,
-			   vector<Constant > multiplicators,
-			   GenerateFunctor& f,
-			   double m)  const {
-  f.setMultiplicator(multiplicators,m);
-  f.setTerminalExpression(this);
-  domain.forall(&f);
-}
  
 MP_variable::MP_variable(const MP_set_base &s1, 
 			 const MP_set_base &s2, 

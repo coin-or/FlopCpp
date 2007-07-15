@@ -220,25 +220,30 @@ namespace flopc {
   }
    
 
-  class Constant_max : public Constant_base, public Functor {
+  class Constant_max : public Constant_base {
     friend Constant maximum(const MP_domain& i, const Constant& e);
   private:
     Constant_max(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
-    void operator()() const {
-      double temp = exp->evaluate();
-      if (temp > the_max) {
-        the_max = temp;
-      }
-    }
     double evaluate() const {    
-      the_max = DBL_MIN;
-      d.forall(this);
-      return the_max;
+      MaxFunctor MF(exp);
+      d.forall(MF);
+      return MF.the_max;
     }
-    
+    class MaxFunctor : public Functor {
+    public:
+      MaxFunctor(Constant exp) : C(exp), the_max(DBL_MIN) {}
+      void operator()() const {
+        double temp = C->evaluate();
+        if (temp > the_max) {
+          the_max = temp;
+        }
+      }
+      Constant C;      
+      mutable double the_max;
+    };
+
     MP_domain d;
     Constant exp;
-    mutable double the_max;
   };
 
   class Constant_min : public Constant_base, public Functor {

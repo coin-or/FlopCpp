@@ -62,9 +62,10 @@ MP_constraint::MP_constraint(
   MP_model::current_model->add(*this);
 }
 
-void MP_constraint::coefficients(GenerateFunctor& f) {
-  f.setConstraint(this);
-    
+void MP_constraint::coefficients(vector<MP::Coef>& cfs) {
+  MP::GenerateFunctor f(this, cfs);
+// f.setConstraint(this);
+  
   vector<Constant> v;
   if (left.isDefined() && right.isDefined()) {
     left->generate((S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5)).such_that(B),v,f,1.0);

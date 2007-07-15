@@ -15,12 +15,9 @@ using std::vector;
 #include "MP_index.hpp"
 
 namespace flopc {
-
-  /** @brief Base class for all "boolean" types of data.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
+  class SUBSETREF;
+  
+  /// @ingroup INTERNAL_USE
   class Boolean_base {
     friend class Handle<Boolean_base*>;
     friend class MP_boolean;
@@ -29,11 +26,8 @@ namespace flopc {
   protected:
     Boolean_base() : count(0) {}
     virtual ~Boolean_base() {}
-
     int count;
   };
-
-  class SUBSETREF;
 
   /** @brief Reference counted class for all "boolean" types of data.
       @ingroup PublicInterface
@@ -42,32 +36,18 @@ namespace flopc {
       This can be a constant valued boolean as well.  
       @TODO explain SUBSETREF
   */
+
   class MP_boolean : public Handle<Boolean_base*> {
-    friend MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
-    friend MP_boolean operator!(const MP_boolean& b);
-    friend MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
-    friend MP_boolean operator||(const MP_boolean& e1, const MP_boolean& e2);
-    friend MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2);
-    friend MP_boolean operator<=(const Constant& e1, const Constant& e2);
-    friend MP_boolean operator<(const MP_index_exp& e1,const MP_index_exp& e2);
-    friend MP_boolean operator<(const Constant& e1, const Constant& e2); 
-    friend MP_boolean operator>=(const MP_index_exp& e1,const MP_index_exp& e2);
-    friend MP_boolean operator>=(const Constant& e1, const Constant& e2);
-    friend MP_boolean operator>(const MP_index_exp& e1,const MP_index_exp& e2);
-    friend MP_boolean operator>(const Constant& e1, const Constant& e2);
-    friend MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
-    friend MP_boolean operator==(const Constant& e1, const Constant& e2);
-    friend MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
-    friend MP_boolean operator!=(const Constant& e1, const Constant& e2);
   public:
     MP_boolean() : Handle<Boolean_base*>(0) {}
     MP_boolean(bool b);
     MP_boolean(const Constant& c); 
     MP_boolean(SUBSETREF& c); 
-  private:
     MP_boolean(Boolean_base* r) : Handle<Boolean_base*>(r) {};
   };
 
+  ////////// Operators creating MP_boolean expressions /////////////////////
+  
   /** @brief For computing the logical negation of a boolean
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -86,6 +66,7 @@ namespace flopc {
       @todo true? haven't used it.
   */
   MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
+
   /** @brief For computing the logical OR of two booleans
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -96,15 +77,15 @@ namespace flopc {
   */
   MP_boolean operator||(const MP_boolean& e1, const MP_boolean& e2);
 
-  /** @brief boolean which returns true if all in domain evaluate to true.
-      @ingroup PublicInterface
-      This is used in the normal formation of an expression.
-      @param d MP_domain to evaluate with
-      @param b boolean expression to evaluate.
-      @returns A boolean which evaluates to true all domain evaluations of the boolean
-      evaluate to true.
-  */
-  MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
+//   /** @brief boolean which returns true if all in domain evaluate to true.
+//       @ingroup PublicInterface
+//       This is used in the normal formation of an expression.
+//       @param d MP_domain to evaluate with
+//       @param b boolean expression to evaluate.
+//       @returns A boolean which evaluates to true all domain evaluations of the boolean
+//       evaluate to true.
+//   */
+//   MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
 
   /** @brief constructs a boolean evaluator using operator overloading
       @ingroup PublicInterface
@@ -124,6 +105,7 @@ namespace flopc {
       </code> 
   */
   MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2);
+
   /** @brief constructs a boolean evaluator by comparing two constants.
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -132,6 +114,7 @@ namespace flopc {
       @param e2 second constant expression
   */
   MP_boolean operator<=(const Constant& e1, const Constant& e2);
+
   /** @brief constructs a boolean evaluator using operator overloading
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -142,6 +125,7 @@ namespace flopc {
       @todo improve this a bit?
   */
   MP_boolean operator<(const MP_index_exp& e1, const MP_index_exp& e2);
+
   /** @brief constructs a boolean evaluator by comparing two constants.
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -150,6 +134,7 @@ namespace flopc {
       @param e2 second constant expression
   */
   MP_boolean operator<(const Constant& e1, const Constant& e2); 
+
   /** @brief constructs a boolean evaluator using operator overloading
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -160,6 +145,7 @@ namespace flopc {
       @todo improve this a bit?
   */
   MP_boolean operator>=(const MP_index_exp& e1, const MP_index_exp& e2);
+
   /** @brief constructs a boolean evaluator by comparing two constants.
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -168,6 +154,7 @@ namespace flopc {
       @param e2 second constant expression
   */
   MP_boolean operator>=(const Constant& e1, const Constant& e2);
+
   /** @brief constructs a boolean evaluator using operator overloading
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -178,6 +165,7 @@ namespace flopc {
       @todo improve this a bit?
   */
   MP_boolean operator>(const MP_index_exp& e1, const MP_index_exp& e2);
+
   /** @brief constructs a boolean evaluator by comparing two constants.
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -186,6 +174,7 @@ namespace flopc {
       @param e2 second constant expression
   */
   MP_boolean operator>(const Constant& e1, const Constant& e2);
+
   /** @brief constructs a boolean evaluator using operator overloading
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -196,6 +185,7 @@ namespace flopc {
       @todo improve this a bit?
   */
   MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
+
   /** @brief constructs a boolean evaluator by comparing two constants.
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -204,6 +194,7 @@ namespace flopc {
       @param e2 second constant expression
   */
   MP_boolean operator==(const Constant& e1, const Constant& e2);
+
   /** @brief constructs a boolean evaluator using operator overloading
       @ingroup PublicInterface
       This is used in the normal formation of an expression.
@@ -214,6 +205,7 @@ namespace flopc {
       @todo improve this a bit?
   */
   MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
+
   /** @brief constructs a boolean evaluator by comparing two constants.
       @ingroup PublicInterface
       This is used in the normal formation of an expression.

@@ -82,6 +82,9 @@ MP_domain MP_domain::such_that(const MP_boolean& b) {
   return *this;
 }
 
+void MP_domain::forall(const Functor& op) const {
+  forall(&op);
+}
 void MP_domain::forall(const Functor* op) const {
   if (condition.size()>0) {
     last->donext = new Functor_conditional(op,condition);

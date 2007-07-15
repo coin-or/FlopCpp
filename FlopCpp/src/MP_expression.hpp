@@ -20,73 +20,56 @@ using std::set;
 
 namespace flopc {
 
-  class Boolean;
-  class MP_domain;
   class MP_constraint;
-  class Row;
+  class TerminalExpression; 
   class MP_variable;
   class VariableRef;
-  class CoefLess;
 
-  /** @brief Internal representation of a Coefficient in a matrix.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  struct Coef {
-    Coef(int c, int r, double v, int s = 0) : 
-      col(c), row(r), stage(s), val(v)  {}
-    int col, row, stage;
-    double val;
+  class MP {
+    friend class MP_expression;
+    friend class MP_constraint;
+    friend class MP_model;
+    friend class Messenger;
+    friend class VerboseMessenger; 
+    friend class CoefLess;
+    friend class MP_expression_base;
+    friend class VariableRef;
+
+    struct Coef {
+      Coef(int c, int r, double v, int s = 0) : 
+        col(c), row(r), stage(s), val(v)  {}
+      int col, row, stage;
+      double val;
+    };
+    
+    struct CoefLess {
+      bool operator() (const MP::Coef& a, const MP::Coef& b) const;
+    };
+
+  protected:
+    class GenerateFunctor : public Functor {
+    public:
+      GenerateFunctor(MP_constraint* r, vector<Coef>& cfs): R(r), Coefs(cfs) {}
+      
+      void setMultiplicator(vector<Constant>& mults, double m) {
+        multiplicators = mults;
+        M = m;
+      }
+      void setTerminalExpression(const TerminalExpression* c) {
+        C = c;
+      }
+      
+      void operator()() const;
+    private:
+      vector<Constant> multiplicators;
+      MP_constraint* R;
+      double M; // sign (1=lhs, -1=rhs)
+      const TerminalExpression* C;
+      vector<MP::Coef>& Coefs;
+    };
   };
 
-  class TerminalExpression;
-
-  /** @brief Functor to facilitate generation of coefficients.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  class GenerateFunctor : public Functor {
-  public:
-    GenerateFunctor(vector<Coef>& coefs) : Coefs(coefs) {}
-
-    virtual ~GenerateFunctor(){}
-
-    void setConstraint(MP_constraint* r) {
-      R = r;
-    }
-    void setMultiplicator(vector<Constant>& mults, double m) {
-      multiplicators = mults;
-      m_ = m;
-    }
-    void setTerminalExpression(const TerminalExpression* c) {
-      C = c;
-    }
-    virtual int row_number() const;
-
-    void operator()() const;
-
-    double m_;
-    vector<Constant> multiplicators;
-    MP_constraint* R;
-    const TerminalExpression* C;
-    vector<Coef>& Coefs;
-  };
-
-  /** @brief Functor to facilitate generation of the objective function.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  class ObjectiveGenerateFunctor : public GenerateFunctor {
-  public:
-    ObjectiveGenerateFunctor(vector<Coef>& coefs) : GenerateFunctor(coefs) {}
-    virtual int row_number() const {
-      return -1;
-    }
-  };
-
+  
   /** @brief The base class for all expressions.
       @ingroup INTERNAL_USE
       @note FOR INTERNAL USE: This is not normally used directly by the
@@ -103,16 +86,18 @@ namespace flopc {
     virtual double level() const = 0;
     virtual void generate(const MP_domain& domain,
                           vector<Constant> multiplicators,
-                          GenerateFunctor& f,
+                          MP::GenerateFunctor &f,
                           double m) const = 0;
+
     virtual void insertVariables(set<MP_variable*>& v) const = 0;
 
     virtual ~MP_expression_base() {}
   };
 
+
   /** @brief Symbolic representation of a linear expression.
       @ingroup PublicInterface
-      This is one of the main public interface classes.  It is the basis for
+      This is one of the main public interface classes.  It is the basis for   
       all linear expressions, including constraints, objective function,
       and expressions involving indexes.
       <br> Although these can be created directly and independently, it
@@ -121,21 +106,17 @@ namespace flopc {
       @note There are constructors which are (silently) used to convert \
       other componenets into expressions.
   */
+
   class MP_expression : public Handle<MP_expression_base*> {
-    friend class MP_constraint;
   public:
-    /// default constructor
     MP_expression() : Handle<MP_expression_base*>(0) {}
-    /** Constructor for internal use
-        @todo should this be private?
-    */
-    MP_expression(MP_expression_base* r) : Handle<MP_expression_base*>(r) {}
     /// Constructor which (silently) converts a Constant to a MP_expression
     MP_expression(const Constant& c);
-    /// Constructor which (silently) converts a Variable to a MP_expression
+    /// Constructor which (silently) converts a VariableRef to a MP_expression
     MP_expression(const VariableRef& v);
-    virtual ~MP_expression() {}
+    MP_expression(MP_expression_base* r) : Handle<MP_expression_base*>(r) {}
   };
+
 
   /** @brief The base class for all expressions.
       @ingroup INTERNAL_USE
@@ -150,61 +131,61 @@ namespace flopc {
     virtual int getStage() const = 0;
   };
 
-  /** @brief The base class for all expressions.
+  /** Semantic representation of a variable in a Math Program
       @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-      @todo can this be moved to the cpp file?
+      @see MP_variable for a public interface.
   */
-  class Expression_operator : public MP_expression_base {
+  class VariableRef : public TerminalExpression {
+    friend class MP_variable;
   public:
-    Expression_operator(const MP_expression& e1, const MP_expression& e2) : 
-      left(e1),right(e2) {}
+    int getColumn() const;
+  private:
+    VariableRef(MP_variable* v, 
+                const MP_index_exp& i1,
+                const MP_index_exp& i2,
+                const MP_index_exp& i3,
+                const MP_index_exp& i4,
+                const MP_index_exp& i5);
+
+    double level() const;
+
     void insertVariables(set<MP_variable*>& v) const {
-      left->insertVariables(v);
-      right->insertVariables(v);
+      v.insert(V);
     }
-  protected:
-    MP_expression left,right;
+    double getValue() const { 
+      return 1.0;
+    }
+    int getStage() const { 
+      return 0;
+    }
+    void generate(const MP_domain& domain,
+                  vector<Constant> multiplicators,
+                  MP::GenerateFunctor& f,
+                  double m) const;
+    MP_variable* V;
+    int offset;
+    const MP_index_exp I1,I2,I3,I4,I5;
   };
 
-  /// Operator which sums two MP_expressions, forms a new MP_expression
+  /// @ingroup PublicInterface
   MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
-  /** Operator which sums an MP_expression and a constant, and forms a new
-      MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator+(const MP_expression& e1, const Constant& e2);
-  /** Operator which sums a constant and an MP_expression , and forms a new
-      MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator+(const Constant& e1, const MP_expression& e2);
-  /** Operator which subtracts an MP_expression from an MP_expression, and
-      forms a new MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator-(const MP_expression& e1, const MP_expression& e2);
-  /** Operator which subtracts a Constant from an MP_expression, and
-      forms a new MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator-(const MP_expression& e1, const Constant& e2);
-  /** Operator which subtracts an MP_expression from a Constant, and
-      forms a new MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator-(const Constant& e1, const MP_expression& e2);
-  /** Operator which multiplies a Constant by an MP_expression, and
-      forms a new MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator*(const Constant& e1, const MP_expression& e2); 
-  /** Operator which multiplies an MP_expression by  a Constant, and
-      forms a new MP_expression
-  */
+  /// @ingroup PublicInterface
   MP_expression operator*(const MP_expression& e1, const Constant& e2);
-  /** forms an expression which divides an expression by a Constant.
-        
-  */
+  /// @ingroup PublicInterface
   MP_expression operator/(const MP_expression& e1, const Constant& e2);
-  /** forms an expression by summing an expression over a domain.
-      @note it's expected that the expression is defined over that domain.
-  */
+  /// @ingroup PublicInterface
   MP_expression sum(const MP_domain& d, const MP_expression& e);
 
 } // End of namespace flopc

@@ -25,43 +25,6 @@ namespace flopc {
   class MP_model;
   class MP_variable;
 
-  /** Semantic representation of a variable in a Math Program
-      @ingroup INTERNAL_USE
-      @see MP_variable for a public interface.
-  */
-  class VariableRef : public TerminalExpression {
-    friend class MP_variable;
-  public:
-    int getColumn() const;
-  private:
-    VariableRef(MP_variable* v, 
-                const MP_index_exp& i1,
-                const MP_index_exp& i2,
-                const MP_index_exp& i3,
-                const MP_index_exp& i4,
-                const MP_index_exp& i5);
-
-    double level() const;
-
-    void insertVariables(set<MP_variable*>& v) const {
-      v.insert(V);
-    }
-    double getValue() const { 
-      return 1.0;
-    }
-    int getStage() const { 
-      return 0;
-    }
-    void generate(const MP_domain& domain,
-                  vector<Constant> multiplicators,
-                  GenerateFunctor& f,
-                  double m) const;
-    MP_variable* V;
-    int offset;
-    const MP_index_exp I1,I2,I3,I4,I5;
-  };
-
-
   /** @brief Symantic representation of a variable.
       @ingroup PublicInterface
       This is one of the main public interface classes.  
@@ -69,7 +32,7 @@ namespace flopc {
       parametersof construction are MP_set s which specify the indexes
       over which the variable is defined.
   */
-  class MP_variable : public RowMajor, public Functor , public Named{
+  class MP_variable : public RowMajor, public Functor , public Named {
     friend class MP_model;
     friend class DisplayVariable;
     friend class VariableRef;

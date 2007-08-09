@@ -1,0 +1,61 @@
+CoinDir  := ../..
+FlopcDir := ..
+
+## uncomment line below to be able to use OSL
+##USE_OSL := YES
+
+CXX      := g++
+CXXFLAGS := -g
+
+IncDir	:= $(CoinDir)/include 
+IncDir	+= $(FlopcDir)/include 
+
+LIBDIRS := $(CoinDir)/lib
+LIBDIRS += $(FlopcDir)/lib
+
+LIBS	:= -lFlopCpp
+LIBS 	+= -lOsi
+LIBS 	+= -lOsiClp
+LIBS 	+= -lClp
+LIBS 	+= -lOsiCbc
+LIBS 	+= -lCbc
+LIBS 	+= -lCoinUtils
+LIBS 	+= -lCgl
+
+ifneq ($(filter YES,$(USE_OSL)),)
+   ### Change below, if needed, to tell where to find OSL
+   OSLDIR  := $(HOME)/osl
+   LIBS    += -lOsiOsl
+   LIBS    += -losl
+   LIBDIRS += $(OSLDIR)/lib
+   IncDir  += $(OSLDIR)include
+endif
+
+###############################################################################
+
+SHLINKPREFIX = -Wl,-rpath,
+CXXFLAGS += $(addprefix -I,${IncDir})
+
+LDFLAGS := $(addprefix -L,$(LIBDIRS))
+LDFLAGS += $(addprefix $(SHLINKPREFIX),$(LIBDIRS))
+LDFLAGS	+= $(LIBS)
+
+###############################################################################
+
+.DELETE_ON_ERROR:
+
+.PHONY: default
+
+default: all
+
+###############################################################################
+
+all :	aircraft transport ampl magic multiProduct tap \
+        coex coexx cross xbsl cuttingStock gapmin stochbenders \
+	mine train bid sudoku stampl
+
+clean:	
+	@rm aircraft transport ampl magic multiProduct tap \
+	coex coexx cross xbsl cuttingStock gapmin stochbenders \
+	mine train bid sudoku stampl
+###############################################################################

@@ -1,0 +1,80 @@
+CoinDir  := ../..
+
+## uncomment line below to be able to use OSL
+##USE_OSL := YES
+
+CXX      := g++
+CXXFLAGS := -g
+
+IncDir	:= $(CoinDir)/include 
+
+LIBDIRS := $(CoinDir)/lib
+
+LIBS	:= -lFlopCpp
+LIBS 	+= -lOsiCbc
+LIBS 	+= -lCbc
+LIBS 	+= -lOsiClp
+LIBS 	+= -lClp
+LIBS 	+= -lCgl
+LIBS 	+= -lOsi
+LIBS 	+= -lCoinUtils
+
+ifneq ($(filter YES,$(USE_OSL)),)
+   ### Change below, if needed, to tell where to find OSL
+   OSLDIR  := $(HOME)/osl
+   LIBS    += -lOsiOsl
+   LIBS    += -losl
+   LIBDIRS += $(OSLDIR)/lib
+   IncDir  += $(OSLDIR)include
+endif
+
+TARGETS  = aircraft
+TARGETS += transport
+TARGETS += ampl
+TARGETS += magic
+TARGETS += multiProduct
+TARGETS += tap
+TARGETS += coex
+TARGETS += coexx
+TARGETS += cross
+TARGETS += xbsl
+TARGETS += cuttingStock
+TARGETS += gapmin
+TARGETS += stochbenders
+TARGETS += mine
+TARGETS += train
+TARGETS += bid
+TARGETS += sudoku
+TARGETS += stampl
+
+###############################################################################
+
+SHLINKPREFIX = -Wl,-rpath,
+CXXFLAGS += $(addprefix -I,${IncDir})
+
+LDFLAGS := $(addprefix -L,$(LIBDIRS))
+LDFLAGS += $(addprefix $(SHLINKPREFIX),$(LIBDIRS))
+LDFLAGS	+= $(LIBS)
+
+###############################################################################
+
+
+
+.DELETE_ON_ERROR:
+
+.PHONY: default
+
+default: all
+
+% : %.cpp
+	$(CXX) $(CXXFLAGS) $< $(LDFLAGS) -o $@
+
+###############################################################################
+
+all : $(TARGETS)
+
+clean:
+	@rm $(TARGETS)
+
+###############################################################################
+

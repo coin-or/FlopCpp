@@ -40,6 +40,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 if COIN_HAS_CBC
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc`
   unitTest_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(CBCOBJDIR)/src/libCbc.la

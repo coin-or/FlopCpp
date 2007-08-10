@@ -50,6 +50,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 # Depending of what solvers are available, we add the corresponding files,
 # libraries and include dirs
 @COIN_HAS_CBC_TRUE@am__append_1 = -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
+@COIN_HAS_CBC_TRUE@	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
 @COIN_HAS_CBC_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc`
 
 @COIN_HAS_CBC_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \

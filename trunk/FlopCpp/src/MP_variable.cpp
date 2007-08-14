@@ -77,8 +77,8 @@ MP_variable::MP_variable(const MP_set_base &s1,
     type = continuous;
 }    
 
-double MP_variable::level(int i1, int i2, int i3, int i4, int i5) {
-    return M->solution[offset +  f(i1,i2,i3,i4,i5)];
+double MP_variable::level(int lcl_i1, int lcl_i2, int lcl_i3, int lcl_i4, int lcl_i5) {
+    return M->solution[offset +  f(lcl_i1,lcl_i2,lcl_i3,lcl_i4,lcl_i5)];
 }
 
 void MP_variable::operator()() const {

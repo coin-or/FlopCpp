@@ -19,7 +19,7 @@ namespace flopc {
     class Constant_index : public Constant_base {
 	friend class Constant;
     private:
-	Constant_index(const MP_index_exp& i) : I(i) {};
+	Constant_index(const MP_index_exp& i) : I(i) {}
 	double evaluate() const {
 	    return I->evaluate(); 
 	}
@@ -146,7 +146,7 @@ namespace flopc {
 	friend Constant operator-(const Constant& a, const Constant& b);
 	friend Constant operator-(MP_index& a, MP_index& b);
     private:
-	Constant_minus(const Constant& i, const Constant& j): Constant_exp(i,j) {};
+	Constant_minus(const Constant& i, const Constant& j): Constant_exp(i,j) {}
 	double evaluate() const {
 	    return left->evaluate()-right->evaluate(); 
 	}
@@ -163,7 +163,7 @@ namespace flopc {
     class Constant_mult : public Constant_exp {
 	friend Constant operator*(const Constant& a, const Constant& b);
     private:
-	Constant_mult(const Constant& i, const Constant& j) : Constant_exp(i,j) {};
+	Constant_mult(const Constant& i, const Constant& j) : Constant_exp(i,j) {}
 	double evaluate() const {
 	    return left->evaluate()*right->evaluate(); 
 	}
@@ -176,7 +176,7 @@ namespace flopc {
     class Constant_div : public Constant_exp {
 	friend Constant operator/(const Constant& a, const Constant& b); 
     private:
-	Constant_div(const Constant& i, const Constant& j) : Constant_exp(i,j) {};
+	Constant_div(const Constant& i, const Constant& j) : Constant_exp(i,j) {}
 	double evaluate() const {
 	    return left->evaluate()/right->evaluate(); 
 	}
@@ -189,7 +189,7 @@ namespace flopc {
     class Constant_max : public Constant_base, public Functor {
 	friend Constant maximum(const MP_domain& i, const Constant& e);
     private:
-	Constant_max(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
+	Constant_max(const MP_domain& i, const Constant& e) : d(i), exp(e) {}
 	void operator()() const {
 	    double temp = exp->evaluate();
 	    if (temp > the_max) {
@@ -210,7 +210,7 @@ namespace flopc {
     class Constant_min : public Constant_base, public Functor {
 	friend Constant minimum(const MP_domain& i, const Constant& e);
     private:
-	Constant_min(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
+	Constant_min(const MP_domain& i, const Constant& e) : d(i), exp(e) {}
 	void operator()() const {
 	    double temp = exp->evaluate();
 	    if (temp < the_min) {
@@ -231,7 +231,7 @@ namespace flopc {
     class Constant_sum : public Constant_base, public Functor {
 	friend Constant sum(const MP_domain& i, const Constant& e);
     private:
-	Constant_sum(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
+	Constant_sum(const MP_domain& i, const Constant& e) : d(i), exp(e) {}
 	void operator()() const {
 	    the_sum += exp->evaluate();
 	}
@@ -249,7 +249,7 @@ namespace flopc {
     class Constant_product : public Constant_base, public Functor {
 	friend Constant product(const MP_domain& i, const Constant& e);
     private:
-	Constant_product(const MP_domain& i, const Constant& e) : d(i), exp(e) {};
+	Constant_product(const MP_domain& i, const Constant& e) : d(i), exp(e) {}
 	void operator()() const {
 	    the_product *= exp->evaluate();
 	}

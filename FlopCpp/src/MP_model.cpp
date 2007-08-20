@@ -66,15 +66,15 @@ MP_model::MP_model(OsiSolverInterface* s, Messenger* m) :
     MP_model::current_model = this;
 }
 
-MP_model& MP_model::add(MP_constraint& c) {
-    Constraints.insert(&c);
+MP_model& MP_model::add(MP_constraint& lcl_c) {
+    Constraints.insert(&lcl_c);
     return *this;
 }
 
-void MP_model::add(MP_constraint* c) {
-    c->M = this;
-    c->offset = m;
-    m += c->size();
+void MP_model::add(MP_constraint* lcl_c) {
+    lcl_c->M = this;
+    lcl_c->offset = m;
+    m += lcl_c->size();
 }
 
 double MP_model::getInfinity() const {
@@ -91,12 +91,12 @@ void MP_model::add(MP_variable* v) {
     n += v->size();
 }
 
-void MP_model::addRow(const Constraint& c) {
+void MP_model::addRow(const Constraint& lcl_c) {
     vector<Coef> cfs;
     vector<Constant> v;
     ObjectiveGenerateFunctor f(cfs);
-    c.left->generate(MP_domain::getEmpty(),v,f,1.0);
-    c.right->generate(MP_domain::getEmpty(),v,f,-1.0);
+    lcl_c.left->generate(MP_domain::getEmpty(),v,f,1.0);
+    lcl_c.right->generate(MP_domain::getEmpty(),v,f,-1.0);
     CoinPackedVector newRow;
     double rhs = 0.0;
     for (unsigned int j=0; j<cfs.size(); j++) {
@@ -112,23 +112,23 @@ void MP_model::addRow(const Constraint& c) {
     }
     // NB no "assembly" of added row yet. Will be done....
  
-    double bl = -rhs;
-    double bu = -rhs;
+    double lcl_bl = -rhs;
+    double lcl_bu = -rhs;
 
     double inf = Solver->getInfinity();
-    switch (c.sense) {
+    switch (lcl_c.sense) {
 	case LE:
-	    bl = - inf;
+	    lcl_bl = - inf;
 	    break;
 	case GE:
-	    bu = inf;
+	    lcl_bu = inf;
 	    break;
 	case EQ:
 	    // Nothing to do
 	    break;		
     }
 
-    Solver->addRow(newRow,bl,bu);
+    Solver->addRow(newRow,lcl_bl,lcl_bu);
 }
 
 void MP_model::setObjective(const MP_expression& o) { 
@@ -137,9 +137,9 @@ void MP_model::setObjective(const MP_expression& o) {
 
 void MP_model::minimize_max(MP_set &s, const MP_expression  &obj) {
     MP_variable v;
-    MP_constraint c(s);
-    add(c);
-    c(s) = v() >= obj;
+    MP_constraint lcl_c(s);
+    add(lcl_c);
+    lcl_c(s) = v() >= obj;
     minimize(v());
 } 
 

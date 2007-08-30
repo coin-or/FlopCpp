@@ -16,11 +16,11 @@ const double R2 = 1.12;
 
 class MP_tree {
 public:
-    MP_tree() {}
-    
-    virtual int nStages() {return 0;}
-    virtual int nScenarios(int stage) {return 0;}
-    virtual int getindex(int rs, int cs, int q) {return 0;}
+  MP_tree() {}
+  
+  virtual int nStages() {return 0;}
+  virtual int nScenarios(int stage) {return 0;}
+  virtual int getindex(int rs, int cs, int q) {return 0;}
   virtual double probability(int stage, int q) {return 1;}
 };
 
@@ -50,9 +50,6 @@ public:
 };
 
 
-
-
-
 class MP_problem {
 public:
   
@@ -78,7 +75,6 @@ struct Cof {
   int col, row;
   double val;
 };
-
 
 void loadStochasticProblem(
     int m,
@@ -266,23 +262,8 @@ main() {
   int rstage[] = {0,1,2,3};
   int cstage[] = {0,0,1,1,2,2,3,3};
 
-//   OsiSolverInterface* Solver = new OsiClpSolverInterface;
-
-//   Solver->loadProblem(n, m, Cst, Rnr, Elm, l, u, c, bl, bu);
-//   Solver->setObjSense(-1);
-//   Solver->initialSolve();
-  
-//   if (Solver->isProvenOptimal() == true) {
-//     cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
-//    cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
-//       Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
-//   }
-
-
-
   MP_binarytree T(3);
 
   loadStochasticProblem(m,n,nz,Cst,Rnr,Elm,ElmLng,bl,bu,c,l,u,rstage,cstage,T);
   cout<<"done"<<endl;
-
 }

@@ -43,7 +43,7 @@ namespace flopc {
     MP_boolean(bool b);
     MP_boolean(const Constant& c); 
     MP_boolean(SUBSETREF& c); 
-    MP_boolean(Boolean_base* r) : Handle<Boolean_base*>(r) {};
+    MP_boolean(Boolean_base* r) : Handle<Boolean_base*>(r) {}
   };
 
   ////////// Operators creating MP_boolean expressions /////////////////////

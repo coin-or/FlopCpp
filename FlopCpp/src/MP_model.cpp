@@ -286,12 +286,51 @@ void MP_model::attach(OsiSolverInterface *_solver) {
   if (n>0) {
     l =   new double[n];  
     u =   new double[n];  
+    colStage =  new int[n]; 
   }
   if (m>0) {
     bl  = new double[m];  
     bu  = new double[m];  
+    rowStage = new int[m];
   }
   const double inf = Solver->getInfinity();
+
+  // Row Stages
+  for (int i=0; i<m; i++) {
+    rowStage[i] = -1;
+  }
+  for (int i=0; i<nz; i++) {
+    int s = coefs[i].stage;
+    int row = coefs[i].row;
+    if ( s > rowStage[row] )  {
+      rowStage[row] = s;
+    }
+  }
+
+  int maxStage = 999999; // change to get from the actual model
+
+  // Column stages
+  for (int j=0; j<n; j++) {
+    colStage[j] = maxStage;
+  }
+  for (int i=0; i<nz; i++) {
+    int row = coefs[i].row;
+    int col = coefs[i].col;
+    int s = rowStage[row];
+    if ( col < n && s < colStage[col] )  {
+      colStage[col] = s;
+    }
+  }
+
+//   cout<<"RowStages"<<endl;
+//   for (int i=0; i<m; i++) {
+//     cout<<i<<" "<<rowStage[i]<<endl;
+//   }
+
+//   cout<<"ColStages"<<endl;
+//   for (int j=0; j<n; j++) {
+//     cout<<j<<" "<<colStage[j]<<endl;
+//   }
 
   for (int j=0; j<n; j++) {
     Clg[j] = 0;
@@ -434,7 +473,23 @@ void MP_model::detach() {
   /// @todo strip all data out of the solver.
   delete Solver;
   Solver=NULL;
+  if (n>0) {
+    delete [] colStage;   
+  }
+  if (m>0) {
+    delete [] rowStage;  
+  }  
 }
+
+int * MP_model::getRowStage() {
+  return rowStage;
+}
+
+int * MP_model::getColStage() {
+  return colStage;
+}
+
+
 
 MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
   assert(Solver);

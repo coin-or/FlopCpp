@@ -202,6 +202,10 @@ namespace flopc {
         direction is to be specified.
         @todo should the direction be defaulted?
     */ 
+    int * getRowStage();
+    
+    int * getColStage();
+ 
     MP_model::MP_status solve(const MP_model::MP_direction &dir);
     /** Accessors for the results after a call to maximize()/minimize()
         @todo should these be private with accessors?  What if not set yet?
@@ -234,6 +238,13 @@ namespace flopc {
     Messenger *getMessenger(){ 
       return messenger;
     }
+    set<MP_variable*> getVariables() {
+      return Variables;
+    }
+    set<MP_constraint*> getConstraints() {
+      return Constraints;
+    }
+    
   private:
     typedef std::set<MP_variable* >::iterator varIt;
     typedef std::set<MP_constraint* >::iterator conIt;
@@ -266,6 +277,8 @@ namespace flopc {
     double *c;
     double *l;
     double *u;
+    int *colStage;
+    int *rowStage;
     MP_status mSolverState;
   };
     

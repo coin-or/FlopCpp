@@ -490,7 +490,6 @@ int * MP_model::getColStage() {
 }
 
 
-
 MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
   assert(Solver);
   assert(mSolverState != MP_model::DETACHED && 

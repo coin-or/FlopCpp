@@ -26,11 +26,11 @@ main() {
   MP_stochastic_data Return(T,INSTR);
 
   MP_variable Buy(T,INSTR);
-  MP_variable Shortage(T), Overage(T);
+  MP_variable Shortage, Overage;
 
-  MP_constraint InvestAll(T);
+  MP_constraint InvestAll;
   MP_constraint ReinvestAll(T);
-  MP_constraint Goal(T);
+  MP_constraint Goal;
 
   double initial_wealth = 55;
   double goal = 80;
@@ -45,24 +45,24 @@ main() {
 
   MP_model *M=MP_model::getCurrentModel();
 
-//SMI: Generate deterministic equivalent
-//SMI: initialize SmiModel
+  //SMI: Generate deterministic equivalent
+  //SMI: initialize SmiModel
   SmiScnModel *smiModel = new SmiScnModel();
   smiModel->setOsiSolverHandle(*new OsiClpSolverInterface());
 
-//SMI: Generate core data
+  //SMI: Generate core data
 
   cout << "SMI: Generating Core Data" << endl;
 
   // set Return for core data (don't have to, but may as use expected values)
-//	forall(T,Return(T,INSTR)= 0.5*GoodReturn(INSTR)+0.5*BadReturn(INSTR));
+  //	forall(T,Return(T,INSTR)= 0.5*GoodReturn(INSTR)+0.5*BadReturn(INSTR));
   Return(T,INSTR)= 0.5*GoodReturn(INSTR)+0.5*BadReturn(INSTR);
 
   // model generation code
-  InvestAll(0) = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
+  InvestAll() = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
   ReinvestAll(T+1) = sum(INSTR, Buy(T,INSTR) * Return(T,INSTR)) == sum(INSTR, Buy(T+1,INSTR));
-  Goal(T.last()) = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage(T.last()) + Overage(T.last());
-  M->setObjective( Overage(T.last()) - 4*Shortage(T.last()) );
+  Goal() = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage() + Overage();
+  M->setObjective( Overage() - 4*Shortage() );
 
   // generate MP_model 
   OsiClpSolverInterface *osiCore = new OsiClpSolverInterface();
@@ -87,9 +87,11 @@ main() {
     cout<<"Row stage  "<<i<<"  "<<rowStage[i]<<endl;
   }
   
+  cout<<"--------------------"<<endl;
 // generate Core Data object
   SmiCoreData *smiCoreData= new SmiCoreData(osiCore, T.size(), &colStage[0], &rowStage[0]);
 //end{TIM}
+  cout<<"--------------------"<<endl;
   
   // clean up MP_Model 
   M->detach();
@@ -102,7 +104,7 @@ main() {
   SmiDiscreteDistribution *smiDD = new SmiDiscreteDistribution(smiCoreData);
 
   // Loop over random variables
-  for (int t=1; t<numStages ; ++t){
+  for (int t=1; t<=numStages ; ++t){
 
     //Each Return is based in period t:
     cout << "SMI: Generating Returns for period: " << t<< endl;
@@ -119,10 +121,10 @@ main() {
     double dprob=0.5;
 
     // model generation code
-    InvestAll(0) = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
+    InvestAll() = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
     ReinvestAll(T+1) = sum(INSTR, Buy(T,INSTR) * Return(T,INSTR)) == sum(INSTR, Buy(T+1,INSTR));
-    Goal(T.last()) = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage(T.last()) + Overage(T.last());
-    M->setObjective( Overage(T.last()) - 4*Shortage(T.last()) );
+    Goal() = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage() + Overage();
+    M->setObjective( Overage() - 4*Shortage() );
 
     // generate MP_model 
     OsiClpSolverInterface *osi = new OsiClpSolverInterface();
@@ -138,14 +140,14 @@ main() {
 		
     cout << "SMI: Event 2: Bad return in period: " << t<< endl;
 
-    forall(INSTR,Return(t,INSTR) = BadReturn(INSTR));
+    Return(t,INSTR) = BadReturn(INSTR);
     dprob=0.5;
 
     // model generation code
-    InvestAll(0) = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
+    InvestAll() = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
     ReinvestAll(T+1) = sum(INSTR, Buy(T,INSTR) * Return(T,INSTR)) == sum(INSTR, Buy(T+1,INSTR));
-    Goal(T.last()) = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage(T.last()) + Overage(T.last());
-    M->setObjective( Overage(T.last()) - 4*Shortage(T.last()) );
+    Goal() = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage() + Overage();
+    M->setObjective( Overage() - 4*Shortage() );
 
     // generate MP_model 
     osi = new OsiClpSolverInterface();
@@ -162,19 +164,24 @@ main() {
 
   }
 
+  cout<<"A--------------------"<<endl;
   // Generate scenarios
   smiModel->processDiscreteDistributionIntoScenarios(smiDD);
+  cout<<"B--------------------"<<endl;
 	
   // load problem data into OsiSolver
   smiModel->loadOsiSolverData();
 
   // get Osi pointer
+  cout<<"C--------------------"<<endl;
   OsiSolverInterface *smiOsi = smiModel->getOsiSolverInterface();
 
+  cout<<"D--------------------"<<endl;
   // set some parameters
   smiOsi->setHintParam(OsiDoPresolveInInitial,true);
   smiOsi->setHintParam(OsiDoScale,true);
   smiOsi->setHintParam(OsiDoCrash,true);
+  cout<<"E--------------------"<<endl;
 
   // solve using Osi Solver
   smiOsi->initialSolve();
@@ -186,4 +193,4 @@ main() {
 
 
 
-}
+ }

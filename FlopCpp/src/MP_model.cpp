@@ -297,7 +297,7 @@ void MP_model::attach(OsiSolverInterface *_solver) {
 
   // Row Stages
   for (int i=0; i<m; i++) {
-    rowStage[i] = -1;
+    rowStage[i] = 0;
   }
   for (int i=0; i<nz; i++) {
     int s = coefs[i].stage;
@@ -307,18 +307,22 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     }
   }
 
-  int maxStage = 999999; // change to get from the actual model
+  int maxStage = 0; // change to get from the actual model
+  for (int i=0; i<nz; i++) {
+    int s = coefs[i].stage;
+    if (s > maxStage) maxStage = s;
+  }
+
 
   // Column stages
   for (int j=0; j<n; j++) {
     colStage[j] = maxStage;
   }
   for (int i=0; i<nz; i++) {
-    int row = coefs[i].row;
     int col = coefs[i].col;
-    int s = rowStage[row];
-    if ( col < n && s < colStage[col] )  {
-      colStage[col] = s;
+    int s = coefs[i].stage;
+    if ( s > 0 && s-1 < colStage[col] )  {
+      colStage[col] = s-1;
     }
   }
 

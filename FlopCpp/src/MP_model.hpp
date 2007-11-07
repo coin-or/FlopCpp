@@ -151,7 +151,7 @@ namespace flopc {
     }
 
     /// Adds a constrataint block to the model.
-    MP_model& add(MP_constraint& c);
+    MP_model& add(MP_constraint& constraint);
 
     /** Binds the data and calls the solver to maximize the current
         objective expression
@@ -215,7 +215,7 @@ namespace flopc {
     /// Adds a variable to the MP_model.
     void add(MP_variable* v);
     /// Adds a constraint to the MP_model
-    void addRow(const Constraint& c); 
+    void addRow(const Constraint& constraint); 
 
     /** Can be used to get the default model
         @todo explain the default and current model concepts.
@@ -242,7 +242,7 @@ namespace flopc {
    
     
     static void assemble(vector<MP::Coef>& v, vector<MP::Coef>& av);
-    void add(MP_constraint* c);
+    void add(MP_constraint* constraint);
     MP_expression Objective;
     set<MP_constraint *> Constraints;
     set<MP_variable *> Variables;

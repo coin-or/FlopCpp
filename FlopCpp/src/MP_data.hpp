@@ -130,13 +130,13 @@ namespace flopc {
         @note this is used internally, but may also be useful for spot
         checking data or in other expressions.
     */
-    double& operator()(int i1, int i2=0, int i3=0, int i4=0, int i5=0) {
-      i1 = S1.check(i1);
-      i2 = S2.check(i2);
-      i3 = S3.check(i3);
-      i4 = S4.check(i4);
-      i5 = S5.check(i5);
-      int i = f(i1,i2,i3,i4,i5);
+    double& operator()(int lcli1, int lcli2=0, int lcli3=0, int lcli4=0, int lcli5=0) { 
+      lcli1 = S1.check(lcli1); 
+      lcli2 = S2.check(lcli2); 
+      lcli3 = S3.check(lcli3); 
+      lcli4 = S4.check(lcli4); 
+      lcli5 = S5.check(lcli5); 
+      int i = f(lcli1,lcli2,lcli3,lcli4,lcli5);     
       if (i == outOfBound) {
         outOfBoundData = 0;
         return outOfBoundData;
@@ -150,13 +150,13 @@ namespace flopc {
         @todo can this be private?
     */
     DataRef& operator() (
-      const MP_index_exp& i1 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i2 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i3 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i4 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i5 = MP_index_exp::getEmpty()
-      ) {
-      myrefs.push_back(new DataRef(this, i1, i2, i3, i4, i5));
+			 const MP_index_exp& lcli1 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli2 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli3 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli4 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli5 = MP_index_exp::getEmpty() 
+			 ) {
+      myrefs.push_back(new DataRef(this, lcli1, lcli2, lcli3, lcli4, lcli5));
       return *myrefs.back();
     }
     
@@ -186,14 +186,16 @@ namespace flopc {
                        const MP_set_base &s5 = MP_set::getEmpty()) :
       MP_data(s1,s2,s3,s4,s5) {}
 
+    using flopc::MP_data::operator(); // From bugsquashing party. Some compiler needs this? 
+
     DataRef& operator() (
-      const MP_index_exp& i1 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i2 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i3 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i4 = MP_index_exp::getEmpty(),
-      const MP_index_exp& i5 = MP_index_exp::getEmpty()
-      ) {
-      myrefs.push_back(new DataRef(this, i1, i2, i3, i4, i5, 1));
+			 const MP_index_exp& lcli1 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli2 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli3 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli4 = MP_index_exp::getEmpty(), 
+			 const MP_index_exp& lcli5 = MP_index_exp::getEmpty() 
+			 ) {
+      myrefs.push_back(new DataRef(this, lcli1, lcli2, lcli3, lcli4, lcli5, 1));
       return *myrefs.back();
     }
   };

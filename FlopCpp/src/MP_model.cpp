@@ -74,16 +74,16 @@ MP_model::~MP_model() {
 }
 
 
-MP_model& MP_model::add(MP_constraint& c) {
-  Constraints.insert(&c);
+MP_model& MP_model::add(MP_constraint& constraint) {
+  Constraints.insert(&constraint);
   return *this;
 }
 
-void MP_model::add(MP_constraint* c) {
-  c->M = this;
-  if (c->left.isDefined() && c->right.isDefined()) {
-    c->offset = m;
-    m += c->size();
+void MP_model::add(MP_constraint* constraint) {
+  constraint->M = this;
+  if (constraint->left.isDefined() && constraint->right.isDefined()) {
+    constraint->offset = m;
+    m += constraint->size();
   }
 }
 
@@ -101,12 +101,12 @@ void MP_model::add(MP_variable* v) {
   n += v->size();
 }
 
-void MP_model::addRow(const Constraint& c) {
+void MP_model::addRow(const Constraint& constraint) {
   vector<MP::Coef> cfs;
   vector<Constant> v;
   MP::GenerateFunctor f(0,cfs);
-  c->left->generate(MP_domain::getEmpty(),v,f,1.0);
-  c->right->generate(MP_domain::getEmpty(),v,f,-1.0);
+  constraint->left->generate(MP_domain::getEmpty(),v,f,1.0);
+  constraint->right->generate(MP_domain::getEmpty(),v,f,-1.0);
   CoinPackedVector newRow;
   double rhs = 0.0;
   for (unsigned int j=0; j<cfs.size(); j++) {
@@ -122,23 +122,23 @@ void MP_model::addRow(const Constraint& c) {
   }
   // NB no "assembly" of added row yet. Will be done....
  
-  double bl = -rhs;
-  double bu = -rhs;
+  double local_bl = -rhs;
+  double local_bu = -rhs;
 
   double inf = Solver->getInfinity();
-  switch (c->sense) {
+  switch (constraint->sense) {
       case LE:
-        bl = - inf;
+        local_bl = - inf;
         break;
       case GE:
-        bu = inf;
+        local_bu = inf;
         break;
       case EQ:
         // Nothing to do
         break;          
   }
 
-  Solver->addRow(newRow,bl,bu);
+  Solver->addRow(newRow,local_bl,local_bu);
 }
 
 void MP_model::setObjective(const MP_expression& o) { 
@@ -147,9 +147,9 @@ void MP_model::setObjective(const MP_expression& o) {
 
 void MP_model::minimize_max(MP_set &s, const MP_expression  &obj) {
   MP_variable v;
-  MP_constraint c(s);
-  add(c);
-  c(s) = v() >= obj;
+  MP_constraint constraint(s);
+  add(constraint);
+  constraint(s) = v() >= obj;
   minimize(v());
 } 
 

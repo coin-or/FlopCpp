@@ -59,7 +59,7 @@ namespace flopc {
         
   */
   class MP_domain : public Handle<MP_domain_base*> {
-    friend MP_domain flopc::operator*(const MP_domain& a, const MP_domain& b);
+    friend MP_domain operator*(const MP_domain& a, const MP_domain& b);
     
     friend class MP_constraint;
     friend class MP_index_exp;

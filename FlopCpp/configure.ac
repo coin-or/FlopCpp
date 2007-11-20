@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([FlopCpp],[1.0.2],[flopcpp@list.coin-or.org])
+AC_INIT([FlopCpp],[1.0stable],[flopcpp@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.

@@ -6,7 +6,7 @@ CoinDir  := ../..
 CXX      := g++
 CXXFLAGS := -g
 
-IncDir	:= $(CoinDir)/include 
+IncDir	:= $(CoinDir)/include/coin
 
 LIBDIRS := $(CoinDir)/lib
 

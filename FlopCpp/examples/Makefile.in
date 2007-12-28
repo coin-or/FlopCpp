@@ -7,7 +7,7 @@ FlopcDir := ..
 CXX      := g++
 CXXFLAGS := -g
 
-IncDir	:= $(CoinDir)/include 
+IncDir	:= $(CoinDir)/include/coin
 IncDir	+= $(FlopcDir)/include 
 
 LIBDIRS := $(CoinDir)/lib

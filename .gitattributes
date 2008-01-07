@@ -1,7 +1,8 @@
 * text=auto !eol
-/AUTHORS -text
 /Doxyfile -text
 /Externals -text
+FlopCpp/AUTHORS -text
+FlopCpp/LICENSE -text
 FlopCpp/MSVisualStudio/v7/FlopCpp.sln -text
 FlopCpp/MSVisualStudio/v7/FlopCpp.suo -text
 FlopCpp/MSVisualStudio/v7/FlopCpp/FlopCpp.vcproj -text
@@ -47,6 +48,7 @@ FlopCpp/MSVisualStudio/v8/examples/train/train.vcproj -text
 FlopCpp/MSVisualStudio/v8/examples/transport/transport.vcproj -text
 FlopCpp/MSVisualStudio/v8/examples/xbsl/xbsl.vcproj -text
 FlopCpp/MSVisualStudio/v8/libflopc.vcproj -text
+FlopCpp/README -text
 FlopCpp/configure -text
 FlopCpp/examples/CEPFlopCppModel.cpp -text
 FlopCpp/examples/aircraft.cpp -text
@@ -112,7 +114,6 @@ FlopCpp/unittest/setTest.cpp -text
 FlopCpp/unittest/unitTest.cpp -text
 FlopCpp/unittest/unitTest.hpp -text
 /INSTALL -text
-/LICENSE -text
 /README -text
 /config.guess -text
 /config.sub -text

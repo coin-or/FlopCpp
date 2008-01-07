@@ -2,6 +2,9 @@
 /AUTHORS -text
 /Doxyfile -text
 /Externals -text
+FlopCpp/AUTHORS -text
+FlopCpp/LICENSE -text
+FlopCpp/README -text
 FlopCpp/configure -text
 FlopCpp/examples/CEPFlopCppModel.cpp -text
 FlopCpp/examples/aircraft.cpp -text

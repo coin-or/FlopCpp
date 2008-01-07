@@ -1,41 +1,6 @@
-This packages should contain the following files:
+FlopCpp README
+==============
 
-flopc/AUTHORS \
-flopc/Doxyfile \
-flopc/INSTALL \
-flopc/LICENSE \
-flopc/Makefile \
-flopc/README \
-flopc/include/*.hpp \
-flopc/*.cpp \
-flopc/Samples/Makefile \
-flopc/Samples/aircraft.cpp \
-flopc/Samples/ampl.cpp \
-flopc/Samples/bid.cpp \
-flopc/Samples/coex.cpp \
-flopc/Samples/coexx.cpp \
-flopc/Samples/cross.cpp \
-flopc/Samples/cuttingStock.cpp \
-flopc/Samples/gapmin.cpp \
-flopc/Samples/magic.cpp \
-flopc/Samples/mine.cpp \
-flopc/Samples/multiProduct.cpp \
-flopc/Samples/stochbenders.cpp \
-flopc/Samples/tap.cpp \
-flopc/Samples/train.cpp \
-flopc/Samples/train.dat \
-flopc/Samples/transport.cpp \
-flopc/Samples/xbsl.cpp \
-flopc/Samples/runone \
-flopc/Samples/runall 
-
-The two makefiles (flopc/Makefile - to build the libraries;
-and flopc/Samples/Makefile - to build the samples) assumes that
-the flopc directory is a subdirectory of COIN. If this is not the
-case the first line of each makefile must be modified to reflect 
-the location of COIN.
-
-
-To build FlopCpp see INSTALL file.
-
-See http://www.mat.ua.pt/thh/flopc for further information.
+For the FlopCp README file, please see the file FlopCpp/README. For the
+README files of other COIN-OR projects included in this distribution, please
+see the README files in their associated subdirectories.

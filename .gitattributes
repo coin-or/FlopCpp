@@ -1,4 +1,5 @@
 * text=auto !eol
+/AUTHORS -text
 /Doxyfile -text
 /Externals -text
 FlopCpp/AUTHORS -text
@@ -114,6 +115,7 @@ FlopCpp/unittest/setTest.cpp -text
 FlopCpp/unittest/unitTest.cpp -text
 FlopCpp/unittest/unitTest.hpp -text
 /INSTALL -text
+/LICENSE -text
 /README -text
 /config.guess -text
 /config.sub -text

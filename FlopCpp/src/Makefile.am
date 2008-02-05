@@ -65,7 +65,7 @@ AM_CPPFLAGS =
 #	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc`
 #  cbc_generic_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 #	$(CLPOBJDIR)/src/libClp.la
-#  LIBS  += `cat $(CLPOBJDIR)/clp_addlibs.txt`
+#  LIBS  += `cat $(CLPDOCDIR)/clp_addlibs.txt`
 #endif
 
 #if COIN_HAS_CPX
@@ -81,7 +81,7 @@ AM_CPPFLAGS =
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
 #  cbc_generic_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 #	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-#  LIBS += `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
+#  LIBS += `cat $(DYLPDOCDIR)/dylp_addlibs.txt`
 #endif
 
 #if COIN_HAS_FMP
@@ -118,7 +118,7 @@ AM_CPPFLAGS =
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
 #  cbc_generic_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la \
 #	$(SYMOBJDIR)/src/libSym.la
-#  LIBS += `cat $(SYMOBJDIR)/sym_addlibs.txt`
+#  LIBS += `cat $(SYMDOCDIR)/sym_addlibs.txt`
 #endif
 
 #if COIN_HAS_VOL
@@ -126,7 +126,7 @@ AM_CPPFLAGS =
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 #  cbc_generic_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la \
 #	$(VOLOBJDIR)/src/libVol.la
-#  LIBS += `cat $(VOLOBJDIR)/vol_addlibs.txt`
+#  LIBS += `cat $(VOLDOCDIR)/vol_addlibs.txt`
 #endif
 
 #if COIN_HAS_XPR
@@ -138,8 +138,8 @@ AM_CPPFLAGS =
 # Finally the Osi Coin library (many of the above need it)
 #cbc_generic_LDADD += $(OSIOBJDIR)/src/libOsi.la \
 #	$(COINUTILSOBJDIR)/src/libCoinUtils.la
-#LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt` \
-#	`cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt` $(ADDLIBS)
+#LIBS += `cat $(OSIDOCDIR)/osi_addlibs.txt` \
+#	`cat $(COINUTILSDOCDIR)/coinutils_addlibs.txt` $(ADDLIBS)
 
 # Finally, the -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic

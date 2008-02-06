@@ -56,7 +56,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_CBC_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 @COIN_HAS_CBC_TRUE@	$(CBCOBJDIR)/src/libCbc.la
 
-@COIN_HAS_CBC_TRUE@am__append_3 = `cat $(CBCDOCDIR)/cbc_addlibs.txt`
+@COIN_HAS_CBC_TRUE@am__append_3 = `cat $(CBCOBJDIR)/cbc_addlibs.txt`
 @COIN_HAS_CLP_TRUE@am__append_4 = -I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
 @COIN_HAS_CLP_TRUE@	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
 @COIN_HAS_CLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp`
@@ -64,9 +64,9 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_CLP_TRUE@am__append_5 = $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 @COIN_HAS_CLP_TRUE@	$(CLPOBJDIR)/src/libClp.la
 
-@COIN_HAS_CLP_TRUE@am__append_6 = `cat $(CLPDOCDIR)/clp_addlibs.txt`
+@COIN_HAS_CLP_TRUE@am__append_6 = `cat $(CLPOBJDIR)/clp_addlibs.txt`
 @COIN_HAS_CGL_TRUE@am__append_7 = $(CGLOBJDIR)/src/libCgl.la
-@COIN_HAS_CGL_TRUE@am__append_8 = `cat $(CGLDOCDIR)/cgl_addlibs.txt`
+@COIN_HAS_CGL_TRUE@am__append_8 = `cat $(CGLOBJDIR)/cgl_addlibs.txt`
 @COIN_HAS_CPX_TRUE@am__append_9 = -I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
@@ -79,7 +79,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_DYLP_TRUE@am__append_12 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
 
-@COIN_HAS_DYLP_TRUE@am__append_13 = `cat $(DYLPDOCDIR)/dylp_addlibs.txt`
+@COIN_HAS_DYLP_TRUE@am__append_13 = `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
 @COIN_HAS_FMP_TRUE@am__append_14 = -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiFmp`
 @COIN_HAS_FMP_TRUE@am__append_15 = $(OSIOBJDIR)/src/OsiFmp/libOsiFmp.la
 @COIN_HAS_GLPK_TRUE@am__append_16 = -I`$(CYGPATH_W) $(GLPKINCDIR)` \
@@ -104,7 +104,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_SYM_TRUE@am__append_25 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la \
 @COIN_HAS_SYM_TRUE@	$(SYMOBJDIR)/src/libSym.la
 
-@COIN_HAS_SYM_TRUE@am__append_26 = `cat $(SYMDOCDIR)/sym_addlibs.txt`
+@COIN_HAS_SYM_TRUE@am__append_26 = `cat $(SYMOBJDIR)/sym_addlibs.txt`
 @COIN_HAS_XPR_TRUE@am__append_27 = -I`$(CYGPATH_W) $(XPRINCDIR)` \
 @COIN_HAS_XPR_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiXpr`
 
@@ -282,8 +282,8 @@ LIBOBJS = @LIBOBJS@
 # List additional libraries
 LIBS = @LIBS@ $(am__append_3) $(am__append_6) $(am__append_8) \
 	$(am__append_13) $(am__append_26) `cat \
-	$(OSIDOCDIR)/osi_addlibs.txt` `cat \
-	$(COINUTILSDOCDIR)/coinutils_addlibs.txt` $(ADDLIBS)
+	$(OSIOBJDIR)/osi_addlibs.txt` `cat \
+	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` $(ADDLIBS)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LN_S = @LN_S@

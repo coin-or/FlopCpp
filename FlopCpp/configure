@@ -20556,13 +20556,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_flopcpp=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   FLOPCPPINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of FlopCPP with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of FlopCPP with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -20721,13 +20722,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_cbc=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   CBCINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of Cbc with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of Cbc with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -20886,13 +20888,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_cgl=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   CGLINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of Cgl with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of Cgl with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -21051,13 +21054,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_clp=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   CLPINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of Clp with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of Clp with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -21216,13 +21220,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_coinutils=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   COINUTILSINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of CoinUtils with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of CoinUtils with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -21381,13 +21386,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_dylp=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   DYLPINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of DyLP with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of DyLP with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -21546,13 +21552,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_osi=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   OSIINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of Osi with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of Osi with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 
@@ -21711,13 +21718,14 @@ fi;
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
 if test "${with_coin_instdir+set}" = set; then
   withval="$with_coin_instdir"
-  coin_has_sym=installed
-		   if test -d "$withval"; then : ; else
+  if test -d "$withval"; then : ; else
 		     { { echo "$as_me:$LINENO: error: argument for --with-coin-instdir not a directory" >&5
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
 		   fi
-                   SYMINSTDIR=`cd $withval; pwd`
+		   { echo "$as_me:$LINENO: WARNING: Cannot verify availability of Sym with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&5
+echo "$as_me: WARNING: Cannot verify availability of Sym with --with-coin-instdir flag.  Project manager needs to provide name of header to look for" >&2;}
+
 fi;
     fi
 

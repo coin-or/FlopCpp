@@ -12,18 +12,16 @@
 #include "MP_model.hpp"
 
 namespace flopc {
-  // Initialization of static member data
-  MP_index& MP_index::Empty = *new MP_index();
-  MP_index& MP_index::Any_index = *new MP_index();
-  MP_index_exp MP_index_exp::Empty =  *new MP_index_exp(Constant(0.0));
-
   MP_index &MP_index::getEmpty() {
+    static MP_index Empty;
     return Empty;
   }
   MP_index &MP_index::Any() {
+    static MP_index Any_index;
     return Any_index;
   }
   const MP_index_exp &MP_index_exp::getEmpty() {
+    static MP_index_exp Empty(Constant(0.0));
     return Empty;
   }
 

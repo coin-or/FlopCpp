@@ -94,8 +94,6 @@ namespace flopc {
     /// Getter for domain over which this index is applied.
     virtual MP_domain getDomain(MP_set* s) const;
 
-    static MP_index& Empty;
-    static MP_index& Any_index;
     int index;
     bool instantiated;
   };
@@ -157,8 +155,6 @@ namespace flopc {
     virtual ~MP_index_exp() {}
     /// Return the unique empty expression.
     static const MP_index_exp &getEmpty();
-  private:
-    static MP_index_exp Empty;
   };
 
   /** @brief Internal representation of an index expression

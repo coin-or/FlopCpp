@@ -80,6 +80,10 @@ namespace flopc {
     /// Lower bound on the variable value.
     MP_data lowerLimit;
   private:
+    //Disabling copy constructor and assignment
+    MP_variable(const MP_variable&);
+    MP_variable& operator=(const MP_variable&);
+ 
     void operator()() const;
     const MP_set_base *S1, *S2, *S3, *S4, *S5;
     MP_index i1,i2,i3,i4,i5;

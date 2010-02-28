@@ -1,9 +1,5 @@
 // ******************** FlopCpp **********************************************
 // File: MP_domain.cpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
 //****************************************************************************
 
 #include "MP_domain.hpp"
@@ -43,13 +39,9 @@ namespace flopc {
 
 using namespace flopc;
 
-const MP_domain* MP_domain::Empty = 0;
-
 const MP_domain& MP_domain::getEmpty() {
-  if(Empty == 0) {
-    Empty= new MP_domain(new MP_domain_set(&MP_set::getEmpty(),&MP_set::getEmpty()));
-  }
-  return *Empty;
+  static MP_domain Empty(new MP_domain_set(&MP_set::getEmpty(),&MP_set::getEmpty()));
+  return Empty;
 }
 
 

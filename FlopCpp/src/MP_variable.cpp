@@ -36,6 +36,8 @@ MP_variable::MP_variable(const MP_set_base &s1,
 }    
 
 double MP_variable::level(int lcl_i1, int lcl_i2, int lcl_i3, int lcl_i4, int lcl_i5) { 
+  assert(M != 0);
+  assert(M->Solver != 0);
   return M->Solver->getColSolution()[offset +  f(lcl_i1,lcl_i2,lcl_i3,lcl_i4,lcl_i5)]; 
 }  
 

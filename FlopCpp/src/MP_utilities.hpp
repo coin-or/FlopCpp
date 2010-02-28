@@ -9,6 +9,7 @@
 #ifndef _MP_utilities_hpp_
 #define _MP_utilities_hpp_
 
+#include <cassert>
 #include <string>
 using std::string;
 
@@ -43,6 +44,7 @@ namespace flopc {
   */
   template<int nbr, class T>
   vector<T> makeVector(T i1, T i2=0, T i3=0, T i4=0, T i5=0) {
+    assert(nbr<6);
     vector<T> S(nbr);
     S[0] = i1; 
     if (nbr==1) return S;
@@ -124,7 +126,7 @@ namespace flopc {
       }
       return *this;
     }
-    bool isDefined() {
+    bool isDefined() const {
       return root != 0;
     }
     ~Handle() {
@@ -133,7 +135,7 @@ namespace flopc {
   protected:
     void increment() {
       if(root != 0) {
-        (root->count)++;
+        ++(root->count);
       }
     }
     void decrement() {
@@ -142,9 +144,8 @@ namespace flopc {
           delete root;
           root = 0;
         } else {
-          ///if(root->count != 0) {
+	  assert(root->count > 0 );
           --(root->count);
-          ///}
         }
       }
     }

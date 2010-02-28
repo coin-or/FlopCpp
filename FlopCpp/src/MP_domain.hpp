@@ -1,10 +1,6 @@
 // ******************** FlopCpp **********************************************
 // File: MP_domain.hpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
-// ****************************************************************************
+// ***************************************************************************
 #ifndef _MP_domain_hpp_
 #define _MP_domain_hpp_
 
@@ -31,8 +27,6 @@ namespace flopc {
     friend class MP_domain;
     friend class Handle<MP_domain_base*>;
     friend MP_domain operator*(const MP_domain& a, const MP_domain& b);
-  private:
-    int count;
   public:
     MP_domain_base();
     virtual ~MP_domain_base();
@@ -42,6 +36,12 @@ namespace flopc {
     virtual const MP_set_base* getSet() const = 0;
     void display()const;
     virtual size_t size() const ;
+    //   const Functor* donext;
+  private:
+    MP_domain_base(const MP_domain_base&);
+    MP_domain_base& operator=(const MP_domain_base&);
+    int count;
+  protected:
     const Functor* donext;
   };
 
@@ -95,7 +95,6 @@ namespace flopc {
   private:
     std::vector<MP_boolean> condition;
     Handle<MP_domain_base*> last;
-    static const MP_domain* Empty;
   };
 
   /** @brief Range over which some other constuct is defined.
@@ -128,6 +127,10 @@ namespace flopc {
     MP_domain getDomain(MP_set* s) const ;
     ~MP_domain_set();
   private:
+    //Disabling copy constructor and assignment operator
+    MP_domain_set(const MP_domain_set&);
+    MP_domain_set& operator=(const MP_domain_set&);
+
     const MP_set* S;
     MP_index* I;
   };

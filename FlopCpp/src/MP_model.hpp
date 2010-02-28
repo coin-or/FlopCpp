@@ -149,6 +149,9 @@ namespace flopc {
     OsiSolverInterface* operator->() {
       return Solver;
     }
+    const OsiSolverInterface* operator->() const {
+      return Solver;
+    }
 
     /// Adds a constrataint block to the model.
     MP_model& add(MP_constraint& constraint);

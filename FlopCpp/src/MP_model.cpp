@@ -11,6 +11,7 @@
 using std::cout;
 using std::endl;
 #include <algorithm>
+#include <limits>
 
 #include <CoinPackedMatrix.hpp>
 #include <OsiSolverInterface.hpp>
@@ -89,13 +90,14 @@ void MP_model::add(MP_constraint* constraint) {
 
 double MP_model::getInfinity() const {
   if (Solver==0) {
-    return 9.9e+32;
+    return std::numeric_limits<double>::infinity();
   } else {
     return Solver->getInfinity();
   }
 }
 
 void MP_model::add(MP_variable* v) {
+  assert(v != 0);
   v->M = this;
   v->offset = n;
   n += v->size();

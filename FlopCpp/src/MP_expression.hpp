@@ -61,6 +61,10 @@ namespace flopc {
       
       void operator()() const;
     private:
+      //Disable copy costructor and assignment
+      GenerateFunctor(const GenerateFunctor&);
+      GenerateFunctor& operator=(const GenerateFunctor&);
+      
       vector<Constant> multiplicators;
       MP_constraint* R;
       double M; // sign (1=lhs, -1=rhs)

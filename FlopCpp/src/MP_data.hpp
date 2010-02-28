@@ -45,6 +45,9 @@ namespace flopc {
     void operator()() const;
     DataRef& probability(double p) { return *this; }
   private:
+    //Disable copy constructor
+    DataRef(const DataRef&);
+    
     MP_data* D;
     MP_index_exp I1,I2,I3,I4,I5;
     Constant C;

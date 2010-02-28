@@ -1,10 +1,6 @@
 // ******************** FlopCpp **********************************************
 // File: MP_boolean.hpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
-// ****************************************************************************
+// ***************************************************************************
 
 #ifndef _MP_boolean_hpp_
 #define _MP_boolean_hpp_

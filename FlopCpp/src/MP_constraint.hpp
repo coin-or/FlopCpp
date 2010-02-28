@@ -1,9 +1,5 @@
 // ******************** FlopCpp **********************************************
 // File: MP_constraint.hpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
 // ****************************************************************************
 
 #ifndef _MP_constraint_hpp_

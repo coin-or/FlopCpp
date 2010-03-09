@@ -35,6 +35,20 @@ void NormalMessenger::generationTime(double t) {
   cout<<"FlopCpp: Generation time: "<<t<<endl;
 }
 
+void NormalMessenger::solutionStatus(const OsiSolverInterface* Solver) {
+  if (Solver->isProvenOptimal()) {
+    cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
+    cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
+      Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
+  } else if (Solver->isProvenPrimalInfeasible()) {
+    cout<<"FlopCpp: Problem is primal infeasible."<<endl;
+  } else if (Solver->isProvenDualInfeasible()) {
+    cout<<"FlopCpp: Problem is dual infeasible."<<endl;
+  } else {
+    cout<<"FlopCpp: Solution process abandoned."<<endl;
+  }
+}
+
 void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs) const {
   cout<<"FlopCpp: Constraint "<<name<<endl;
   for (unsigned int j=0; j<cfs.size(); j++) {
@@ -440,20 +454,21 @@ MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
       cout<<e.message()<<endl;
     }
   }
-     
+  
+  messenger->solutionStatus(Solver);
+  
   if (Solver->isProvenOptimal() == true) {
-    cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
-    cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
-      Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
+    //cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
+    //cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
   } else if (Solver->isProvenPrimalInfeasible() == true) {
     return mSolverState=MP_model::PRIMAL_INFEASIBLE;
-    cout<<"FlopCpp: Problem is primal infeasible."<<endl;
+    //cout<<"FlopCpp: Problem is primal infeasible."<<endl;
   } else if (Solver->isProvenDualInfeasible() == true) {
     return mSolverState=MP_model::DUAL_INFEASIBLE;
-    cout<<"FlopCpp: Problem is dual infeasible."<<endl;
+    //cout<<"FlopCpp: Problem is dual infeasible."<<endl;
   } else {
     return mSolverState=MP_model::ABANDONED;
-    cout<<"FlopCpp: Solution process abandoned."<<endl;
+    //cout<<"FlopCpp: Solution process abandoned."<<endl;
   }
   return mSolverState=MP_model::OPTIMAL;
 }

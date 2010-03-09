@@ -23,15 +23,18 @@ namespace flopc {
     @ingroup INTERNAL_USE
     @note FOR INTERNAL USE: This is not normally used directly by the calling code.
 */
-  class MP_set_base : public MP_index , public Named {
+  class MP_set_base : public MP_index , private Named {
   public:
     MP_set_base() : Cyclic(false) {}
+
+    using Named::setName;
+    using Named::getName;
 
     virtual int size() const = 0;
     virtual operator MP_domain() const = 0;
     virtual MP_domain operator()(const MP_index_exp& i) const = 0;
  
-    int check(int i) const {
+    int check(const int i) const {
       if ((i>=0) && (i<size())) {
         return i;
       } else {

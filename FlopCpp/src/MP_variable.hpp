@@ -28,7 +28,7 @@ namespace flopc {
       parametersof construction are MP_set s which specify the indexes
       over which the variable is defined.
   */
-  class MP_variable : public RowMajor, public Functor , public Named {
+  class MP_variable : public RowMajor, public Functor , private Named {
     friend class MP_model;
     friend class DisplayVariable;
     friend class VariableRef;
@@ -40,6 +40,9 @@ namespace flopc {
                 const MP_set_base &s5 = MP_set::getEmpty());
 
     void display(const std::string &s = "");  
+    
+    using Named::setName;
+    using Named::getName;
 
     ~MP_variable() {
     }

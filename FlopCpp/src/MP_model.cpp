@@ -20,8 +20,8 @@ using namespace flopc;
 
 MP_model& MP_model::default_model = *new MP_model(0);
 MP_model* MP_model::current_model = &MP_model::default_model;
-MP_model &MP_model::getDefaultModel() { return default_model;}
-MP_model *MP_model::getCurrentModel() { return current_model;}
+MP_model& MP_model::getDefaultModel() { return default_model;}
+MP_model* MP_model::getCurrentModel() { return current_model;}
 
 void NormalMessenger::statistics(int bm, int m, int bn, int n, int nz) {
   cout<<"FlopCpp: Number of constraint blocks: " <<bm<<endl;
@@ -35,7 +35,7 @@ void NormalMessenger::generationTime(double t) {
   cout<<"FlopCpp: Generation time: "<<t<<endl;
 }
 
-void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs) {
+void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs) const {
   cout<<"FlopCpp: Constraint "<<name<<endl;
   for (unsigned int j=0; j<cfs.size(); j++) {
     int col=cfs[j].col;
@@ -46,7 +46,7 @@ void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs)
   }
 }
 
-void VerboseMessenger::objectiveDebug(const vector<MP::Coef>& cfs) {
+void VerboseMessenger::objectiveDebug(const vector<MP::Coef>& cfs) const {
   cout<<"Objective "<<endl;
   for (unsigned int j=0; j<cfs.size(); j++) {
     int col=cfs[j].col;
@@ -65,9 +65,10 @@ MP_model::MP_model(OsiSolverInterface* s, Messenger* m) :
 
 MP_model::~MP_model() {
   delete messenger;
-  if (Solver!=0) {
+  //if (Solver!=0) {
     delete Solver;
-  }
+    //}
+  MP_model::current_model = &MP_model::default_model;
 }
 
 
@@ -77,6 +78,7 @@ MP_model& MP_model::add(MP_constraint& constraint) {
 }
 
 void MP_model::add(MP_constraint* constraint) {
+  assert(constraint != 0);
   constraint->M = this;
   if (constraint->left.isDefined() && constraint->right.isDefined()) {
     constraint->offset = m;
@@ -123,6 +125,7 @@ void MP_model::addRow(const Constraint& constraint) {
   double local_bl = -rhs;
   double local_bu = -rhs;
 
+  assert(Solver);
   double inf = Solver->getInfinity();
   switch (constraint->sense) {
       case LE:

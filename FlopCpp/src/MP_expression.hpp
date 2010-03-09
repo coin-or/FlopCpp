@@ -147,6 +147,10 @@ namespace flopc {
                 const MP_index_exp& i4,
                 const MP_index_exp& i5);
 
+    //Disable copy constructor and assignment operator
+    VariableRef(const VariableRef&);
+    VariableRef& operator=(const VariableRef&);
+
     double level() const;
 
     void insertVariables(set<MP_variable*>& v) const {

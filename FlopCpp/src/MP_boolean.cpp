@@ -41,6 +41,11 @@ namespace flopc {
         return true;
       }
     }
+
+    //disable copy constructor and operator assignment
+    Boolean_SUBSETREF(const Boolean_SUBSETREF&);
+    Boolean_SUBSETREF& operator=(const Boolean_SUBSETREF&);
+    
     SUBSETREF* C;
   };
 

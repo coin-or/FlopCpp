@@ -67,7 +67,7 @@ namespace flopc {
       @li constraint coefficients
       @li 'right hand sides'
   */
-  class MP_data : public RowMajor, public Functor , public Named {
+  class MP_data : public RowMajor, public Functor , private Named {
     friend class MP_variable;
     friend class DisplayData;
     friend class DataRef;
@@ -112,6 +112,9 @@ namespace flopc {
     ~MP_data() {
       if (manageData == true) delete[] v;
     }
+
+    using Named::setName;
+    using Named::getName;
         
     /// Used to bind and deep copy data into the MP_data data structure.
     void value(const double* d) {

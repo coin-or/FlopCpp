@@ -34,8 +34,8 @@ namespace flopc {
     virtual void logMessage(int level, const char * const msg){}
     friend class MP_model;
   private:
-    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs) {}
-    virtual void objectiveDebug(const vector<MP::Coef>& cfs) {}
+    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs) const {}
+    virtual void objectiveDebug(const vector<MP::Coef>& cfs) const {}
     virtual void statistics(int bm, int m, int bn, int n, int nz) {}
     virtual void generationTime(double t) {}
   protected:
@@ -58,8 +58,8 @@ namespace flopc {
   class VerboseMessenger : public NormalMessenger {
     friend class MP_model;
   private:
-    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs);
-    virtual void objectiveDebug(const vector<MP::Coef>& cfs);
+    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs) const;
+    virtual void objectiveDebug(const vector<MP::Coef>& cfs) const;
   };
 
   /** @brief This is the anchor point for all constructs in a FlopC++ model.

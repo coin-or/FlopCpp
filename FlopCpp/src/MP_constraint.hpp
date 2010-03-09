@@ -200,7 +200,7 @@ namespace flopc {
       @todo more work on MP_constraint.
     
   */
-  class MP_constraint : public RowMajor, public Named {
+  class MP_constraint : public RowMajor, private Named {
   public: 
     /// construct the MP_constraint with appropriate sets for indexing.
     MP_constraint(
@@ -210,6 +210,9 @@ namespace flopc {
       const MP_set_base &s4 = MP_set::getEmpty(), 
       const MP_set_base &s5 = MP_set::getEmpty()
       );
+
+    using Named::setName;
+    using Named::getName;
 
     MP_constraint& operator()(
       const MP_index_exp& i1 = MP_index_exp::getEmpty(), 

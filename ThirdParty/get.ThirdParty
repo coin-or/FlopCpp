@@ -1,0 +1,8 @@
+#!/bin/sh
+# This script just executes the scripts to get boost and googletes
+cd boost
+/bin/sh get.boost
+cd ../gtest
+/bin/sh get.gtest
+cd ../glog
+/bin/sh get.glog

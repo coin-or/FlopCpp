@@ -1,0 +1,30 @@
+#!/bin/sh
+## Shell script to obtain and unpack the boost library
+## It is not necessary to build the libraries..
+## wget needs to be installed in order to get the package
+## you need to be in the ThirdParty/boost directory if you call this script
+
+# if file is already there we do not need to download, if not we download it
+wgetcmd=wget
+wgetcount=`which wget 2>/dev/null | wc -l`
+if test ! $wgetcount = 1; then
+  echo "Utility wget not found in your PATH."
+  exit -1
+fi
+mirror=ignum
+echo "Downloading boost source code..."
+echo "If downloading the file fails, you can download the file itself and unzip the content in the current directory."
+$wgetcmd "http://downloads.sourceforge.net/project/boost/boost/1.43.0/boost_1_43_0.tar.gz?use_mirror=$mirror"
+
+echo "Uncompressing tarball.."
+tar --overwrite -xzf boost_1_43_0.tar.gz
+mv boost_1_43_0/* ./
+
+#echo "Building necessary boost libraries"
+#./bootstrap
+#./bjam --with-filesystem --with-date_time --with-regex --with-system --with-thread --with-log variant=release,debug stage
+
+echo "Cleaning up"
+rmdir boost_1_43_0
+rm boost_1_43_0.tar.gz
+

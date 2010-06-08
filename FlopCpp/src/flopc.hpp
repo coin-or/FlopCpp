@@ -1,9 +1,5 @@
 // ******************** FlopCpp **********************************************
 // File: flopc.hpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
 // ****************************************************************************
 
 #ifndef _flopc_hpp_
@@ -18,6 +14,7 @@
 #include "MP_expression.hpp"
 #include "MP_boolean.hpp"
 #include "MP_model.hpp"
+#include "MP_random_data.hpp"
 
 /** @defgroup PublicInterface Public interface
     @brief Classes in this group are for normal modeling purposes.
@@ -53,13 +50,14 @@ namespace flopc {
       @ingroup PublicInterface
   */
   inline void forall(const MP_domain& d, const Functor& f) {
-    d.Forall(&f);
+    d.forall(&f);
   }
     
   /** @brief Global function for performing a Functor without having a set
       to operate on.
       @ingroup PublicInterface
       @todo This turns into a no-op? 
+	  @todo Why is this necessary? 
   */
   inline void forall(const Functor& f) {
     forall(MP_domain::getEmpty(), f);
@@ -70,7 +68,7 @@ namespace flopc {
       @ingroup PublicInterface
   */
   inline void operator<<=(const MP_domain& s, const MP_domain& d) {
-    d.Forall( s->makeInsertFunctor());
+    d.forall( s->makeInsertFunctor());
   }
 
   /** @brief This is one of the main entry points for execution 

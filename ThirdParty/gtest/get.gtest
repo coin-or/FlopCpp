@@ -1,0 +1,24 @@
+#!/bin/sh
+## Shell script to obtain and unpack googletest
+## wget needs to be installed in order to get the package
+## you need to be in the ThirdParty/gtest directory if you call this script
+
+wgetcmd=wget
+wgetcount=`which wget 2>/dev/null | wc -l`
+if test ! $wgetcount = 1; then
+  echo "Utility wget not found in your PATH."
+  exit -1
+fi
+echo "Downloading gtest source code"
+$wgetcmd http://googletest.googlecode.com/files/gtest-1.5.0.tar.gz
+
+echo "Uncompressing tarball.."
+tar -xzf gtest-1.5.0.tar.gz
+
+echo "Move files in correct location"
+mv gtest-1.5.0/* ./
+
+echo "Cleaning up"
+rmdir gtest-1.5.0
+rm gtest-1.5.0.tar.gz
+

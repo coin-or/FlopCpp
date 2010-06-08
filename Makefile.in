@@ -20,14 +20,14 @@
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
-# Copyright (C) 2006 International Business Machines and others.
+# Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 ########################################################################
-#                         Maintainer Stuff                             #
+#                    Documentation installation                        #
 ########################################################################
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -88,13 +88,20 @@ GZIP_ENV = --best
 distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
+ADDLIBS = @ADDLIBS@
+ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
+ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMTAR = @AMTAR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AUX_DIR = @AUX_DIR@
 AWK = @AWK@
+BOOSTINCDIR = @BOOSTINCDIR@
+BOOSTLIB = @BOOSTLIB@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
+COIN_HAS_BOOST_FALSE = @COIN_HAS_BOOST_FALSE@
+COIN_HAS_BOOST_TRUE = @COIN_HAS_BOOST_TRUE@
 COIN_SKIP_PROJECTS = @COIN_SKIP_PROJECTS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -102,6 +109,12 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
+FADDLIBS = @FADDLIBS@
+GLOGINCDIR = @GLOGINCDIR@
+GLOGLIB = @GLOGLIB@
+GREP = @GREP@
+GTESTINCDIR = @GTESTINCDIR@
+GTESTLIB = @GTESTLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -112,6 +125,7 @@ LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOLM4 = @LIBTOOLM4@
+LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
@@ -133,29 +147,35 @@ abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
 abs_source_dir = @abs_source_dir@
-ac_ct_STRIP = @ac_ct_STRIP@
 am__leading_dot = @am__leading_dot@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
 build_alias = @build_alias@
 datadir = @datadir@
+datarootdir = @datarootdir@
+docdir = @docdir@
+dvidir = @dvidir@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
 have_svn = @have_svn@
 host_alias = @host_alias@
+htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
+localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
+pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
+psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 subdirs = @subdirs@
@@ -178,6 +198,8 @@ SUBDIRS = $(subdirs)
 
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(am__append_2) $(VPATH_DISTCLEANFILES)
+DocFiles = README AUTHORS LICENSE
+DocInstallDir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
 all: all-recursive
 
 .SUFFIXES:
@@ -609,6 +631,22 @@ doxydoc:
 
 .PHONY: test unitTest tests unitTests doxydoc
 
+install-doc: $(DocFiles)
+	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
+	for file in $(DocFiles); do \
+	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
+	  if test -f "$$dir$$file"; then $(INSTALL_DATA) "$$dir$$file" "$(DESTDIR)$(DocInstallDir)/$$file"; fi; \
+	done
+
+uninstall-doc:
+	for file in $(DocFiles); do \
+	  rm -f "$(DESTDIR)$(DocInstallDir)/$$file"; \
+	done
+
+########################################################################
+#                         Maintainer Stuff                             #
+########################################################################
+
 # Make sure acinclude is using most recent coin.m4
 @MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4
 @MAINTAINER_MODE_TRUE@	cat $(LIBTOOLM4) $< > $@
@@ -641,6 +679,8 @@ doxydoc:
 
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@update-externals: .Externals-stamp
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@	cd $(srcdir); svn update
+
+.PHONY: install-doc uninstall-doc update-externals
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

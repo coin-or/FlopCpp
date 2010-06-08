@@ -1,9 +1,5 @@
 // ******************** FlopCpp **********************************************
 // File: MP_expression.hpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
 // ****************************************************************************
 
 #ifndef _MP_expression_hpp_
@@ -14,198 +10,268 @@
 using std::vector;
 using std::set;
 
+#include <boost/shared_ptr.hpp>
+
 #include "MP_domain.hpp"
 #include "MP_constant.hpp"
 #include "MP_utilities.hpp"
+#include "MP_random_data.hpp"
+
+
 
 namespace flopc {
 
-  class Boolean;
-  class MP_domain;
-  class MP_constraint;
-  class Row;
-  class MP_variable;
-  class VariableRef;
-  class CoefLess;
+    class MP_constraint;
+    class TerminalExpression; 
+    class MP_variable;
+    class VariableRef;
 
-  /** @brief Internal representation of a Coefficient in a matrix.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  struct Coef {
-    Coef(int c, int r, double v, int s = 0) : 
-      col(c), row(r), stage(s), val(v)  {}
-    int col, row, stage;
-    double val;
-  };
+    class MP {
+        friend class MP_expression;
+        friend class MP_constraint;
+        friend class MP_model;
+        friend class Messenger;
+        friend class VerboseMessenger; 
+        friend class CoefLess;
+        friend class MP_expression_base;
+        friend class VariableRef;
+        friend class MP_variable;
 
-  class TerminalExpression;
+        struct Coef {
+            Coef(int c, int r, double v, int s = 0,int rs = 0,const std::vector<double>& scen = std::vector<double>()) : 
+        col(c), row(r), varStage(s),randomStage(rs), val(v), scenVector(scen)  {}
+        int col, row, varStage,randomStage;
+        double val;
+        std::vector<double> scenVector;
+        //Col = Column Number of Coef
+        //Row = Row Number of Coef
+        //Stage = Stage of belonging Variable (Column)
+        //Val = Coefficient value
+        //scenVal = stores random values for given scenarios..
+        bool operator< (const MP::Coef& rhs) {
+            if (this->col < rhs.col) {
+                return true;
+            } else if (this->col == rhs.col && this->row < rhs.row) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-  /** @brief Functor to facilitate generation of coefficients.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  class GenerateFunctor : public Functor {
-  public:
-    GenerateFunctor(vector<Coef>& coefs) : Coefs(coefs) {}
 
-    virtual ~GenerateFunctor(){}
+        };
 
-    void setConstraint(MP_constraint* r) {
-      R = r;
-    }
-    void setMultiplicator(vector<Constant>& mults, double m) {
-      multiplicators = mults;
-      m_ = m;
-    }
-    void setTerminalExpression(const TerminalExpression* c) {
-      C = c;
-    }
-    virtual int row_number() const;
+        static bool CoefLess (const MP::Coef& a, const MP::Coef& b) ;
+        static bool CoefLessShared (const boost::shared_ptr<MP::Coef>& a, const boost::shared_ptr<MP::Coef>& b) ;
+        static bool CoefLessWithStageShared  (const boost::shared_ptr<MP::Coef>& a, const boost::shared_ptr<MP::Coef>& b) ;
+        /*    struct CoefLess {
+        bool operator()  const;
+        };
 
-    void operator()() const;
+        struct CoefLessShared {
+        bool operator() (const MP::Coef& a, const MP::Coef& b) const;
+        };
+        struct CoefLessWithStageShared {
+        bool operator() (const boost::shared_ptr<MP::Coef>& a, const boost::shared_ptr<MP::Coef>& b) const;
+        };*/
 
-    double m_;
-    vector<Constant> multiplicators;
-    MP_constraint* R;
-    const TerminalExpression* C;
-    vector<Coef>& Coefs;
-  };
+    protected:
+        //This class is used to set all coefficients of an constraint to 
+        class GenerateFunctor : public Functor {
+        public:
+            GenerateFunctor(MP_constraint* r, vector<Coef>& cfs): R(r), Coefs(cfs) {}
 
-  /** @brief Functor to facilitate generation of the objective function.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  class ObjectiveGenerateFunctor : public GenerateFunctor {
-  public:
-    ObjectiveGenerateFunctor(vector<Coef>& coefs) : GenerateFunctor(coefs) {}
-    virtual int row_number() const {
-      return -1;
-    }
-  };
+            void setMultiplicator(vector<Constant>& mults, double m) {
+                multiplicators = mults;
+                M = m;
+            }
+            void setTerminalExpression(const TerminalExpression* c) {
+                C = c;
+            }
 
-  /** @brief The base class for all expressions.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-  */
-  class MP_expression_base {
-    friend class MP_expression;
-    friend class Handle<MP_expression_base*>;
-  private:
-    int count;
-  public:
-    MP_expression_base() : count(0) {}
+            void operator()() const;
+        private:
+            //Disable copy contructor and assignment operator
+            GenerateFunctor(const GenerateFunctor&);
+            GenerateFunctor& operator=(const GenerateFunctor&);
 
-    virtual double level() const = 0;
-    virtual void generate(const MP_domain& domain,
-                          vector<Constant> multiplicators,
-                          GenerateFunctor& f,
-                          double m) const = 0;
-    virtual void insertVariables(set<MP_variable*>& v) const = 0;
 
-    virtual ~MP_expression_base() {}
-  };
+            MP_constraint* R;
+            //Temporary values
+            vector<Constant> multiplicators; //Coefficients?
+            double M; // sign (1=lhs, -1=rhs)
+            const TerminalExpression* C; //Current 
+            //End Temporary values
+            vector<MP::Coef>& Coefs;
+        };
 
-  /** @brief Symbolic representation of a linear expression.
-      @ingroup PublicInterface
-      This is one of the main public interface classes.  It is the basis for
-      all linear expressions, including constraints, objective function,
-      and expressions involving indexes.
-      <br> Although these can be created directly and independently, it
-      is expected these will be created through the use of the operators
-      which are later in this file.  (operator+, operator-, etc.)
-      @note There are constructors which are (silently) used to convert \
-      other componenets into expressions.
-  */
-  class MP_expression : public Handle<MP_expression_base*> {
-    friend class MP_constraint;
-  public:
-    /// default constructor
-    MP_expression() : Handle<MP_expression_base*>(0) {}
-    /** Constructor for internal use
-        @todo should this be private?
+        class VariableBoundsFunctor : public Functor {
+        public:
+            VariableBoundsFunctor(const VariableRef* v, std::vector< std::vector< boost::shared_ptr<MP::Coef> > >& cfs): var(v), Coefs(cfs) {}
+            void operator()() const;
+        private:
+            //Disable copy contructor and assignment operator
+            VariableBoundsFunctor(const VariableBoundsFunctor&);
+            VariableBoundsFunctor& operator=(const VariableBoundsFunctor&);
+
+
+            const VariableRef* var;
+            std::vector<std::vector< boost::shared_ptr<MP::Coef> > >& Coefs;
+        };
+    };
+
+
+    /** @brief The base class for all expressions.
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
     */
-    MP_expression(MP_expression_base* r) : Handle<MP_expression_base*>(r) {}
-    /// Constructor which (silently) converts a Constant to a MP_expression
-    MP_expression(const Constant& c);
-    /// Constructor which (silently) converts a Variable to a MP_expression
-    MP_expression(const VariableRef& v);
-    virtual ~MP_expression() {}
-  };
+    class MP_expression_base {
+        friend class MP_expression;
+        friend class Handle<MP_expression_base*>;
+    private:
+        int count;
+    public:
+        MP_expression_base() : count(0) {}
 
-  /** @brief The base class for all expressions.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-      @todo can this be moved to the cpp file?
-  */
-  class TerminalExpression : public MP_expression_base {
-  public:
-    virtual double getValue() const = 0; 
-    virtual int getColumn() const = 0;
-    virtual int getStage() const = 0;
-  };
+        //TODO: Comments needed. What do these methods do?
+        virtual double level() const = 0; 
+        virtual void generate(const MP_domain& domain,
+            vector<Constant> multiplicators,
+            MP::GenerateFunctor &f,
+            double m) const = 0;
 
-  /** @brief The base class for all expressions.
-      @ingroup INTERNAL_USE
-      @note FOR INTERNAL USE: This is not normally used directly by the
-      calling code.
-      @todo can this be moved to the cpp file?
-  */
-  class Expression_operator : public MP_expression_base {
-  public:
-    Expression_operator(const MP_expression& e1, const MP_expression& e2) : 
-      left(e1),right(e2) {}
-    void insertVariables(set<MP_variable*>& v) const {
-      left->insertVariables(v);
-      right->insertVariables(v);
-    }
-  protected:
-    MP_expression left,right;
-  };
+        virtual void insertVariables(set<MP_variable *>& v) const = 0; //Insert given Variables to the Model?!
 
-  /// Operator which sums two MP_expressions, forms a new MP_expression
-  MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
-  /** Operator which sums an MP_expression and a constant, and forms a new
-      MP_expression
-  */
-  MP_expression operator+(const MP_expression& e1, const Constant& e2);
-  /** Operator which sums a constant and an MP_expression , and forms a new
-      MP_expression
-  */
-  MP_expression operator+(const Constant& e1, const MP_expression& e2);
-  /** Operator which subtracts an MP_expression from an MP_expression, and
-      forms a new MP_expression
-  */
-  MP_expression operator-(const MP_expression& e1, const MP_expression& e2);
-  /** Operator which subtracts a Constant from an MP_expression, and
-      forms a new MP_expression
-  */
-  MP_expression operator-(const MP_expression& e1, const Constant& e2);
-  /** Operator which subtracts an MP_expression from a Constant, and
-      forms a new MP_expression
-  */
-  MP_expression operator-(const Constant& e1, const MP_expression& e2);
-  /** Operator which multiplies a Constant by an MP_expression, and
-      forms a new MP_expression
-  */
-  MP_expression operator*(const Constant& e1, const MP_expression& e2); 
-  /** Operator which multiplies an MP_expression by  a Constant, and
-      forms a new MP_expression
-  */
-  MP_expression operator*(const MP_expression& e1, const Constant& e2);
-  /** forms an expression which divides an expression by a Constant.
-        
-  */
-  MP_expression operator/(const MP_expression& e1, const Constant& e2);
-  /** forms an expression by summing an expression over a domain.
-      @note it's expected that the expression is defined over that domain.
-  */
-  MP_expression sum(const MP_domain& d, const MP_expression& e);
+        virtual void insertRandomVariables(std::vector< std::set<RandomVariable*> >& v) const = 0;
+
+        virtual ~MP_expression_base() {}
+    };
+
+
+    /** @brief Symbolic representation of a linear expression.
+    @ingroup PublicInterface
+    This is one of the main public interface classes.  It is the basis for   
+    all linear expressions, including constraints, objective function,
+    and expressions involving indexes.
+    <br> Although these can be created directly and independently, it
+    is expected these will be created through the use of the operators
+    which are later in this file.  (operator+, operator-, etc.)
+    @note There are constructors which are (silently) used to convert \
+    other componenets into expressions.
+    */
+
+    class MP_expression : public Handle<MP_expression_base*> {
+    public:
+        MP_expression() : Handle<MP_expression_base*>(0) {}
+        /// Constructor which (silently) converts a Constant to a MP_expression
+        MP_expression(const Constant& c);
+        /// Constructor which (silently) converts a VariableRef to a MP_expression
+        MP_expression(const VariableRef& v);
+        MP_expression(MP_expression_base* r) : Handle<MP_expression_base*>(r) {}
+    };
+
+
+    /** @brief The base class for all expressions.
+    @ingroup INTERNAL_USE
+    @note FOR INTERNAL USE: This is not normally used directly by the
+    calling code.
+    @todo can this be moved to the cpp file?
+    */
+    class TerminalExpression : public MP_expression_base {
+    public:
+        virtual ~TerminalExpression() {};
+
+        virtual double getValue(int scenario = getZero) const = 0; 
+        virtual int getColumn() const = 0;
+        virtual int getStage() const = 0;
+        virtual RandomVariable* getRandomVariable() const = 0;
+    };
+
+    /** Semantic representation of a variable in a Math Program
+    @ingroup INTERNAL_USE
+    @see MP_variable for a public interface.
+    */
+    class VariableRef : public TerminalExpression {
+        friend class MP_variable;
+    public:
+
+        virtual ~VariableRef();
+
+        virtual int getColumn() const;
+        double level() const;
+
+        void insertVariables(set<MP_variable*>& v) const {
+            v.insert(V);
+        }
+
+        void insertRandomVariables(std::vector< std::set<RandomVariable*> >& v) const;
+
+        virtual double getValue(int scenario) const { 
+            return 1.0;
+        }
+        virtual int getStage() const;
+
+        virtual RandomVariable* getRandomVariable() const {
+            return 0;
+        }
+
+
+
+    private:
+        VariableRef(MP_variable* v, 
+            const MP_index_exp& i1,
+            const MP_index_exp& i2,
+            const MP_index_exp& i3,
+            const MP_index_exp& i4,
+            const MP_index_exp& i5);
+
+        //VariableRef& operator=(const &VariableRef); Why is there a compiler warning about assignment operator can not be generated? due to the private constructor?
+
+        //Disable copy constructor and assignment operator ? 
+        VariableRef(const VariableRef&);
+        VariableRef& operator=(const VariableRef&);
+
+        void generate(const MP_domain& domain,
+            vector<Constant> multiplicators,
+            MP::GenerateFunctor& f,
+            double m) const;
+
+    public:
+        MP_variable* V;
+    private:
+        int offset;
+        const MP_index_exp I1,I2,I3,I4,I5;
+    };
+
+
+
+    /** Semantic representation of a random variable in a Math Program
+    @ingroup INTERNAL_USE
+    @see MP_variable for a public interface.
+    */
+
+
+    /// @ingroup PublicInterface
+    MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator+(const MP_expression& e1, const Constant& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator+(const Constant& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator-(const MP_expression& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator-(const MP_expression& e1, const Constant& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator-(const Constant& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator*(const Constant& e1, const MP_expression& e2); 
+    /// @ingroup PublicInterface
+    MP_expression operator*(const MP_expression& e1, const Constant& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator/(const MP_expression& e1, const Constant& e2);
+    /// @ingroup PublicInterface
+    MP_expression sum(const MP_domain& d, const MP_expression& e);
 
 } // End of namespace flopc
 #endif

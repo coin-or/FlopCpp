@@ -1,7 +1,7 @@
 // $Id$
 #include "flopc.hpp"
 using namespace flopc;
-#include "OsiClpSolverInterface.hpp"
+#include "OsiCbcSolverInterface.hpp"
 
 /* FLOPC++ implementation of a financial planning and control model from
 "StAMPL: A filtration-oriented modeling toll for stochastic programming" by Fourer and Lopes
@@ -86,7 +86,7 @@ Stage_i::Stage_i(int numINSTR, MP_data& Return, int n, Stage* p, MP_data& Good, 
 
 main() {
     const int numStages = 4;
-    MP_model::getDefaultModel().setSolver(new OsiClpSolverInterface);
+    MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
     MP_model::getDefaultModel().verbose();
 
     MP_set INSTR(numINSTR);
@@ -100,7 +100,6 @@ main() {
 
     Stage_1 M(numINSTR, 55, GoodReturn, BadReturn, numStages);
     M.Buy.display();
-    MP_model::getDefaultModel()->writeMps("stampl_recursive");
 }
 
 // part of the expected output

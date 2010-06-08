@@ -20,14 +20,14 @@
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
-# Copyright (C) 2006 International Business Machines and others.
+# Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 ########################################################################
-#                         Maintainer Stuff                             #
+#                    Documentation installation                        #
 ########################################################################
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -56,14 +56,14 @@ host_triplet = @host@
 # specified.  But we need to list it as subdirectory to make sure that it is
 # included in the tarball
 @ALWAYS_FALSE@am__append_1 = test
-DIST_COMMON = $(am__configure_deps) \
+DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../BuildTools/Makemain.inc $(srcdir)/../config.guess \
 	$(srcdir)/../config.sub $(srcdir)/../install-sh \
 	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/flopcpp_addlibs.txt.in $(top_srcdir)/configure \
 	$(top_srcdir)/examples/Makefile.in \
-	$(top_srcdir)/inc/config_flopcpp.h.in
+	$(top_srcdir)/inc/config_flopcpp.h.in AUTHORS
 @HAVE_EXTERNALS_TRUE@am__append_2 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_3 = .Externals-stamp
 subdir = .
@@ -114,19 +114,29 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AUX_DIR = @AUX_DIR@
 AWK = @AWK@
+BOOSTINCDIR = @BOOSTINCDIR@
+BOOSTLIB = @BOOSTLIB@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
+CBCDOCDIR = @CBCDOCDIR@
 CBCOBJDIR = @CBCOBJDIR@
 CBCSRCDIR = @CBCSRCDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+CGLDOCDIR = @CGLDOCDIR@
 CGLOBJDIR = @CGLOBJDIR@
 CGLSRCDIR = @CGLSRCDIR@
+CLPDOCDIR = @CLPDOCDIR@
 CLPOBJDIR = @CLPOBJDIR@
 CLPSRCDIR = @CLPSRCDIR@
+COINUTILSDOCDIR = @COINUTILSDOCDIR@
 COINUTILSOBJDIR = @COINUTILSOBJDIR@
 COINUTILSSRCDIR = @COINUTILSSRCDIR@
+COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
+COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
+COIN_HAS_BOOST_FALSE = @COIN_HAS_BOOST_FALSE@
+COIN_HAS_BOOST_TRUE = @COIN_HAS_BOOST_TRUE@
 COIN_HAS_CBC_FALSE = @COIN_HAS_CBC_FALSE@
 COIN_HAS_CBC_TRUE = @COIN_HAS_CBC_TRUE@
 COIN_HAS_CGL_FALSE = @COIN_HAS_CGL_FALSE@
@@ -143,14 +153,20 @@ COIN_HAS_FLOPCPP_FALSE = @COIN_HAS_FLOPCPP_FALSE@
 COIN_HAS_FLOPCPP_TRUE = @COIN_HAS_FLOPCPP_TRUE@
 COIN_HAS_FMP_FALSE = @COIN_HAS_FMP_FALSE@
 COIN_HAS_FMP_TRUE = @COIN_HAS_FMP_TRUE@
+COIN_HAS_GLOG_FALSE = @COIN_HAS_GLOG_FALSE@
+COIN_HAS_GLOG_TRUE = @COIN_HAS_GLOG_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
 COIN_HAS_GLPK_TRUE = @COIN_HAS_GLPK_TRUE@
+COIN_HAS_GTEST_FALSE = @COIN_HAS_GTEST_FALSE@
+COIN_HAS_GTEST_TRUE = @COIN_HAS_GTEST_TRUE@
 COIN_HAS_MSK_FALSE = @COIN_HAS_MSK_FALSE@
 COIN_HAS_MSK_TRUE = @COIN_HAS_MSK_TRUE@
 COIN_HAS_OSI_FALSE = @COIN_HAS_OSI_FALSE@
 COIN_HAS_OSI_TRUE = @COIN_HAS_OSI_TRUE@
 COIN_HAS_OSL_FALSE = @COIN_HAS_OSL_FALSE@
 COIN_HAS_OSL_TRUE = @COIN_HAS_OSL_TRUE@
+COIN_HAS_SMI_FALSE = @COIN_HAS_SMI_FALSE@
+COIN_HAS_SMI_TRUE = @COIN_HAS_SMI_TRUE@
 COIN_HAS_SPX_FALSE = @COIN_HAS_SPX_FALSE@
 COIN_HAS_SPX_TRUE = @COIN_HAS_SPX_TRUE@
 COIN_HAS_SYM_FALSE = @COIN_HAS_SYM_FALSE@
@@ -171,6 +187,8 @@ DBG_CFLAGS = @DBG_CFLAGS@
 DBG_CXXFLAGS = @DBG_CXXFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DSYMUTIL = @DSYMUTIL@
+DYLPDOCDIR = @DYLPDOCDIR@
 DYLPOBJDIR = @DYLPOBJDIR@
 DYLPSRCDIR = @DYLPSRCDIR@
 ECHO = @ECHO@
@@ -182,12 +200,19 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
+FLOPCPPDOCDIR = @FLOPCPPDOCDIR@
 FLOPCPPOBJDIR = @FLOPCPPOBJDIR@
 FLOPCPPSRCDIR = @FLOPCPPSRCDIR@
 FMPINCDIR = @FMPINCDIR@
 FMPLIB = @FMPLIB@
+GLOGINCDIR = @GLOGINCDIR@
+GLOGLIB = @GLOGLIB@
 GLPKINCDIR = @GLPKINCDIR@
 GLPKLIB = @GLPKLIB@
+GLPKOBJDIR = @GLPKOBJDIR@
+GREP = @GREP@
+GTESTINCDIR = @GTESTINCDIR@
+GTESTLIB = @GTESTLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -211,9 +236,11 @@ MPICC = @MPICC@
 MPICXX = @MPICXX@
 MSKINCDIR = @MSKINCDIR@
 MSKLIB = @MSKLIB@
+NMEDIT = @NMEDIT@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
+OSIDOCDIR = @OSIDOCDIR@
 OSIOBJDIR = @OSIOBJDIR@
 OSISRCDIR = @OSISRCDIR@
 OSLINCDIR = @OSLINCDIR@
@@ -227,11 +254,16 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SMIDOCDIR = @SMIDOCDIR@
+SMIOBJDIR = @SMIOBJDIR@
+SMISRCDIR = @SMISRCDIR@
 SPXINCDIR = @SPXINCDIR@
 SPXLIB = @SPXLIB@
 STRIP = @STRIP@
+SYMDOCDIR = @SYMDOCDIR@
 SYMOBJDIR = @SYMOBJDIR@
 SYMSRCDIR = @SYMSRCDIR@
 VERSION = @VERSION@
@@ -242,12 +274,11 @@ abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
 abs_source_dir = @abs_source_dir@
-ac_ct_AR = @ac_ct_AR@
+ac_c_preproc_warn_flag = @ac_c_preproc_warn_flag@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
-ac_ct_RANLIB = @ac_ct_RANLIB@
-ac_ct_STRIP = @ac_ct_STRIP@
+ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -264,6 +295,9 @@ build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
+datarootdir = @datarootdir@
+docdir = @docdir@
+dvidir = @dvidir@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
@@ -273,19 +307,24 @@ host_alias = @host_alias@
 host_cpu = @host_cpu@
 host_os = @host_os@
 host_vendor = @host_vendor@
+htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
+localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
+pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
+psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
@@ -306,6 +345,7 @@ EXTRA_DIST = $(am__append_2)
 #                  Installation of the addlibs file                    #
 ########################################################################
 addlibsfile = flopcpp_addlibs.txt
+addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
 
 ########################################################################
 #                         Maintainer Stuff                             #
@@ -313,6 +353,8 @@ addlibsfile = flopcpp_addlibs.txt
 
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(am__append_3) $(VPATH_DISTCLEANFILES)
+DocFiles = README AUTHORS LICENSE
+DocInstallDir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
 all: all-recursive
 
 .SUFFIXES:
@@ -764,6 +806,9 @@ test: all
 
 unitTest: test
 
+googleTest: all
+	cd test; make googleTest
+
 clean-local:
 	if test -r test/Makefile; then cd test; make clean; fi
 
@@ -772,11 +817,27 @@ distclean-local:
 
 .PHONY: test unitTest
 
-install-exec-local:
-	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(libdir)/$(addlibsfile)
+install-exec-local: install-doc
+	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(addlibsdir)/$(addlibsfile)
 
-uninstall-local:
-	rm -f $(DESTDIR)$(libdir)/$(addlibsfile)
+uninstall-local: uninstall-doc
+	rm -f $(DESTDIR)$(addlibsdir)/$(addlibsfile)
+
+install-doc: $(DocFiles)
+	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
+	for file in $(DocFiles); do \
+	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
+	  if test -f "$$dir$$file"; then $(INSTALL_DATA) "$$dir$$file" "$(DESTDIR)$(DocInstallDir)/$$file"; fi; \
+	done
+
+uninstall-doc:
+	for file in $(DocFiles); do \
+	  rm -f "$(DESTDIR)$(DocInstallDir)/$$file"; \
+	done
+
+########################################################################
+#                         Maintainer Stuff                             #
+########################################################################
 
 # Make sure acinclude is using most recent coin.m4
 @MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4
@@ -810,6 +871,8 @@ uninstall-local:
 
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@update-externals: .Externals-stamp
 @HAVE_EXTERNALS_TRUE@@MAINTAINER_MODE_TRUE@	cd $(srcdir); svn update
+
+.PHONY: install-doc uninstall-doc update-externals
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

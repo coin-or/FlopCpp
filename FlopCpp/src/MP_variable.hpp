@@ -1,19 +1,18 @@
 // ******************** FlopCpp **********************************************
 // File: MP_variable.hpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
 //****************************************************************************
 
 #ifndef _MP_variable_hpp_
 #define _MP_variable_hpp_
+
+#include <boost/shared_ptr.hpp>
 
 #include "MP_set.hpp"
 #include "MP_index.hpp"
 #include "MP_expression.hpp"
 #include "MP_domain.hpp"
 #include "MP_data.hpp"
+#include "MP_constant.hpp"
 
 namespace flopc {
 
@@ -25,43 +24,6 @@ namespace flopc {
   class MP_model;
   class MP_variable;
 
-  /** Semantic representation of a variable in a Math Program
-      @ingroup INTERNAL_USE
-      @see MP_variable for a public interface.
-  */
-  class VariableRef : public TerminalExpression {
-    friend class MP_variable;
-  public:
-    int getColumn() const;
-  private:
-    VariableRef(MP_variable* v, 
-                const MP_index_exp& i1,
-                const MP_index_exp& i2,
-                const MP_index_exp& i3,
-                const MP_index_exp& i4,
-                const MP_index_exp& i5);
-
-    double level() const;
-
-    void insertVariables(set<MP_variable*>& v) const {
-      v.insert(V);
-    }
-    double getValue() const { 
-      return 1.0;
-    }
-    int getStage() const { 
-      return 0;
-    }
-    void generate(const MP_domain& domain,
-                  vector<Constant> multiplicators,
-                  GenerateFunctor& f,
-                  double m) const;
-    MP_variable* V;
-    int offset;
-    const MP_index_exp I1,I2,I3,I4,I5;
-  };
-
-
   /** @brief Symantic representation of a variable.
       @ingroup PublicInterface
       This is one of the main public interface classes.  
@@ -69,7 +31,7 @@ namespace flopc {
       parametersof construction are MP_set s which specify the indexes
       over which the variable is defined.
   */
-  class MP_variable : public RowMajor, public Functor , public Named{
+  class MP_variable : public RowMajor, public Functor , private Named {
     friend class MP_model;
     friend class DisplayVariable;
     friend class VariableRef;
@@ -80,15 +42,18 @@ namespace flopc {
                 const MP_set_base &s4 = MP_set::getEmpty(), 
                 const MP_set_base &s5 = MP_set::getEmpty());
 
+    ~MP_variable();
     void display(const std::string &s = "");  
-
-    ~MP_variable() {
-    }
+    
+    using Named::setName;
+    using Named::getName;
 
     /// Returns the value of the variable given the specific index values.
     double level(int i1=0, int i2=0, int i3=0, int i4=0, int i5=0);
+    double levelScenario(int scenario = 0,int i1=0, int i2=0, int i3=0, int i4=0, int i5=0);
 
-    /// Interal use only.
+
+    /// Convert a MP_variable into a VariableRef
     const VariableRef& operator()(
       const MP_index_exp& d1 = MP_index_exp::getEmpty(), 
       const MP_index_exp& d2 = MP_index_exp::getEmpty(), 
@@ -96,34 +61,50 @@ namespace flopc {
       const MP_index_exp& d4 = MP_index_exp::getEmpty(), 
       const MP_index_exp& d5 = MP_index_exp::getEmpty()
       ) {
-      return *new VariableRef(this, d1, d2, d3, d4, d5);
+          lowerLimit->propagateIndexExpression(d1,d2,d3,d4,d5);
+          upperLimit->propagateIndexExpression(d1,d2,d3,d4,d5);
+          myrefs.push_back(new VariableRef(this, d1, d2, d3, d4, d5));
+      return *myrefs.back(); //TODO: possible Memory Leak.. same procedure as in MP_data: Store all refs in a array to be able to clean up in the end..
     }
     
     //void display(string s = "");  
 
     /// Call this method to turn the variable into a binary variable
     void binary() { 
-      upperLimit.initialize(1);
-      type = discrete; 
+      //upperLimit.initialize(1);
+        lowerLimit = Constant(0);
+        upperLimit = Constant(1);
+        type = discrete; 
     }
 
     /// Call this method to turn the MP_variable into an integer variable
     void integer() { 
       type = discrete; 
     }
+
+    void bounds(std::vector< std::vector<boost::shared_ptr<MP::Coef> > >& v);
  
     /// Upper bound on the variable value.
-    MP_data upperLimit;
+    Constant upperLimit;
     /// Lower bound on the variable value.
-    MP_data lowerLimit;
+    Constant lowerLimit;
   private:
+    //Disabling copy constructor and assignment
+    MP_variable(const MP_variable&);
+    MP_variable& operator=(const MP_variable&);
+
+    int getCurrentStage(int i1, int i2, int i3, int i4, int i5);
+    void setStageSet();
+ 
     void operator()() const;
     const MP_set_base *S1, *S2, *S3, *S4, *S5;
     MP_index i1,i2,i3,i4,i5;
 
     MP_model *M;
+    std::vector<VariableRef*> myrefs;
     variableType type;
     int offset;
+    int stageSet;
   };
 
   /** Specialized subclass of MP_variable where the variable is

@@ -39,6 +39,9 @@ test: all
 
 unitTest: test
 
+googleTest: all
+	cd test; make googleTest
+
 clean-local:
 	if test -r test/Makefile; then cd test; make clean; fi
 
@@ -52,12 +55,13 @@ distclean-local:
 ########################################################################
 
 addlibsfile = flopcpp_addlibs.txt
+addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
 
-install-exec-local:
-	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(libdir)/$(addlibsfile)
+install-exec-local: install-doc
+	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(addlibsdir)/$(addlibsfile)
 
-uninstall-local:
-	rm -f $(DESTDIR)$(libdir)/$(addlibsfile)
+uninstall-local: uninstall-doc
+	rm -f $(DESTDIR)$(addlibsdir)/$(addlibsfile)
 
 ########################################################################
 #                         Maintainer Stuff                             #

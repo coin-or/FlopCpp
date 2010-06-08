@@ -88,7 +88,7 @@ int main() {
 
     n.integer();
     n.upperLimit(j,i) = number(j);
-    n.upperLimit.display("n upper");
+    //n.upperLimit.display("n upper");
 
     MP_constraint
 	pow(T),    // demand for power (1000mw)

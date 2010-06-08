@@ -124,7 +124,7 @@ int main() {
 
     y.upperLimit(j,h) = deltb(j,h);
 
-    y.upperLimit.display("y upper");
+    //y.upperLimit.display("y upper");
 
     m1.add(ab).add(db).add(bcd1).add(ocd);
     m1.minimize(oc() + bc());

@@ -13,15 +13,20 @@ using namespace flopc;
 */
 
 
-main() {
+int main() {
   MP_model::getDefaultModel().setSolver(new OsiClpSolverInterface);
   MP_model::getDefaultModel().verbose();
 
   enum { STOCKS, BONDS, numINSTR};
   const int numStages = 3;
+  const int numScenarios = 20;
+
+
 
   MP_set INSTR(numINSTR);
   MP_stage T(numStages);
+
+  MP_index i;
 
   MP_stochastic_data Return(T,INSTR);
 
@@ -62,7 +67,7 @@ main() {
   InvestAll() = sum(INSTR, Buy(0,INSTR)) == initial_wealth;
   ReinvestAll(T+1) = sum(INSTR, Buy(T,INSTR) * Return(T,INSTR)) == sum(INSTR, Buy(T+1,INSTR));
   Goal() = sum(INSTR, Buy(T.last(),INSTR) * Return(T.last(),INSTR)) == goal - Shortage() + Overage();
-  M->setObjective( Overage() - 4*Shortage() );
+  M->setObjective( Overage() - 4*Shortage() + Buy(T.last(),INSTR) );
 
   // generate MP_model 
   OsiClpSolverInterface *osiCore = new OsiClpSolverInterface();
@@ -76,6 +81,7 @@ main() {
 
   vector<int> colStage((*M)->getNumCols());
   vector<int> rowStage((*M)->getNumRows());
+ 
 
   for (int j=0; j!=(*M)->getNumCols(); ++j) {
     colStage[j] = M->getColStage()[j];
@@ -104,6 +110,7 @@ main() {
   SmiDiscreteDistribution *smiDD = new SmiDiscreteDistribution(smiCoreData);
 
   // Loop over random variables
+  //Christian: This looks more like looping over stages.. What is with more than one RV per stage?
   for (int t=1; t<=numStages ; ++t){
 
     //Each Return is based in period t:
@@ -191,6 +198,6 @@ main() {
 
 
 
-
+  return 0;
 
  }

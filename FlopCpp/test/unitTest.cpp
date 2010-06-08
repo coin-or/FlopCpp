@@ -5,6 +5,7 @@ using namespace flopc;
 #include "CoinFloatEqual.hpp"
 
 
+
 namespace Aircraft {
     enum {a, b, c, d, numA};
 } 
@@ -83,6 +84,7 @@ int main() {
 
     deltb(j,h) = pos(dd(j,h)-dd(j,h-1));
 
+    lambda.display("lambda");
     ed.display("ed");
     gamma.display("gamma");
     deltb.display("deltb");
@@ -127,7 +129,7 @@ int main() {
 
     y.upperLimit(j,h) = deltb(j,h);
 
-    y.upperLimit.display("y upper");
+    //y.upperLimit.display("y upper");
 
     m1.add(ab).add(db).add(bcd1).add(ocd);
     m1.minimize(oc() + bc());
@@ -152,12 +154,13 @@ int main() {
     assert(m2->getNumCols()==72);
     assert(m2->getNumElements()==219);
     
-    // Optimal objective value m1: 1566.04
-    // Optimal objective value m2: 1566.04 (like m1)
+    // Optimal objective value m1: 1566.04218913
+    // Optimal objective value m2: 1566.04218913 (like m1)
     assert(m2->getObjValue()>=1566.03 && m2->getObjValue()<=1566.05);
+
     CoinRelFltEq eq;
-    assert( eq(m2->getObjValue(),1566.04) );
-    assert( eq(m1->getObjValue(),1566.04) );
+    assert( eq(m2->getObjValue(),1566.04218913) );
+    assert( eq(m1->getObjValue(),1566.04218913) );
 
     y.display("y second model");
   }

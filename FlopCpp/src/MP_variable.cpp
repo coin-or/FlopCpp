@@ -1,9 +1,5 @@
 // ******************** FlopCpp **********************************************
 // File: MP_variable.cpp
-// $Id$
-// Author: Tim Helge Hultberg (thh@mat.ua.pt)
-// Copyright (C) 2003 Tim Helge Hultberg
-// All Rights Reserved.
 //****************************************************************************
 
 #include <iostream>
@@ -16,90 +12,131 @@ using std::endl;
 #include "MP_domain.hpp" 
 #include "MP_constant.hpp" 
 #include "MP_model.hpp"
+#include "SmiScnModel.hpp"
 using namespace flopc;
 
-VariableRef::VariableRef(MP_variable* v, 
-			 const MP_index_exp& i1,
-			 const MP_index_exp& i2,
-			 const MP_index_exp& i3,
-			 const MP_index_exp& i4,
-			 const MP_index_exp& i5) :
-  V(v),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5) { 
-  offset = v->offset; 
-}
 
-double VariableRef::level() const {
-  return  V->M->solution[V->offset +
-                         V->f(V->S1->evaluate(),
-                              V->S2->evaluate(),
-                              V->S3->evaluate(),
-                              V->S4->evaluate(),
-                              V->S5->evaluate())];
-}
-
-int VariableRef::getColumn() const { 
-  int i1 = V->S1->check(I1->evaluate());
-  int i2 = V->S2->check(I2->evaluate());
-  int i3 = V->S3->check(I3->evaluate());
-  int i4 = V->S4->check(I4->evaluate());
-  int i5 = V->S5->check(I5->evaluate());
-    
-  if (i1==outOfBound || i2==outOfBound || i3==outOfBound ||
-      i4==outOfBound || i5==outOfBound) {
-    return outOfBound;
-  } else {
-    return V->offset +  V->f(i1,i2,i3,i4,i5);
-  }
-}
-
-void VariableRef::generate(const MP_domain& domain,
-			   vector<Constant > multiplicators,
-			   GenerateFunctor& f,
-			   double m)  const {
-  f.setMultiplicator(multiplicators,m);
-  f.setTerminalExpression(this);
-  domain.Forall(&f);
-}
- 
 MP_variable::MP_variable(const MP_set_base &s1, 
-			 const MP_set_base &s2, 
-			 const MP_set_base &s3,
-			 const MP_set_base &s4, 
-			 const MP_set_base &s5) :
-  RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
-  upperLimit(MP_data(s1,s2,s3,s4,s5)),
-  lowerLimit(MP_data(s1,s2,s3,s4,s5)),
-  S1(&s1),S2(&s2),S3(&s3),S4(&s4),S5(&s5),
-  offset(-1)
+                         const MP_set_base &s2, 
+                         const MP_set_base &s3,
+                         const MP_set_base &s4, 
+                         const MP_set_base &s5) :
+RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
+upperLimit(MP_model::getCurrentModel()->getInfinity()),
+lowerLimit(0),
+S1(&s1),S2(&s2),S3(&s3),S4(&s4),S5(&s5),
+offset(-1)
 {
-  lowerLimit.initialize(0.0);
-  upperLimit.initialize(MP_model::getDefaultModel().getInfinity());
-  type = continuous;
-}    
+    type = continuous;
+    setStageSet();
+} 
 
-double MP_variable::level(int i1, int i2, int i3, int i4, int i5) {
-  return M->solution[offset +  f(i1,i2,i3,i4,i5)];
+MP_variable::~MP_variable() { }
+
+double MP_variable::level(int lcl_i1, int lcl_i2, int lcl_i3, int lcl_i4, int lcl_i5) { 
+     assert(M != 0);
+    assert(M->Solver != 0);
+    if (M->stage.size()) //TODO: This gives solution values for the first stage only..
+        throw invalid_argument_exception();
+    else
+        return M->Solver->getColSolution()[offset +  f(lcl_i1,lcl_i2,lcl_i3,lcl_i4,lcl_i5)];
+
+} 
+
+double MP_variable::levelScenario(int scenario, int lcl_i1, int lcl_i2, int lcl_i3, int lcl_i4, int lcl_i5) { 
+    assert(M != 0);
+    assert(M->Solver != 0);
+    if (M->colIndirection[offset+f(lcl_i1,lcl_i2,lcl_i3,lcl_i4,lcl_i5)] == outOfBound)
+        throw invalid_argument_exception();
+    if (M->stage.size()) //TODO: This gives solution values for the first stage only..
+        return M->smiModel->getColSolution(scenario,getCurrentStage(lcl_i1,lcl_i2,lcl_i3,lcl_i4,lcl_i5),M->colIndirection[offset+f(lcl_i1,lcl_i2,lcl_i3,lcl_i4,lcl_i5)]);
+    else
+        throw invalid_argument_exception();
+
+}  
+
+void MP_variable::setStageSet(){
+    if (S1->isStage())
+        stageSet = 0;
+    else 
+        if (S2->isStage())
+            stageSet = 1;
+        else 
+            if (S3->isStage())
+                stageSet = 2;
+            else 
+                if (S4->isStage())
+                    stageSet = 3;
+                else 
+                    if (S5->isStage())
+                        stageSet = 4;
+                    else
+                        stageSet = outOfBound;
+}
+
+int MP_variable::getCurrentStage(int i1, int i2, int i3, int i4, int i5){
+    switch (stageSet)
+    {
+    case 0: return i1;
+    case 1: return i2;
+    case 2: return i3;
+    case 3: return i4;
+    case 4: return i5;
+    case outOfBound : return outOfBound;
+    default : return outOfBound;
+    }
 }
 
 void MP_variable::operator()() const {
-  if (S1!=&MP_set::getEmpty()) cout << i1.evaluate() << " ";
-  if (S2!=&MP_set::getEmpty()) cout << i2.evaluate() << " ";
-  if (S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
-  if (S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
-  if (S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
-  cout<<"  "<< M->solution[offset +
-                           f(i1.evaluate(),
-                             i2.evaluate(),
-                             i3.evaluate(),
-                             i4.evaluate(),
-                             i5.evaluate())]<<endl;
+    if (S1!=&MP_set::getEmpty()) cout << i1.evaluate() << " ";
+    if (S2!=&MP_set::getEmpty()) cout << i2.evaluate() << " ";
+    if (S3!=&MP_set::getEmpty()) cout << i3.evaluate() << " ";
+    if (S4!=&MP_set::getEmpty()) cout << i4.evaluate() << " ";
+    if (S5!=&MP_set::getEmpty()) cout << i5.evaluate() << " ";
+    if (M->stage.size()){ //TODO: Terribly inefficient..
+        int length = 0;
+        double* values = 0;
+        for (int i = 0; i < M->scenSet.size(); i++){
+            values = M->smiModel->getColSolution(i,&length);
+            //TODO: Check length //Check colIndirection for outOfBound..
+            cout<<"  "<< values[M->colIndirection[offset +
+            f(i1.evaluate(),
+            i2.evaluate(),
+            i3.evaluate(),
+            i4.evaluate(),
+            i5.evaluate())]]<<endl;
+            delete[] values; //error, use free as values were malloced
+        }
+    }
+    else
+        cout<<"  "<< M->Solver->getColSolution()[offset +
+        f(i1.evaluate(),
+        i2.evaluate(),
+        i3.evaluate(),
+        i4.evaluate(),
+        i5.evaluate())]<<endl;
+
 }
 
 void MP_variable::display(const std::string &s) {
-  cout<<s<<endl;
-  if (offset >= 0) {
-    ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).Forall(this);
-  } else {
-    cout<<"No solution available!"<<endl;
-  }
+    cout<<s<<endl;
+    if (offset >= 0) {
+        ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).forall(this);
+    } else {
+        cout<<"No solution available!"<<endl;
+    }
+}
+
+void MP_variable::bounds(std::vector<std::vector<boost::shared_ptr<MP::Coef> > >& cfs) {
+
+    //Store Constant index expressions of upper and lower bound and reset them afterwards?! Just for the moment..
+    // Create new MP_index? 
+    //MP_index in1,in2,in3,in4,in5;
+    //const VariableRef* var = new VariableRef(this,in1,in2,in3,in4,in5);
+    //delete var;
+    const VariableRef& var = this->operator()(i1,i2,i3,i4,i5); //This is incorrect: We put MP_index in but we want a MP_index_exp. What happens to the indices of the limit Constants?!
+    MP::VariableBoundsFunctor f(&var, cfs);
+    ((*S1)(i1)*(*S2)(i2)*(*S3)(i3)*(*S4)(i4)*(*S5)(i5)).forall(&f);
+    delete myrefs.back();
+    myrefs.pop_back();
 }

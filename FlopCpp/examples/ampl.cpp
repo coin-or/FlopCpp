@@ -4,6 +4,9 @@ using namespace flopc;
 #include <OsiCbcSolverInterface.hpp>
 #include <OsiClpSolverInterface.hpp>
 
+using std::cout;
+using std::endl;
+
 /*   A sample problem to demonstrate the power of modeling systems
 Fourer, R, Gay, D M, and Kernighan, B W, AMPL: A Mathematical Programming
 Language. AT\&T Bell Laboratories, Murray Hill, New Jersey, 1987.

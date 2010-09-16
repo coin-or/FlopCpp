@@ -4,6 +4,9 @@ using namespace flopc;
 #include <OsiCbcSolverInterface.hpp>
 #include <CoinPackedVector.hpp>
 
+using std::cout;
+using std::endl;
+
 class Paper : public MP_model {
 public:
     MP_set WIDTHS,PATTERNS;

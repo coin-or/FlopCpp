@@ -13,10 +13,14 @@
 
 #include <CoinPackedVector.hpp>
 #include <CoinPackedMatrix.hpp>
+// This is necessary for PFunc and windows, so do a #ifdef around it
+//#include <Windows.h>
+//#include <pfunc/pfunc.hpp>
 
 
 #include "MP_expression.hpp"
 #include "MP_constraint.hpp"
+#include "MP_random_data.hpp"
 
 
 using std::vector;
@@ -28,6 +32,11 @@ class SmiCoreData;
 class SmiScnModel;
 
 namespace flopc {
+
+    /* Library instance description */
+    //typedef ::pfunc::generator<cilkS, /* scheduling policy */
+    //    ::pfunc::use_default, /* compare */
+    //    ::pfunc::use_default> my_pfunc; /*function object*/
 
     // forward declarations
     class MP_variable;
@@ -52,11 +61,11 @@ namespace flopc {
         virtual void logMessage(int level, const char * const msg);
         friend class MP_model;
     private:
-    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs) const {}
-    virtual void objectiveDebug(const vector<MP::Coef>& cfs) const {}
-    virtual void solutionStatus(const OsiSolverInterface* Solver) {}
-    virtual void statistics(int bm, int m, int bn, int n, int nz) {}
-    virtual void generationTime(double t) {}
+    virtual void constraintDebug(string name, const vector<MP::Coef>& cfs) const;
+    virtual void objectiveDebug(const vector<MP::Coef>& cfs) const;
+    virtual void solutionStatus(const OsiSolverInterface* Solver);
+    virtual void statistics(int bm, int m, int bn, int n, int nz);
+    virtual void generationTime(double t);
     protected:
         virtual ~Messenger() {}
     };
@@ -137,7 +146,7 @@ namespace flopc {
         static const std::string stageString;
 
         /// Constructs an MP_model from an OsiSolverInterface *.
-        MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger);
+        MP_model(OsiSolverInterface* s, Messenger* m = new NormalMessenger, unsigned int seed = 0);
 
         ~MP_model();
 
@@ -267,12 +276,12 @@ namespace flopc {
         Messenger *getMessenger(){ 
             return messenger;
         }
-        MP_stage Stage() const { return stage; }
-        void Stage(const MP_stage& val) { stage = val; }
-        MP_scenario_set ScenSet() const { return scenSet; }
-        void ScenSet(const flopc::MP_scenario_set& val) { scenSet = val; }
-        void Probabilities(const MP_data& prob);
-        std::vector<double> Probabilities();
+        MP_stage getStage() const { return stage; }
+        void setStage(const MP_stage& val) { stage = val; }
+        MP_scenario_set getScenSet() const { return scenSet; }
+        void setScenSet(const flopc::MP_scenario_set& val) { scenSet = val; }
+        void setProbabilities(const MP_data& prob);
+        std::vector<double> getProbabilities();
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @fn void SampleSize(int val)
         ///
@@ -283,8 +292,8 @@ namespace flopc {
         ///
         /// @param  val The value. 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        void SampleSize(int val) { defaultSampleSize = val; };
-        int SampleSize() { return defaultSampleSize; };
+        void setSampleSize(int val) { defaultSampleSize = val; };
+        int getSampleSize() { return defaultSampleSize; };
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @fn void setSampleOnlyScenarioGeneration(bool sampleOnly, int sampleSize = 0)
@@ -298,7 +307,9 @@ namespace flopc {
         /// @param  sampleOnly  true to sample only. 
         /// @param  sampleSize  Size of the sample. 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        void setSampleOnlyScenarioGeneration(bool sampleOnly, int sampleSize ) { this->sampleOnly = sampleOnly; defaultSampleSize = sampleSize; }
+        void setSampleOnlyScenarioGeneration(bool sampleOnly, int sampleSize ) { this->sampleOnly = sampleOnly; defaultSampleSize = sampleSize; doSample = true; }
+        void setSample(bool sample) { doSample = sample; }
+        bool getSample() { return doSample; }
 
         const SmiScnModel* getSmi() const { return smiModel; }
         SmiScnModel* getSmi() { return smiModel; }
@@ -308,6 +319,8 @@ namespace flopc {
         boost::shared_ptr<Uniform01Generator> getUniformGenerator(){
             return uniformGenerator;
         }
+
+		unsigned int getSeed();
     private:
         typedef std::set<MP_variable* >::iterator varIt;
         typedef std::set<MP_constraint* >::iterator conIt;
@@ -338,12 +351,14 @@ namespace flopc {
         MP_stage stage;
         MP_scenario_set scenSet;
         MP_expression Objective;
+        // We have sets of MP_variables and MP_constraints, as well as set of RandomVariable's. Is this the most efficient way to handle it?
         set<MP_constraint *> Constraints;
         set<MP_variable *> Variables;
         std::vector< std::set<RandomVariable*> > RandomVariables;
         std::vector<double> probabilities;
         int defaultSampleSize;
         bool sampleOnly;
+        bool doSample;
 
     private:
         int m;
@@ -380,7 +395,7 @@ namespace flopc {
         const MP_model::MP_direction &direction);
 
    
-    void printMatrix(CoinPackedMatrix* matrix_,int n, int m, double* clo, double* cup, double* obj, double* rlo, double* rup,int* colStage,int* rowStage);
+    std::string printMatrix(CoinPackedMatrix* matrix_,int n, int m, double* clo, double* cup, double* obj, double* rlo, double* rup,int* colStage,int* rowStage);
 
     //TODO: Read back solution values
     // two possibilities: Read back values so they are stored in the variable

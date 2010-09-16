@@ -3,6 +3,9 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
+using std::cout;
+using std::endl;
+
 /* Peacefully Coexisting Armies of Queens 
 
  Two armies of queens (balvk and white) peacefully coexsit on a

@@ -6,9 +6,6 @@
 #define _MP_set_hpp_
 
 #include <iostream>
-#include <sstream>
-using std::cout;
-using std::endl;
 
 #include <string>
 using std::string;
@@ -91,7 +88,7 @@ namespace flopc {
         into the set.
         @todo is the internal use?
         */
-        //virtual ~MP_set(); //TODO: Is this destructor needed? If public, clients complain (maybe because baseclass destructor is protected?
+       
         virtual MP_domain operator()(const MP_index_exp& i) const {
             return i->getDomain(const_cast<MP_set*>(this));
         }
@@ -194,12 +191,12 @@ namespace flopc {
 
         void display(const std::string& s = "") const {
             std::map<std::vector<int>, int>::const_iterator i;
-            cout<<s<<endl;
+            std::cout<<s<<std::endl;
             for (i = elements.begin(); i != elements.end(); i++) {
                 for (int j=0; j<nbr; j++) {
-                    cout<<(*i).first[j]<<"  ";
+                    std::cout<<(*i).first[j]<<"  ";
                 }
-                cout<<endl;
+                std::cout<<std::endl;
             }
         }
 
@@ -222,7 +219,9 @@ namespace flopc {
             const MP_index_exp& i3=MP_index::getEmpty(),
             const MP_index_exp& i4=MP_index::getEmpty(),
             const MP_index_exp& i5=MP_index::getEmpty()) {
-                return *new SubsetRef<nbr>(this,i1,i2,i3,i4,i5);
+                SubsetRef<nbr>* tempPtr = new SubsetRef<nbr>(this,i1,i2,i3,i4,i5);
+                myrefs.push_back(MP_index_exp(tempPtr));
+                return *tempPtr;
         }
 
         MP_domain& operator()(const SUBSETREF& s) {
@@ -249,6 +248,7 @@ namespace flopc {
             for (int i=0; i<nbr; i++) {
                 if ( S[i]->check(args[i]) == outOfBound ) {
                     isOk = false;
+                    LOG(ERROR) << "You supplied wrong arguments for the indexation of SubSet " << this->getName() << " for the " << i << ". argument.";
                 }
             }
             if (isOk == true) {
@@ -275,6 +275,7 @@ namespace flopc {
         }
 
     private:
+        vector<MP_index_exp> myrefs;
         vector<const MP_set*> S; 
         std::map<std::vector<int>, int> elements;
     };
@@ -293,6 +294,8 @@ namespace flopc {
         virtual MP_index* getIndex() const;
         virtual MP_domain getDomain(MP_set* s) const;
         virtual int evaluate() const;
+        virtual MP_index_base* deepCopy() const;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp& expr);
     };
 
     /** @brief Internal representation of a "set" 

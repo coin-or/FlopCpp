@@ -4,6 +4,7 @@
 /Externals -text
 FlopCpp/AUTHORS -text
 FlopCpp/LICENSE -text
+FlopCpp/MSVisualStudio/v9/CplexConfiguration.vsprops -text
 FlopCpp/MSVisualStudio/v9/FlopCpp.sln -text
 FlopCpp/MSVisualStudio/v9/FlopCpp/unitTest/unitTest.vcproj -text
 FlopCpp/MSVisualStudio/v9/IncludeFiles.vsprops -text
@@ -93,6 +94,8 @@ FlopCpp/src/MP_index.cpp -text
 FlopCpp/src/MP_index.hpp -text
 FlopCpp/src/MP_model.cpp -text
 FlopCpp/src/MP_model.hpp -text
+FlopCpp/src/MP_random_constant.cpp -text
+FlopCpp/src/MP_random_constant.hpp -text
 FlopCpp/src/MP_random_data.cpp -text
 FlopCpp/src/MP_random_data.hpp -text
 FlopCpp/src/MP_set.cpp -text

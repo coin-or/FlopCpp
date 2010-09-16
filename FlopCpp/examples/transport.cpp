@@ -3,6 +3,9 @@
 using namespace flopc;
 #include <OsiClpSolverInterface.hpp>
 
+using std::cout;
+using std::endl;
+
 int main() {
     MP_model::getDefaultModel().setSolver(new OsiClpSolverInterface);
     enum  {seattle, sandiego, numS}; 

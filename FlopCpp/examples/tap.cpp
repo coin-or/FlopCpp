@@ -3,6 +3,9 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
+using std::cout;
+using std::endl;
+
 /* Teacher Assignment Problem
 
 T. H. Hultberg and D. M. Cardoso, "The teacher assignment problem: A special 

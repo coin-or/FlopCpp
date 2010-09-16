@@ -3,6 +3,9 @@
 using namespace flopc;
 #include <OsiCbcSolverInterface.hpp>
 
+using std::cout;
+using std::endl;
+
 // M A G I C   Power Scheduling Problem 
 /*   A number of power stations are committed to meet demand for a particular
    day. three types of generators having different operating characteristics

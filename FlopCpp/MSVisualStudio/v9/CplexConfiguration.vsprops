@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="CplexConfiguration"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="C:\ILOG\CPLEX110\include\ilcplex"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="cplex110.lib"
+		AdditionalLibraryDirectories="C:\ILOG\CPLEX110\lib\x86_.net2005_8.0\stat_mta"
+	/>
+</VisualStudioPropertySheet>

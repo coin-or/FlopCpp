@@ -63,7 +63,7 @@ namespace flopc {
 
         This method will call the functor for each member of the MP_domain.
         */
-        void forall(const Functor* op) const;
+        void forall(const Functor* op, bool deleteFunctor = false) const;
         void forall(const Functor& op) const;
         /// returns number of elements in the domain.
         size_t size() const;
@@ -125,6 +125,9 @@ namespace flopc {
         const MP_set_base* getSet() const;
         /// Getter for the index used in construction.
         MP_index* getIndex() const;
+
+        virtual MP_index_base* deepCopy() const;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp&);
         /** @note Internal use. 
         @todo Is internal? can be private? or needs more doc.
         */
@@ -177,6 +180,17 @@ namespace flopc {
         MP_domain_subset<nbr> (MP_subset<nbr>* s, 
             const std::vector<MP_index*> &i) : S(s), I(i){}
 
+        // Does it makes sense to call this function for a MP_domain_subset? I hope not *G*
+        MP_index_base* insertIndexExpr( const MP_index_exp& expr)
+        {
+            throw not_implemented_error();
+            return getIndex(); //TODO: We have to redo this eventually?
+        }
+
+        MP_index_base* deepCopy() const
+        {
+            return getIndex();
+        }
         /** Evaluates the index within the domain.  
         @note For internal use
         */

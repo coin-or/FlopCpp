@@ -3,6 +3,9 @@
 using namespace flopc;
 #include <OsiCbcSolverInterface.hpp>
 
+using std::cout;
+using std::endl;
+
 // Adapted from bid.gms from the GAMS model library:
 //    http://www.gams.com/
 

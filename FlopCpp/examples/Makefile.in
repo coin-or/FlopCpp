@@ -7,6 +7,8 @@ CXX      := g++
 CXXFLAGS := -g
 
 IncDir	:= $(CoinDir)/include/coin
+IncDir += $(CoinDir)/ThirdParty/boost
+IncDir += $(CoinDir)/include
 
 LIBDIRS := $(CoinDir)/lib
 
@@ -18,6 +20,8 @@ LIBS 	+= -lClp
 LIBS 	+= -lCgl
 LIBS 	+= -lOsi
 LIBS 	+= -lCoinUtils
+LIBS 	+= -lSmi
+LIBS 	+= -lglog
 
 ifneq ($(filter YES,$(USE_OSL)),)
    ### Change below, if needed, to tell where to find OSL

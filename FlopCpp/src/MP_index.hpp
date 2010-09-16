@@ -13,6 +13,7 @@ namespace flopc {
     class MP_index;
     class MP_domain;
     class MP_set;
+    class MP_index_exp;
 
     /** @brief Internal representation of a index
     @ingroup INTERNAL_USE
@@ -26,6 +27,9 @@ namespace flopc {
         virtual int evaluate() const = 0;
         virtual MP_index* getIndex() const = 0;
         virtual MP_domain getDomain(MP_set* s) const = 0;
+        virtual MP_index_base* deepCopy() const = 0;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp&) = 0;
+
         //	virtual void display()const;
     protected:
         MP_index_base() : count(0) {}
@@ -33,6 +37,8 @@ namespace flopc {
     private:
         int count;
     };
+
+    class MP_index_constant;
 
     /** @brief Representation of an index.
     @ingroup PublicInterface
@@ -48,6 +54,7 @@ namespace flopc {
     */
     class MP_index : public MP_index_base {
         friend class MP_domain_set;
+        friend class MP_index_constant;
         template<int nbr> friend class MP_domain_subset;
     public:
         /// Default constructor. 
@@ -57,6 +64,10 @@ namespace flopc {
         virtual int evaluate() const { 
             return index; 
         }
+        virtual MP_index_base* deepCopy() const;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp&);
+
+
         /// returns a reference to the distinct "empty" index.
         static MP_index &getEmpty();
         /// returns a reference to the distinct "wildcard" index.
@@ -154,6 +165,10 @@ namespace flopc {
         virtual ~MP_index_exp() {}
         /// Return the unique empty expression.
         static const MP_index_exp &getEmpty();
+        
+        MP_index_exp deepCopyIndexExpression() const;
+
+
     };
 
     /** @brief Internal representation of an index expression
@@ -174,6 +189,10 @@ namespace flopc {
             return left->getIndex();
         }
         virtual MP_domain getDomain(MP_set* s) const;
+
+        virtual MP_index_base* deepCopy() const;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp&);
+
         MP_index_exp left;
         Constant right;
     };
@@ -197,6 +216,9 @@ namespace flopc {
             return left->getIndex();
         }
         virtual MP_domain getDomain(MP_set* s) const;
+
+        virtual MP_index_base* deepCopy() const;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp&);
         MP_index_exp left;
         Constant right;
     };
@@ -220,6 +242,8 @@ namespace flopc {
             return left->getIndex();
         }
         virtual MP_domain getDomain(MP_set* s) const;
+        virtual MP_index_base* deepCopy() const;
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp&);
         MP_index_exp left;
         Constant right;
     };

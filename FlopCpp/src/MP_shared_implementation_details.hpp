@@ -1,8 +1,6 @@
 #ifndef _MP_shared_implementation_details_hpp_
 #define _MP_shared_implementation_details_hpp_
 
-#include <iostream>
-
 #include <boost/shared_ptr.hpp>
 #include <boost/random.hpp>
 

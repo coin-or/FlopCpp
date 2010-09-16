@@ -9,11 +9,16 @@ using std::endl;
 #include <algorithm>
 #include <limits>
 #include <map>
-#include <queue>
+#include <list>
+#include <deque>
 #include <ctime>
 #include <iterator>
 
-#include "boost/shared_ptr.hpp"
+
+
+#include <glog/logging.h>
+
+#include <boost/shared_ptr.hpp>
 #include <boost/random.hpp>
 
 #include <CoinTime.hpp>
@@ -32,6 +37,10 @@ using std::endl;
 #include "MP_constraint.hpp"
 #include "MP_shared_implementation_details.hpp"
 
+// Workaround necessary for glog, if WinGDI.h is included (I do not know who includes the file)
+#ifdef ERROR
+#undef ERROR
+#endif
 
 using namespace flopc;
 
@@ -42,73 +51,78 @@ MP_model& MP_model::getDefaultModel() { return default_model;}
 MP_model* MP_model::getCurrentModel() { return current_model;}
 
 void NormalMessenger::statistics(int bm, int m, int bn, int n, int nz) {
-    cout<<"FlopCpp: Number of constraint blocks: " <<bm<<endl;
-    cout<<"FlopCpp: Number of individual constraints: " <<m<<endl;
-    cout<<"FlopCpp: Number of variable blocks: " <<bn<<endl;
-    cout<<"FlopCpp: Number of individual variables: " <<n<<endl;
-    cout<<"FlopCpp: Number of non-zeroes (including rhs): " <<nz<<endl;
+    DLOG(INFO) <<"FlopCpp: Number of constraint blocks: " <<bm<<endl;
+    DLOG(INFO) <<"FlopCpp: Number of individual constraints: " <<m<<endl;
+    DLOG(INFO) <<"FlopCpp: Number of variable blocks: " <<bn<<endl;
+    DLOG(INFO) <<"FlopCpp: Number of individual variables: " <<n<<endl;
+    DLOG(INFO) <<"FlopCpp: Number of non-zeroes (including rhs): " <<nz<<endl;
 }
 
 void NormalMessenger::generationTime(double t) {
-    cout<<"FlopCpp: Generation time: "<<t<<endl;
+    DLOG(INFO) <<"FlopCpp: Generation time: "<<t<<endl;
 }
 
 void NormalMessenger::solutionStatus(const OsiSolverInterface* Solver) {
     if (Solver->isProvenOptimal()) {
-        cout<<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
-        cout<<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
+        DLOG(INFO) <<"FlopCpp: Optimal obj. value = "<<Solver->getObjValue()<<endl;
+        DLOG(INFO) <<"FlopCpp: Solver(m, n, nz) = "<<Solver->getNumRows()<<"  "<<
             Solver->getNumCols()<<"  "<<Solver->getNumElements()<<endl;
     } else if (Solver->isProvenPrimalInfeasible()) {
-        cout<<"FlopCpp: Problem is primal infeasible."<<endl;
+        DLOG(INFO) <<"FlopCpp: Problem is primal infeasible."<<endl;
     } else if (Solver->isProvenDualInfeasible()) {
-        cout<<"FlopCpp: Problem is dual infeasible."<<endl;
+        DLOG(INFO) <<"FlopCpp: Problem is dual infeasible."<<endl;
     } else {
-        cout<<"FlopCpp: Solution process abandoned."<<endl;
+        DLOG(INFO) <<"FlopCpp: Solution process abandoned."<<endl;
     }
 }
 
 void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs) const {
-    cout<<"FlopCpp: Constraint "<<name<<endl;
+    DLOG(INFO) <<"FlopCpp: Constraint "<<name<<endl;
     for (unsigned int j=0; j<cfs.size(); j++) {
         int col=cfs[j].col;
         int row=cfs[j].row;
         double elm=cfs[j].val;
         int stage=cfs[j].varStage;
-        cout<<row<<"   "<<col<<"  "<<elm<<"  "<<stage<<endl;
+        DLOG(INFO) <<row<<"   "<<col<<"  "<<elm<<"  "<<stage<<endl;
     }
 }
 
 void VerboseMessenger::objectiveDebug(const vector<MP::Coef>& cfs) const {
-    cout<<"Objective "<<endl;
+    DLOG(INFO) <<"Objective "<<endl;
     for (unsigned int j=0; j<cfs.size(); j++) {
         int col=cfs[j].col;
         int row=cfs[j].row;
         double elm=cfs[j].val;
-        cout<<row<<"   "<<col<<"  "<<elm<<endl;
+        DLOG(INFO) <<row<<"   "<<col<<"  "<<elm<<endl;
     }
 }
 
-MP_model::MP_model(OsiSolverInterface* s, Messenger* m) : 
-Solver(s),messenger(m),stage(0),scenSet(0),Objective(0),defaultSampleSize(0),sampleOnly(false),
+MP_model::MP_model(OsiSolverInterface* s, Messenger* m, unsigned int seed ) : 
+Solver(s),messenger(m),stage(0),scenSet(0),Objective(0),defaultSampleSize(0),sampleOnly(false),doSample(false),
 m(0), n(0), nz(0),Cst(0),Clg(0),Rnr(0),Elm(0), bl(0), bu(0), c(0),l(0),u(0),colStage(0),rowStage(0),colIndirection(0),rowIndirection(0),
 mSolverState(((s==0)?(MP_model::DETACHED):(MP_model::SOLVER_ONLY))),uniformGenerator(new Uniform01Generator()),smiModel(0) {
     MP_model::current_model = this;
-    uniformGenerator->rng = boost::shared_ptr<base_generator_type>(new base_generator_type(uniformGenerator->seed));
+    uniformGenerator->rng = boost::shared_ptr<base_generator_type>(new base_generator_type(seed ? seed : uniformGenerator->seed));
     uniformGenerator->uniform = boost::shared_ptr<uniform_distr_gen>(new uniform_distr_gen(*uniformGenerator->rng ,boost::uniform_01<double>() ));
+    // Create a new taskmgr for PFunc
 }
 
 MP_model::~MP_model() {
     delete messenger;
-    if (Solver!=0) { //If solver was not deleted, call detach and therefore delete the Solver
+    if (Solver) { //If solver was not deleted, call detach and therefore delete the Solver and smiModel
         this->detach();
     }
     assert(Solver == 0);
+    assert(smiModel == 0);
     //Reset currentModel Pointer to default model IF it points to this model to prevent dangling pointer
     if (MP_model::current_model == this)
         MP_model::current_model = &MP_model::default_model;
 
 }
 
+unsigned int MP_model::getSeed() {
+	return uniformGenerator->seed;
+}
 
 MP_model& MP_model::add(MP_constraint& constraint) {
     Constraints.insert(&constraint);
@@ -124,7 +138,7 @@ void MP_model::add(MP_constraint* constraint) { //Counts total number of rows in
     }
 }
 
-void MP_model::Probabilities(const MP_data& prob){
+void MP_model::setProbabilities(const MP_data& prob){
     // set probabilities
     if (scenSet.size() == 0)
         throw invalid_argument_exception(); //We need to set MP_scenario_set first..
@@ -147,7 +161,7 @@ void MP_model::Probabilities(const MP_data& prob){
     }
 }
 
-std::vector<double> MP_model::Probabilities(){
+std::vector<double> MP_model::getProbabilities(){
     // set probabilities
     return probabilities;
 }
@@ -169,7 +183,7 @@ void MP_model::add(MP_variable* v) { //Counts total number of variables in this 
 
 void MP_model::addRow(const Constraint& constraint) {
     vector<MP::Coef> cfs;
-    vector<Constant> v;
+    vector<TerminalExpression*> v;
     MP::GenerateFunctor f(0,cfs);
     constraint->left->generate(MP_domain::getEmpty(),v,f,1.0);
     constraint->right->generate(MP_domain::getEmpty(),v,f,-1.0);
@@ -234,7 +248,7 @@ void MP_model::assemble(vector<MP::Coef>& v, vector<boost::shared_ptr<MP::Coef> 
         s = i->varStage;
         rs = i->randomStage;
         scenVector = i->scenVector;
-        i++;
+        ++i;
         //In case of RHS with a constant term consisting of more than one constant
         //These values were added one after another, otherwise this does not make sense.
         while (i!=v.end() && c==i->col && r==i->row) {
@@ -249,7 +263,7 @@ void MP_model::assemble(vector<MP::Coef>& v, vector<boost::shared_ptr<MP::Coef> 
                     scenVector[j] = scenVector[j] + (i->scenVector)[j];
                 }
             }
-            i++;
+            ++i;
         }
         boost::shared_ptr<MP::Coef> temp(new MP::Coef(c,r,val,s,rs,scenVector));
         av.push_back(temp);
@@ -261,7 +275,7 @@ void MP_model::maximize() {
         attach(Solver);
         solve(MP_model::MAXIMIZE);
     } else {
-        cout<<"no solver specified"<<endl;
+        LOG(ERROR) <<"no solver specified"<<endl;
     }
 }
 
@@ -271,7 +285,7 @@ void MP_model::maximize(const MP_expression &obj) {
         attach(Solver);
         solve(MP_model::MAXIMIZE);
     } else {
-        cout<<"no solver specified"<<endl;
+        LOG(ERROR) << "no solver specified" << endl;
     }
 }
 
@@ -291,7 +305,7 @@ void MP_model::minimize() {
         attach(Solver);
         solve(MP_model::MINIMIZE);
     } else {
-        cout<<"no solver specified"<<endl;
+        DLOG(WARNING) <<"no solver specified"<<endl;
     }
 }
 
@@ -301,7 +315,7 @@ void MP_model::minimize(const MP_expression &obj) {
         attach(Solver);
         solve(MP_model::MINIMIZE);
     } else {
-        cout<<"no solver specified"<<endl;
+        DLOG(WARNING) <<"no solver specified"<<endl;
     }
 }
 
@@ -311,10 +325,18 @@ void MP_model::attachStochastic(){
     if (Solver == 0)
         throw invalid_argument_exception();
 
+    // Maybe we have changed RandomVariables, so we have to empty the RV set and fill it again
+    for (int i = 0; i < RandomVariables.size(); i++){
+        RandomVariables[i].clear();
+    }
+    for (conIt i=Constraints.begin(); i!=Constraints.end(); ++i)
+        (*i)->insertRandomVariables(RandomVariables);
+
     // Resample values
     sampleRandomVariates(RandomVariables);
 
     vector<boost::shared_ptr<MP::Coef> > coefs;
+    // TODO
     vector<MP::Coef> cfs;
 
     // Generate new coefficients
@@ -329,10 +351,10 @@ void MP_model::attachStochastic(){
     //In case of a stage set we need to add all random coefficients to randomCoefs, to cope with them later. 
     if (stage.size()){
 
-        //Generate random bounds for all variables
-        for (varIt j=Variables.begin(); j!=Variables.end(); j++) {
-            (*j)->bounds(randomCoefs);
-        }
+        //Generate random bounds for all variables TODO
+        //for (varIt j=Variables.begin(); j!=Variables.end(); j++) {
+        //    (*j)->bounds(randomCoefs);
+        //}
         // Add all other random coefs to randomCoefs.
         for ( int i = 0; i != coefs.size(); i++){
             if ( !coefs[i]->scenVector.empty() ) { //We have scenario values
@@ -349,13 +371,14 @@ void MP_model::attachStochastic(){
                 if (randomCoefs[i][j]->col == -1)
                     randomCoefs[i][j]->col = n; //This is not very consistent with realn..
                 assert( colIndirection[randomCoefs[i][j]->col] != outOfBound);
-                randomCoefs[i][j]->col = colIndirection[randomCoefs[i][j]->col];
+                if (colIndirection[randomCoefs[i][j]->col] != -1 ) //In case of RHS?!
+                    randomCoefs[i][j]->col = colIndirection[randomCoefs[i][j]->col];
             }
         }
     }//end if stage
 
     // Generate objective function coefficients
-    vector<Constant> v;
+    vector<TerminalExpression*> v;
     MP::GenerateFunctor f(0,cfs);
     coefs.erase(coefs.begin(),coefs.end());
     Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
@@ -404,8 +427,6 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     double time = CoinCpuTime();
     m=0;
     n=0;
-    vector<boost::shared_ptr<MP::Coef> > coefs;
-    vector<MP::Coef> cfs;
 
     typedef std::set<MP_variable* >::iterator varIt;
     typedef std::set<MP_constraint* >::iterator conIt;
@@ -420,7 +441,7 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     }
     //Count number of columns and rows in the add methods. 
     //Insert the remaining variables not in the objective to the list of variables stored in container Variables.
-    for (conIt i=Constraints.begin(); i!=Constraints.end(); i++) {
+    for (conIt i=Constraints.begin(); i!=Constraints.end(); ++i) {
         add(*i);
         if (stage.size()) // if stochastic insert Random Variables
             (*i)->insertRandomVariables(RandomVariables);
@@ -428,25 +449,39 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     }
     //Count the number of real variables in the model with the add Method. 
     // The variables in the Variables set are inserted from constraints and objective function.
-    for (varIt j=Variables.begin(); j!=Variables.end(); j++) {
+    for (varIt j=Variables.begin(); j!=Variables.end(); ++j) {
         add(*j); 
     }// We have number of rows and number of columns at this point
 
     // We need to generate all the values we need at this point, if they are not already present.
     // For now: Simple Check: All randomVariables are either ScenarioRandomVars OR (exclusive) Independently distributed RandomVars. (This check is done in sampleRandomVariates method).
 
-    // TODO: We can use more intelligent ways of storing the values (sparse arrays..)?
+    // TODO: Can we use more intelligent ways of storing the values (sparse arrays..)?
     sampleRandomVariates(RandomVariables);
 
     // Generate coefficient matrix and right hand side. All Variables and Constraints needs their offset for that to work
     //At first, generate coefficients for every constraint and store them in coefs vector: Assigns column and row number
-    for (conIt i=Constraints.begin(); i!=Constraints.end(); i++) {
-        (*i)->coefficients(cfs);
-        messenger->constraintDebug((*i)->getName(),cfs);
+    vector<boost::shared_ptr<MP::Coef> > coefs;
+    vector<MP::Coef> cfs;
+    conIt it;
+    //We can do this in different ways, according to which system we use..
+    //#pragma omp parallel private(it,cfs,coefs)
+
+    //{
+        //#pragma omp for 
+    double timeBegin = CoinCpuTime();
+    for (conIt it=Constraints.begin(); it!=Constraints.end(); ++it) {
+        (*it)->coefficients(cfs);
+        messenger->constraintDebug((*it)->getName(),cfs);
         //Sort and Store Coefficients of current constraint and add them to constraint set coefs.
+        //#pragma omp critical 
+        //{
         assemble(cfs,coefs);
-        cfs.erase(cfs.begin(),cfs.end());
+        //}
+        cfs.clear();
+        //}//End parallel
     }
+    DLOG(INFO) << "Zeit zum Generieren der Koeffizienten: " << CoinCpuTime()-timeBegin << "s";
     nz = coefs.size();
     realn = n;
 
@@ -483,9 +518,8 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
             assert(j <n);
             realn = j;
             colIndirection[n] = realn; // Set correct new index for RHS
-            std::cout << "We have empty variables in this formulation" << std::endl;
+            DLOG(INFO) << "We have empty variables in this formulation";
             // We have to g
-
             //assert(j == n);
         }
 
@@ -511,7 +545,7 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     if (n>0) {
         l =   new double[realn];  
         u =   new double[realn];  
-        c =  new double[realn]; 
+        c =  new double[realn+1]; //The +1 accounts for the RHS term in the objective 
         if (stage.size()){
             colStage = new int[realn+1]; //Col Stage of RHS is not necessary..
             for (int i=0; i<realn+1; i++) {
@@ -688,17 +722,12 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     const double numericInfinity = std::numeric_limits<double>::infinity();
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
         for (int k=0; k<(*i)->size(); k++) {
-            IndexKeeper temp = (*i)->getIndices(k);
-            const DataRef* dPtr;
             if (stage.size()){ //In case of stochastic, we have to obey colIndirection
                 if (colIndirection[(*i)->offset+k] == outOfBound)
                     continue; //go to next round, we have empty variable here
-                //Update Index expressions for evaluation
-                (*i)->lowerLimit->propagateIndexExpression(temp.i1,temp.i2,temp.i3,temp.i4,temp.i5);
-                (*i)->upperLimit->propagateIndexExpression(temp.i1,temp.i2,temp.i3,temp.i4,temp.i5);
                 //Evaluate values to mean value in case of stochastic and to real value in case of normal bounds
-                l[colIndirection[(*i)->offset+k]] = (*i)->lowerLimit->evaluate(outOfBound);
-                u[colIndirection[(*i)->offset+k]] = (*i)->upperLimit->evaluate(outOfBound);
+                l[colIndirection[(*i)->offset+k]] = (*i)->lowerLimit.v[k];
+                u[colIndirection[(*i)->offset+k]] = (*i)->upperLimit.v[k];
                 //Update values to solver infinity if we find numeric infinity.
                 if (l[colIndirection[(*i)->offset+k]] == -numericInfinity)
                     l[colIndirection[(*i)->offset+k]] = -inf;
@@ -707,11 +736,8 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
 
             }
             else {
-                //Update Index expressions for evaluation
-                (*i)->lowerLimit->propagateIndexExpression(temp.i1,temp.i2,temp.i3,temp.i4,temp.i5);
-                (*i)->upperLimit->propagateIndexExpression(temp.i1,temp.i2,temp.i3,temp.i4,temp.i5);
-                l[(*i)->offset+k] = (*i)->lowerLimit->evaluate();
-                u[(*i)->offset+k] = (*i)->upperLimit->evaluate();
+                l[(*i)->offset+k] = (*i)->lowerLimit.v[k];
+                u[(*i)->offset+k] = (*i)->upperLimit.v[k];
                 if (l[(*i)->offset+k] == -numericInfinity)
                     l[(*i)->offset+k] = -inf;
                 if (u[(*i)->offset+k] == numericInfinity)
@@ -725,10 +751,10 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     //In case of a stage set we need to add all random coefficients to randomCoefs, to cope with them later. 
     if (stage.size()){
 
-        //Generate random bounds for all variables
-        for (varIt j=Variables.begin(); j!=Variables.end(); j++) {
-            (*j)->bounds(randomCoefs);
-        }
+        //TODO Generate random bounds for all variables
+        //for (varIt j=Variables.begin(); j!=Variables.end(); j++) {
+        //    (*j)->bounds(randomCoefs);
+        //}
         // As these bounds were generated in the variables section, the columns are wrong. This means we have to update that 
         for (int i = 0; i < randomCoefs.size();i++) {
             for (int j = 0; j < randomCoefs[i].size();j++) {
@@ -746,7 +772,7 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     }//end if stage
 
     // Generate objective function coefficients
-    vector<Constant> v;
+    vector<TerminalExpression*> v;
     MP::GenerateFunctor f(0,cfs);
     coefs.erase(coefs.begin(),coefs.end());
     Objective->generate(MP_domain::getEmpty(), v, f, 1.0);
@@ -756,8 +782,14 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     if (stage.size()){
         for ( int i = 0; i != coefs.size(); i++){
             //Set correct rowIndex and colIndex via colIndirection
+            DLOG_IF(INFO,colIndirection[coefs[i]->col] == outOfBound) << "Some of your variables in your objective function do not appear in your model. Please check your model for validity. Take a closer look at indexed variables.";
             assert(colIndirection[coefs[i]->col] != outOfBound); // Asssert that all variables in the objective function already appear in a constraint.
-            coefs[i]->col = colIndirection[coefs[i]->col];
+            if (coefs[i]->col == -1){ //Handle constant terms in the objective function later (for now set coefficient value)
+               coefs[i]->col = colIndirection[n]; //or realn
+            }
+            else {
+                coefs[i]->col = colIndirection[coefs[i]->col];     
+            }
             if (coefs[i]->row == -1){ //Objective function 
                 coefs[i]->row = m;
             }
@@ -773,7 +805,7 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         }
     }
 
-    for (int j=0; j<realn; j++) {
+    for (int j=0; j<=realn; j++) {
         c[j] = 0.0;
     }
     //Set objective coefficients
@@ -781,29 +813,36 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         int col = coefs[i]->col;
         if ( coefs[i]->row == m){
             double elm = coefs[i]->val;
-            c[col] = elm;
+            c[col] += elm; // a simple = should to the trick, as all coefficents are already added during the assemble step.
         }
     } 
 
 
     // Set integer information..
     std::vector<int> integerIndices;
+    std::vector<int> binaryIndices; // Contains only binary information..
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
         int begin = (*i)->offset;
         int end = (*i)->offset+(*i)->size();
-        if ((*i)->type == discrete) {
+        if ( (*i)->type == type::discrete || (*i)->type == type::binary ) {
             for (int k=begin; k<end; k++) {
                 if (stage.size()){
-                    if (colIndirection[k] != outOfBound)
+                    if (colIndirection[k] != outOfBound){
                         integerIndices.push_back(colIndirection[k]);
+                        if ( (*i)->type == type::binary)
+                            binaryIndices.push_back(colIndirection[k]);
+                    }
                 }
                 else{
                     integerIndices.push_back(k);
+                    if ( (*i)->type == type::binary)
+                        binaryIndices.push_back(k);
                 }
             }
         }
     }
     std::sort(integerIndices.begin(),integerIndices.end()); //Sort indices in ascending order
+    std::sort(binaryIndices.begin(),binaryIndices.end()); //Sort indices in ascending order
 
     ////
     // Core Model generated..
@@ -823,13 +862,19 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         CoinPackedMatrix matrix(true,m,realn,realnz,Elm,Rnr,Cst,NULL); //Matrix without right-hand-side..
         matrix.reverseOrdering(); //Smi needs matrix in row ordered form
         //TODO: Debug switch
-        //printMatrix(&matrix,realn,m,l,u,c,bl,bu,colStage,rowStage);
+        // DLOG(INFO) << "Core-Matrix" << std::endl;
+        // DLOG(INFO) << printMatrix(&matrix,realn,m,l,u,c,bl,bu,colStage,rowStage);
+        
         //matrix.removeGaps(); //What is this for?
         Solver->loadProblem(matrix, l, u, c, bl, bu); //Generate Core Data, in Solver
-        SmiCoreData *osiCore = 0;
-        if (!integerIndices.empty()){
+        SmiCoreData *osiCore = 0; //Create CoreData Node. Needs to be deleted in case of stochastic solver.
+        if (!integerIndices.empty()){ //suffices, because every binary is also an integer
             Solver->setInteger(&integerIndices[0],integerIndices.size());
             osiCore = new SmiCoreData(Solver,stage.size(),colStage,rowStage,&integerIndices[0]); //Create CoreData Node. Needs to be deleted in case of stochastic solver.
+            if (!binaryIndices.empty())
+                osiCore = new SmiCoreData(Solver,stage.size(),colStage,rowStage,&integerIndices[0],integerIndices.size(), &binaryIndices[0],binaryIndices.size()); 
+            else
+                osiCore = new SmiCoreData(Solver,stage.size(),colStage,rowStage,&integerIndices[0],integerIndices.size()); 
         }
         else {
             osiCore = new SmiCoreData(Solver,stage.size(),colStage,rowStage); //Create CoreData Node. Needs to be deleted in case of stochastic solver.
@@ -848,7 +893,6 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         Solver->loadProblem(n, m, Cst, Rnr, Elm, l, u, c, bl, bu);
         if (!integerIndices.empty())
             Solver->setInteger(&integerIndices[0],integerIndices.size());
-        //TODO: Debug Switch Statement..
         //printMatrix( const_cast<CoinPackedMatrix*>(Solver->getMatrixByRow()),n,m,l,u,c,bl,bu,colStage,rowStage);
     }
 
@@ -900,7 +944,7 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
         }
     }
     if (scenarios && independent){
-        std::cout << "ScenarioRandomVariables and normal RandomVariables where specified. We do not know how to handle this." << std::endl;
+        DLOG(INFO) << "ScenarioRandomVariables and normal RandomVariables where specified. We do not know how to handle this.";
         throw invalid_argument_exception(); //User has to specify what he wants, we can not guess
     }
     if (scenarios && !independent){ //In case of scenarios, we return as we have nothing to do here. But: We assure that probabilities are set in a correct way, if not already done by the user.
@@ -924,7 +968,8 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
         // Sample values for every variable independently. We might not have equally probable scenarios.
         std::vector< RandomVariable::sampleVector > sampledValuesOfVars;
 
-        assert(!rv[i].empty()); //Assume we have random variables in every stage.
+        DLOG_IF(INFO,rv[i].empty()) << "There are no random variables in this stage, but you specified a stage set. Please check your model";
+        assert(!rv[i].empty()); //Assume we have random variables in every stage. If not specifying a stage set does not make sense.
         for (rvIterator it = rv[i].begin(); it != rv[i].end();++it){
             (*it)->sample(sampleSize);
             randVarsPerStage[i]++;
@@ -936,8 +981,8 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
         //Ensure we have at least two random variables, otherwise a combine all against all does not makes sense..
         sampledValuesOfVars.push_back(std::map<double,double>());
 
-        // Now we prepare the iterator vector. We do it here as otherwise we ould invalidate the previous iterators
-        std::cout << randVarsPerStage[i] << std::endl;
+        // Now we prepare the iterator vector. We do it here as otherwise we would invalidate the previous iterators
+        DLOG(INFO) << "Random Variable in Stage " << i << " : " << randVarsPerStage[i] << std::endl;
         for (int j = 0; j < randVarsPerStage[i]+1; j++){
             iteratorVector[j] = sampledValuesOfVars[j].begin();
         }
@@ -950,7 +995,7 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
         scenariosPerStage[i] = std::vector< std::vector<double> >();
 
         // Combine all-against-all for this stage. Include probabilities of previous stages
-        // At first we go the first value where the current value and the next sampled Value differ
+        // At first we go to the first value where the current value and the next sampled Value differ
         while (true){
             while ( iteratorVector[nextVar] != sampledValuesOfVars[nextVar].end() ){ // As long as we have not reached the empty map, everything is fine: Go to the next map.
                 ++nextVar;
@@ -988,7 +1033,7 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
     } //end for
     if (sampleOnly){ //If we sampled only, we have equiprobable values and do not have to generate the scenario fan => resampling with preset probabilities does not makes sense..
         this->probabilities.clear();
-        this->ScenSet(MP_scenario_set(sampleSize));//Important <- otherwise scenario generation does not work as coefs get initialized without scenario values
+        this->setScenSet(MP_scenario_set(sampleSize));//Important <- otherwise scenario generation does not work as coefs get initialized without scenario values
         probabilities = std::vector<double>(scenSet.size(),1.0/scenSet.size());
         return;
     }
@@ -1016,7 +1061,8 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
             ////Compute probability and insert values per randomvar to form a scenario.
             overallScenarios.push_back(std::vector<double>()); //TODO: Reserve some space?
             for (int j = 1; j < stage.size();j++){ // For all stages
-                overallScenarios.back().insert(overallScenarios.back().begin(),scenariosPerStage[j][curScenario[j]].begin(),--scenariosPerStage[j][curScenario[j]].end()); //Insert values for all RV in order from iterator given above, but do not insert probability of scenario.
+
+                overallScenarios.back().insert(overallScenarios.back().end(),scenariosPerStage[j][curScenario[j]].begin(),--scenariosPerStage[j][curScenario[j]].end()); //Insert values for all RV in order from iterator given above, but do not insert probability of scenario.
                 prob *= scenariosPerStage[j][curScenario[j]].back();
 
             }
@@ -1046,12 +1092,12 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
             for (int j = 0; j < overallScenarios.size(); j++) {
                 temp.push_back(overallScenarios[j][curRVIndex]);
             }
-            (*it)->setSampledValues(temp);
+            (*it)->setScenarioValues(temp);
             ++curRVIndex;
         }//end for rv
     }//end for stage
     //Prepare everything in the model: Set scenario set and add probabilities..
-    this->ScenSet(MP_scenario_set(overallScenarios.size()));
+    this->setScenSet(MP_scenario_set(overallScenarios.size()));
     this->probabilities.clear();
     this->probabilities.reserve(overallScenarios.size());
     double sum = 0;
@@ -1073,6 +1119,7 @@ void MP_model::detach() {
     if (stage.size() > 0 && smiModel != 0){ 
         smiModel->releaseSolver(); //TODO: This can be deleted, if stochasticSolverInterface is ready.
         delete smiModel;
+        smiModel = 0;
         if (n > 0){
             delete [] colStage;
             delete [] colIndirection;
@@ -1108,30 +1155,29 @@ MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
     Solver->setObjSense(dir);
     bool isMIP = false;
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
-        if ((*i)->type == discrete) {
+        if ( (*i)->type == type::discrete || (*i)->type == type::binary ) {
             isMIP = true;
             break;
         }
     }
     // We want to inform the user about wall clock solving time..
-    clock_t startClock = clock();
-    clock_t stochasticClock;
+    double startClock = CoinCpuTime();
+    double stochasticClock = 0;
     if (stage.size() > 0 && smiModel != 0) { // We have a time structure AND a smiModel ready. If only timeStructure, there were no RandomVariables specified.
-        //OsiClpSolverInterface osiClp;
-        //smiModel->setOsiSolverHandle(osiClp);
-        smiModel->setOsiSolverHandle(Solver);
-        //OsiSolverInterface* osiStoch = smiModel->loadOsiSolverData();
+        smiModel->setOsiSolverHandle(Solver); //We create a copy of the solver with this method..
+        // Delete current solver before we overwrite the Pointer with the new solver interface
+        delete Solver;
         Solver = smiModel->loadOsiSolverData();
         Solver->setObjSense(dir); //Important: After loading solver data, objSense is not specified..
-        stochasticClock = clock();        
-        std::cout << "Generation of deterministic equivalent took " << diffclock(stochasticClock,startClock) << " ms." << std::endl;
+        stochasticClock = CoinCpuTime();        
+        DLOG(INFO) << "Generation of deterministic equivalent took " << CoinCpuTime()-startClock << "s";
         try {
             if (isMIP == true)
                 Solver->branchAndBound();
             else
                 Solver->initialSolve();
         }  catch (CoinError e) {
-            cout<<e.message()<<endl;
+            DLOG(ERROR) << e.message();
         }
     }
     else {
@@ -1139,26 +1185,25 @@ MP_model::MP_status MP_model::solve(const MP_model::MP_direction &dir) {
             try {
                 Solver->branchAndBound();
             } catch  (CoinError e) {
-                cout<<e.message()<<endl;
-                cout<<"Solving the LP relaxation instead."<<endl;
+                DLOG(ERROR) << e.message();
+                DLOG(INFO) << "Solving the LP relaxation instead.";
                 try {
                     Solver->initialSolve();
                 } catch (CoinError e) {
-                    cout<<e.message()<<endl;
+                    DLOG(ERROR) << e.message();
                 }
             }
         } else {
             try {
                 Solver->initialSolve();
             }  catch (CoinError e) {
-                cout<<e.message()<<endl;
+                DLOG(ERROR) << e.message();
             }
         }
     }
-    clock_t endClock = clock();
-    std::cout << "Overall wall clock time for solution : " << diffclock(endClock,startClock) << " ms." << std::endl;
+    DLOG(INFO) << "Overall wall clock time for solution : " << CoinCpuTime()-startClock << "s";
     if (stage.size())
-        std::cout << "Solution time for stochastic programs using deterministic equivalent is: " << diffclock(endClock,stochasticClock) << " ms." << std::endl;
+        DLOG(INFO) << "Solution time for stochastic programs using deterministic equivalent: " << CoinCpuTime()-stochasticClock << "s";
 
     messenger->solutionStatus(Solver);
 
@@ -1212,7 +1257,7 @@ namespace flopc {
             return os;
     }
 
-    SmiScnModel* MP_model::generateScenarioTree(const std::vector< std::vector<boost::shared_ptr<MP::Coef> > >& randomVariableVector, SmiCoreData* smiCore){
+    SmiScnModel* MP_model::generateScenarioTree(const std::vector< std::vector<boost::shared_ptr<MP::Coef> > >& randomCoefficientVector, SmiCoreData* smiCore){
         //TODO: Check with own test if scenario generation is correct. It looks like it, but we will never now until we test it.
         typedef std::vector<boost::shared_ptr<MP::Coef> >::const_iterator randVarIterator;
         //Get basic important values
@@ -1223,7 +1268,7 @@ namespace flopc {
         if (nScen==0) // We have no specified scenario set, so we rely on the default sample size and count the scenario size afterwards.
             count = true;
         for (int curStage = 1; curStage < nStages; curStage++){ //Count number of random coefficients for each stage..
-            for (randVarIterator it = randomVariableVector[curStage].begin(); it != randomVariableVector[curStage].end();++it){
+            for (randVarIterator it = randomCoefficientVector[curStage].begin(); it != randomCoefficientVector[curStage].end();++it){
                 randVarsPerStage[curStage]++;
             }
         }
@@ -1259,10 +1304,10 @@ namespace flopc {
 
         }
 
-        //CoinPackedVector clo;
-        //CoinPackedVector cup;
         std::vector<int> tempAncScenVec(nScen,outOfBound); //Initalized Vector with outOfBound (not valid)
         std::vector<int> branchStageVec(nScen,outOfBound); //Initialized Vector with 0
+        // Usage: Branch: stage in which scenario differs from ancestor scenario
+        // => if we differ in stage 1 we need 0 as ancestor (or otherwise this does not makes so much sense)
         //set correct values for first scenario:
         tempAncScenVec[0] = 0;
         branchStageVec[0] = 1;
@@ -1272,18 +1317,18 @@ namespace flopc {
         if (probabilities.empty())
             probabilities = std::vector<double>(nScen,1.0/nScen); //If probability set is present, use that, otherwise use equiprobable values.
 
-        typedef std::set<int>::iterator scenIt;
-        std::set<int> scenarioHeap;
+        typedef std::list<int>::iterator scenIt;
+        std::list<int> scenarioHeap;
 
         for (int i = 0; i < nScen; i++)
-            scenarioHeap.insert(i);
+            scenarioHeap.push_back(i);
 
         std::vector<std::deque<int> > subScenarioQueueVector(nStages,std::deque<int> ()); //For each stage an own queue
         subScenarioQueueVector[0].push_front(0);
 
         //We do not like recursion, therefore we need to store all the elements in a list of vectors and stuff
-        std::vector< std::vector< std::set<int> > > subScenariosPerStageAndScenario(nStages,std::vector<std::set<int> > (nScen));
-        for (int j = 0; j < nScen; j++){ // Assign scenarioHeap to all the first stage sets. TODO: Improve memory consumption..
+        std::vector< std::vector< std::list<int> > > subScenariosPerStageAndScenario(nStages, std::vector<std::list<int> > (nScen)); //TODO: Redo, this seems to be expensive..
+        for (int j = 0; j < nScen; j++){ // Assign scenarioHeap to all the first stage sets. TODO: Improve memory consumption and thus running time due to allocation and deletion
             subScenariosPerStageAndScenario[0][j] = scenarioHeap;
         }
 
@@ -1308,18 +1353,18 @@ namespace flopc {
                 if (curStage < nStages-1){//Add to queue for the next stage, if we are not in the last stage
                     subScenarioQueueVector[curStage+1].push_back(parentScen);
                 }
-                else{ //In the last stage: increase scenario counter and set scenarioIndirection and delete the parent scenario from subScenarios
+                else{ //In the last stage: increase scenario counter and set scenarioIndirection and delete the parent scenario from subScenarios so that only the same scenarios as the parentScen scenario are left
                     scenarioIndirection[parentScen] = scenCounter++;
                     realOrderingFromVirtualScenario[scenCounter -1] = parentScen;
                     subScenariosPerStageAndScenario[curStage][curScen].erase(subScenariosPerStageAndScenario[curStage][curScen].begin()); //Remove from subsetSet to only contain strict subset in the last stage: This ensures correct probability calculation
-                    probabilities[scenCounter-1] = probabilities[scenCounter-1];
+                    //probabilities[scenCounter-1] = probabilities[scenCounter-1];
                 }
 
 #pragma region setCoefficients
                 //Do the real stuff: Add values for the current scenario.
                 //Add all random coefficients to corresponding places
                 for (int j = 0; j < randVarsPerStage[curStage];j++){  //Values differ 
-                    boost::shared_ptr<MP::Coef> it = randomVariableVector[curStage][j];
+                    boost::shared_ptr<MP::Coef> it = randomCoefficientVector[curStage][j];
                     double coefficient = it->scenVector[parentScen];
                     int colIndex = it->col;
                     int rowIndex = it->row;
@@ -1345,6 +1390,10 @@ namespace flopc {
                     }
                     else{ //RHS : This means coefficient is multiplied with -1. TODO: Change this behaviour in FlopC++ so that also right hand side has original values.
                         assert(colIndex == n);
+                        if ( rowIndex == m){ // We have a constant term in the objective..
+                            objVec[parentScen]->modifyCoefficient(colIndex,0,coefficient);
+                            continue; // move to the next round of the for loop
+                        }
                         //We need the row sense to insert in the right vector..
                         switch (this->Solver->getRowSense()[rowIndex])
                         { 
@@ -1352,7 +1401,9 @@ namespace flopc {
                         case 'G' : rloVec[parentScen]->modifyCoefficient(rowIndex,0,-coefficient,true); break;
                         case 'L' : rupVec[parentScen]->modifyCoefficient(rowIndex,0,-coefficient,true); break; 
                         case 'N' : break;
-                        default : throw not_implemented_error(); 
+                        default : DLOG(FATAL) << this->Solver->getRowSense()[rowIndex] << " row sense of row " << rowIndex;
+                            const char* rowSense = this->Solver->getRowSense();
+                            throw invalid_argument_exception(); 
                         }//end switch
                     }//end else
                 }//end for: randVars
@@ -1371,11 +1422,11 @@ namespace flopc {
                         subScenariosPerStageAndScenario[curStage][curScen].erase(innerIt++);
                     }
                     // Define the new scenario subset node for the next stage
-                    else if (!differFromPrevious(randomVariableVector,curStage+1,parentScen,*innerIt)){// We have a scenario subset node        
+                    else if (!differFromPrevious(randomCoefficientVector,curStage+1,parentScen,*innerIt)){// We have a scenario subset node        
                         //Add to scenario subset heap of next stage node and scenario
-                        subScenariosPerStageAndScenario[curStage+1][parentScen].insert(*innerIt); //debug this statement
+                        subScenariosPerStageAndScenario[curStage+1][parentScen].push_back(*innerIt); 
                         //Erase from subsetHeap, so that this subset scenario does not form a new node in a subsequent run of the while loop
-                        subScenariosPerStageAndScenario[curStage][curScen].erase(innerIt++);
+                       subScenariosPerStageAndScenario[curStage][curScen].erase(innerIt++);
                     }
                     else{ // Scenario is in another node, skip it for now. Will be looked at during the inner while loop
                         ++innerIt;
@@ -1395,7 +1446,7 @@ namespace flopc {
         std::vector<int> ancScenVec(scenCounter);
         for (int i = 0; i < nScen; i++){
             if (scenarioIndirection[i] != outOfBound) //If we are out of Bound this scenario is the same as another one.
-                ancScenVec[scenarioIndirection[i]] = tempAncScenVec[scenarioIndirection[i]]; //Get program index for natural scenario i. Need to transfer program index to natural scenario index. 
+                ancScenVec[scenarioIndirection[i]] = scenarioIndirection[tempAncScenVec[i]]; //Get program index for natural scenario i. Need to transfer program index to natural scenario index. 
         }
         if (smiModel){ //If we already have a smiModel we do not want to create a new one, but only throw away the scenario tree.
             smiModel->releaseCore(); //Keep Core Model.
@@ -1410,8 +1461,10 @@ namespace flopc {
         // scenarios needs to be added in correct ordering, i.e. every scenario that depends on another one can be only inserted after the dependent one.
         // We need to sort the scenarioIndirection array to get the correct ordering for adding scenarios and we need to keep the old ordering.
 
+        std::vector<double> newProbs(scenCounter);
         for (int curScen = 0; curScen < scenCounter; curScen++){
             int flopScen = realOrderingFromVirtualScenario[curScen];
+            newProbs[curScen] = probabilities[flopScen];
             //If ancScen of an arbitrary scenario is not set the data is such that the number of Scenarios reduces by this scenario, as it does not differ from another one.
             if (ancScenVec[curScen]!=outOfBound){ //If ancScen is set, we can generate a scenario, otherwise, we won't.
                 //We need to convert the CoinPackedMatrix to CoinPackedVectors..
@@ -1424,14 +1477,15 @@ namespace flopc {
                 smiModel->generateScenario(smiCore,matrixVec[flopScen],&curBloVec,&curBupVec,&curObjVec,&curRloVec,&curRupVec,branchStageVec[flopScen],ancScenVec[curScen],probabilities[flopScen]);
             }
         }
-        //TODO: Think about debugging routines or debugging logger..
-        //Look at PG or look into boost.
-        std::cout << "Generated " << scenCounter << " scenarios." << std::endl;
 
+        DLOG(INFO) << "Generated " << scenCounter << " scenarios.";
         if (scenSet.size() != scenCounter){
-            std::cout << "We changed scenario set size from " << scenSet.size() << " to " << scenCounter << " during scenario tree generation." << std::endl;
+            DLOG(INFO) << "We changed scenario set size from " << scenSet.size() << " to " << scenCounter << " during scenario tree generation.";
             scenSet = MP_scenario_set(scenCounter);
+            probabilities = newProbs;
+            
         }
+        // Need a debug assertment statement
 
         //Delete temporary variables
         for (int curScen = 0; curScen < nScen; curScen++){
@@ -1453,15 +1507,16 @@ namespace flopc {
             return false;
         bool identical = true;
         for (int i = 0; i < randomVariableVector[curStage].size();i++){
+            // If there is any value in the curStage that is different from the value of nextScen, the scenarios differ.
             if (!compareDouble(randomVariableVector[curStage][i]->scenVector[curScen],randomVariableVector[curStage][i]->scenVector[nextScen]) ){
                 identical = false;
                 break; //break loop and return
             }
         }
-        return !identical;
+        return !identical; 
     }
 
-    void printMatrix(CoinPackedMatrix* matrix_,int n, int m, double* clo, double* cup, double* obj, double* rlo, double* rup, int* colStage = 0, int* rowStage = 0){
+    std::string printMatrix(CoinPackedMatrix* matrix_,int n, int m, double* clo, double* cup, double* obj, double* rlo, double* rup, int* colStage = 0, int* rowStage = 0){
         printf("Print Problem\n");
         printf("Objective: ");
         for (int i = 0; i < n;i++){
@@ -1487,9 +1542,35 @@ namespace flopc {
             cout << endl;
         }
         printf("\nMatrix printed \n");
+        return "";
     }
 
     void Messenger::logMessage( int level, const char * const msg )
+    {
+
+    }
+
+    void Messenger::solutionStatus( const OsiSolverInterface* Solver )
+    {
+
+    }
+
+    void Messenger::statistics( int bm, int m, int bn, int n, int nz )
+    {
+
+    }
+
+    void Messenger::objectiveDebug( const vector<MP::Coef>& cfs ) const
+    {
+
+    }
+
+    void Messenger::constraintDebug( string name, const vector<MP::Coef>& cfs ) const
+    {
+
+    }
+
+    void Messenger::generationTime( double t )
     {
 
     }

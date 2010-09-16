@@ -6,6 +6,9 @@ using namespace flopc;
 #include <fstream>
 #include <string>
 
+using std::cout;
+using std::endl;
+
 /**/
 
 

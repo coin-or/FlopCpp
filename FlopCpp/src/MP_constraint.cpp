@@ -62,13 +62,14 @@ void MP_constraint::coefficients(vector<MP::Coef>& cfs) {
     MP::GenerateFunctor f(this, cfs);
     // f.setConstraint(this);
 
-    vector<Constant> v;
+    vector<TerminalExpression*> v;
     if (left.isDefined() && right.isDefined()) {
         left->generate((S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5)).such_that(B),v,f,1.0);
         right->generate((S1(I1)*S2(I2)*S3(I3)*S4(I4)*S5(I5)).such_that(B),v,f,-1.0);
     } else {
         cout<<"FlopCpp Warning: Constraint declared but not defined."<<endl;
     }
+    //TODO Delete pointer when in vector v TODO FIXME
 }
 
 void MP_constraint::insertVariables(set<MP_variable*>& v) {

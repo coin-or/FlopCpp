@@ -52,17 +52,23 @@ namespace flopc {
         friend class Constraint_base;
         friend Constraint operator<=(const MP_expression& l, const MP_expression& r);
         friend Constraint operator<=(const Constant& l, const MP_expression& r); 
-        friend Constraint operator<=(const MP_expression& l, const Constant& r); 
+        friend Constraint operator<=(const MP_expression& l, const Constant& r);
+        friend Constraint operator<=(const RandomConstant& l, const MP_expression& r); 
+        friend Constraint operator<=(const MP_expression& l, const RandomConstant& r); 
         friend Constraint operator<=(const VariableRef& l, const VariableRef& r); 
 
         friend Constraint operator>=(const MP_expression& l, const MP_expression& r);
         friend Constraint operator>=(const Constant& l, const MP_expression& r); 
         friend Constraint operator>=(const MP_expression& l, const Constant& r); 
+        friend Constraint operator>=(const RandomConstant& l, const MP_expression& r); 
+        friend Constraint operator>=(const MP_expression& l, const RandomConstant& r); 
         friend Constraint operator>=(const VariableRef& l, const VariableRef& r);
 
         friend Constraint operator==(const MP_expression& l, const MP_expression& r);
         friend Constraint operator==(const Constant& l, const MP_expression& r); 
         friend Constraint operator==(const MP_expression& l, const Constant& r); 
+        friend Constraint operator==(const RandomConstant& l, const MP_expression& r); 
+        friend Constraint operator==(const MP_expression& l, const RandomConstant& r); 
         friend Constraint operator==(const VariableRef& l, const VariableRef& r); 
     public:
         Constraint() : Handle<Constraint_base*>(0) {}
@@ -94,6 +100,22 @@ namespace flopc {
     inline Constraint operator<=(const MP_expression& l, const Constant& r){
         return operator<=(l, MP_expression(r));
     }
+        /** @brief Uses operator overloading to construct an Constraint 
+    @ingroup PublicInterface
+    Constucts a Constraint using operator overloading.
+    @see MP_constraint
+    */
+    inline Constraint operator<=(const RandomConstant& l, const MP_expression& r) {
+        return operator<=(MP_expression(l), r);
+    }
+    /** @brief Uses operator overloading to construct an Constraint 
+    @ingroup PublicInterface
+    Constucts a Constraint using operator overloading.
+    @see MP_constraint
+    */
+    inline Constraint operator<=(const MP_expression& l, const RandomConstant& r){
+        return operator<=(l, MP_expression(r));
+    }
     /** @brief Uses operator overloading to construct an Constraint 
     @ingroup PublicInterface
     Constucts a Constraint using operator overloading.
@@ -117,6 +139,22 @@ namespace flopc {
     @see MP_constraint
     */
     inline Constraint operator>=(const Constant& l, const MP_expression& r){
+        return operator>=(MP_expression(l), r);
+    }
+    /** @brief Uses operator overloading to construct an Constraint 
+    @ingroup PublicInterface
+    Constucts a Constraint using operator overloading.
+    @see MP_constraint
+    */
+    inline Constraint operator>=(const MP_expression& l, const RandomConstant& r){
+        return operator>=(l, MP_expression(r));
+    }
+        /** @brief Uses operator overloading to construct an Constraint 
+    @ingroup PublicInterface
+    Constucts a Constraint using operator overloading.
+    @see MP_constraint
+    */
+    inline Constraint operator>=(const RandomConstant& l, const MP_expression& r){
         return operator>=(MP_expression(l), r);
     }
     /** @brief Uses operator overloading to construct an Constraint 
@@ -150,6 +188,22 @@ namespace flopc {
     @see MP_constraint
     */
     inline Constraint operator==(const Constant& l, const MP_expression& r){
+        return operator==(MP_expression(l), r);
+    }
+    /** @brief Uses operator overloading to construct an Constraint 
+    @ingroup PublicInterface
+    Constucts a Constraint using operator overloading.
+    @see MP_constraint
+    */
+    inline Constraint operator==(const MP_expression& l, const RandomConstant& r) {
+        return operator==(l, MP_expression(r));
+    }
+        /** @brief Uses operator overloading to construct an Constraint 
+    @ingroup PublicInterface
+    Constucts a Constraint using operator overloading.
+    @see MP_constraint
+    */
+    inline Constraint operator==(const RandomConstant& l, const MP_expression& r){
         return operator==(MP_expression(l), r);
     }
     /** @brief Uses operator overloading to construct an Constraint 
@@ -214,7 +268,7 @@ namespace flopc {
     using Named::setName;
     using Named::getName;
 
-        MP_constraint& operator()(
+    MP_constraint& operator()(
             const MP_index_exp& i1 = MP_index_exp::getEmpty(), 
             const MP_index_exp& i2 = MP_index_exp::getEmpty(), 
             const MP_index_exp& i3 = MP_index_exp::getEmpty(), 

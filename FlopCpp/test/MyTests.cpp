@@ -1,3 +1,4 @@
+#define BOOST_TR1_TUPLE_HPP_INCLUDED //This prevents compilation issues.
 #include <gtest/gtest.h>
 #include <iostream>
 #include <ctime>
@@ -10,15 +11,46 @@
 #include "CoinFloatEqual.hpp"
 #include "flopc.hpp"
 #include "SmiScnModel.hpp"
+#include "SAA.hpp"
+#include "SmiSmpsIO.hpp"
 //#include "OsiStochasticSolverInterface.hpp"
-
 
 //#include <vld.h> //uncomment to enable Visual Leak Detector
 //TODO: Test about correct colOrdering that is given to the solver..
-
+//TODO: Test scenario tree generation for RV that are not for themselves part of the model. Maybe this is already working, maybe not..
 
 //using namespace flopc;
 namespace flopc {
+    void writeReadSMPSTest(MP_model& model, MP_model::MP_direction direction, const std::string& filename){
+        // write SMPS files
+        model.smiModel->writeSmps(filename.c_str());        
+        
+        // read SMPS files        
+        SmiScnModel smi;
+        DLOG(INFO) << "SMPS reader: " << smi.readSmps(filename.c_str()) << "\n";
+        OsiSolverInterface *clp = new OsiClpSolverInterface();
+        smi.setOsiSolverHandle(*clp);
+        OsiSolverInterface *osiStoch = smi.loadOsiSolverData();
+        osiStoch->setObjSense(direction);
+        
+        if (osiStoch->getNumIntegers() > 0)
+            osiStoch->branchAndBound();
+        else
+            osiStoch->initialSolve();
+        
+        EXPECT_EQ(model.Solver->isProvenOptimal(),osiStoch->isProvenOptimal());
+        EXPECT_EQ(model.Solver->isProvenPrimalInfeasible(),osiStoch->isProvenPrimalInfeasible());
+        EXPECT_EQ(model.Solver->isProvenDualInfeasible(),osiStoch->isProvenDualInfeasible());
+        EXPECT_EQ(model.Solver->isAbandoned(),osiStoch->isAbandoned());
+       
+        // check objective values in case of optimal solution
+        if ( model.Solver->isProvenOptimal() )
+            EXPECT_NEAR(model.Solver->getObjValue(), osiStoch->getObjValue(), 0.001);
+        ASSERT_EQ(0,remove( (filename+".core").c_str() ));
+        ASSERT_EQ(0,remove( (filename+".time").c_str() ));
+        ASSERT_EQ(0,remove( (filename+".stoch").c_str() ));
+        delete clp;
+    }
 
 #pragma region initialization
     class MP_modelTest: public ::testing::Test {
@@ -82,17 +114,18 @@ namespace flopc {
         MP_model testModel;
     };
 
-        // Class to test the functionality of random variables
+    // Class to test the functionality of random variables
     class IntegerTest: public MP_modelTest {
     };
-    
+
     class BendersTest: public ::testing::Test{
     protected:
         BendersTest(){ }
     };
-    
-    #pragma endregion initialization
 
+#pragma endregion initialization
+
+    // To run the BendersTest, you need to link to the Benders solver and the OsiCpx SolverInterface, as well as including additionally the OsiStochasticSolverInterface.
     //TEST_F(BendersTest,BendersSolverTest){
     //    // minimization 
     //    // model.solve(MP_model::MINIMIZE);
@@ -156,6 +189,382 @@ namespace flopc {
     //    delete benders; //TODO: This leads to errors
     //}
 
+    //TEST_F(MP_modelTest,SAATest){
+    //    MP_model testModel(new OsiClpSolverInterface(),new VerboseMessenger());
+
+    //    MP_stage T(3);
+    //    //Define two sets
+    //    MP_set cars(3);
+    //    MP_set trains(2);
+    //    MP_set streets(3);
+
+    //    MP_random_data a(T);
+    //    a(1) = new ContinuousNormalRandomVariable(0,1,new BracketMeanDiscretization(20));
+    //    a(1)->setStage(1);
+    //    a(2) = new ContinuousNormalRandomVariable(0,1,new BracketMeanDiscretization(20));
+    //    a(2)->setStage(2);
+
+    //    MP_variable x(T);
+    //    MP_variable y(T);
+    //    MP_variable z(cars);
+    //    MP_variable z1(cars);
+
+    //    MP_constraint testCon(cars),carOnStreet(T),countCars(T);
+    //    //testCon(cars) = z(cars) <= sum(cars,z1(cars));
+    //    carOnStreet(T) = x(T) <= abs(a(T));
+    //    MP_index aliasT;
+    //    countCars(T+1) = y(T+1) <= sum(T(aliasT).such_that(aliasT<= T) ,x(aliasT+1));
+
+
+    //    MP_expression objective;
+    //    objective = y(T.last());
+
+    //    testModel.setObjective(objective);
+    //    SAASolver solver(testModel,*testModel.Solver);
+    //    solver.setValues(10,20,5);
+    //    solver.solve(MP_model::MAXIMIZE);
+    //    EXPECT_DOUBLE_EQ(1.5922808968215727,testModel->getObjValue());
+
+
+
+    //}
+
+    TEST_F(MP_modelTest,RandomVarInScenTreeTest){
+        MP_model testModel(new OsiClpSolverInterface(),new VerboseMessenger());
+        MP_stage T(2);
+        MP_random_data a(T);
+        a(1) = new ContinuousUniformRandomVariable(-2,-1,new BracketMeanDiscretization(2));
+        a(1)->setStage(1);
+        MP_random_data b(T);
+        b(1) = new ContinuousUniformRandomVariable(1,2,new BracketMeanDiscretization(2));
+        b(1)->setStage(1);
+        MP_random_data d(T);
+        d(1) = new ContinuousNormalRandomVariable(0,1, new DoubleDiscretization(4) );
+        d(1)->setStage(1);
+        MP_random_data c(T);
+        c(T) = a(T)+b(T);
+
+        MP_variable x(T);
+
+        MP_constraint testCon(T);
+        testCon(T) = x(T) <= 10+c(T);
+
+        MP_expression objective;
+        objective = x(T.last());
+
+        testModel.setObjective(objective);
+        testModel.attach();
+        testModel.solve(MP_model::MAXIMIZE);
+        //EXPECT_DOUBLE_EQ(1.5922808968215727,testModel->getObjValue());
+        ASSERT_EQ(3,testModel.getScenSet().size());
+        //OsiStochasticBendersTwoStageSolverInterface benders(testModel.Solver,testModel.getSmi());
+        ////double begin = CoinCpuTime();
+        //benders.initialSolve();
+        //double duration = CoinCpuTime() - begin;
+    }
+
+    TEST_F(MP_modelTest,ComplicatedExpressionsTest){
+        MP_model testModel(new OsiClpSolverInterface(),new VerboseMessenger());
+
+        MP_stage T(3);
+        //Define two sets
+        MP_set cars(3);
+        MP_set trains(2);
+        MP_set streets(3);
+
+        MP_random_data a(T);
+        a(1) = new ContinuousNormalRandomVariable(0,1,new BracketMeanDiscretization(10));
+        a(1)->setStage(1);
+        a(2) = new ContinuousNormalRandomVariable(0,1,new ExtendedPearsonTukeyDiscretization());
+        a(2)->setStage(2);
+
+        MP_variable x(T);
+        MP_variable y(T);
+        MP_variable z(cars);
+        MP_variable z1(cars);
+
+        MP_constraint testCon(cars),carOnStreet(T),countCars(T);
+        //testCon(cars) = z(cars) <= sum(cars,z1(cars));
+        carOnStreet(T) = x(T) <= abs(a(T));
+        MP_index aliasT;
+        countCars(T+1) = y(T+1) <= sum(T(aliasT).such_that(aliasT<= T) ,x(aliasT+1));
+
+
+        MP_expression objective;
+        objective = y(T.last());
+
+        testModel.setObjective(objective);
+        testModel.attach();
+        testModel.solve(MP_model::MAXIMIZE);
+        EXPECT_DOUBLE_EQ(1.3819475579528415,testModel->getObjValue());
+        ASSERT_EQ(10,testModel.getScenSet().size());
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+
+    }
+
+    TEST_F(MP_modelTest,DiscretizationTest){
+        MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger());
+        MP_stage T(2);
+        MP_random_data rvar(T);
+        rvar(1) = new ContinuousNormalRandomVariable(0,1, new BracketMeanDiscretization(10));
+        rvar(1)->setStage(1);
+        //rvar2(1) = new ContinuousNormalRandomVariable(0,1, new BracketMedianDiscretization(5));
+        //rvar2(1)->setStage(1);
+        MP_variable x(T);
+        MP_constraint con(T);
+        con(T) = x(T) <= rvar(T);
+        testModel.setObjective( x(T.last()) );
+        testModel.solve(MP_model::MAXIMIZE);
+        rvar(1) = new ContinuousNormalRandomVariable(0,1, new BracketMedianDiscretization(10));
+        rvar(1)->setStage(1);
+        testModel.setObjective( x(T.last()) );
+        testModel.attach();
+        testModel.solve(MP_model::MAXIMIZE);
+        rvar(1) = new ContinuousExponentialRandomVariable(1, new BracketMedianDiscretization(10));
+        rvar(1)->setStage(1);
+        testModel.setObjective( x(T.last()) );
+        testModel.attach();
+        testModel.solve(MP_model::MAXIMIZE);
+
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+
+
+    }
+
+    TEST_F(MP_modelTest,CoefficientGeneration){
+        MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger(),837234979);
+        // Enable stochastic elements to allow matrix printing
+        MP_stage T(3);
+        MP_random_data rVar(T);
+        //rVar(0) = new DiscreteBernoulliRandomVariable();
+        rVar(1) = new DiscreteUniformRandomVariable(-2,-1);
+        rVar(1)->setStage(1);
+        rVar(2) = new DiscreteUniformRandomVariable(1,2,3);
+        rVar(2)->setStage(2);
+        MP_data A(T);
+        A(0) = 15;
+        A(1) = 10;
+        A(2) = 5;
+        MP_random_data combined(T);
+        combined(T) = A(T) + rVar(T);
+        MP_variable y(T);
+        MP_constraint randomConstraint1(T),randomConstraint2(T),randomConstraint3(T);
+        randomConstraint1(T) = y(T) <= combined(T);
+        randomConstraint3(T+2) = y(T+2) <= combined(T+2)+rVar(T+1);
+        randomConstraint2(T+1) = y(T+1) <= combined(T+1);
+        testModel.setObjective(y(T.last()));
+        testModel.attach();
+        testModel.solve(MP_model::MAXIMIZE);
+        EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
+        EXPECT_DOUBLE_EQ(5,testModel.Solver->getObjValue());
+        y.display("y");
+        rVar.display("RandomVars");
+        combined.display("CombinedData");
+
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+    }
+
+    TEST_F(MP_modelTest,ExtendedCoefficientGeneration){
+        MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger(),837234979);
+        // Enable stochastic elements to allow matrix printing
+        MP_stage T(3);
+        MP_random_data rVar(T);
+        //rVar(0) = new DiscreteBernoulliRandomVariable();
+        rVar(1) = new DiscreteUniformRandomVariable(-2,-1,2);
+        rVar(1)->setStage(1);
+        rVar(2) = new DiscreteUniformRandomVariable(1,2,2);
+        rVar(2)->setStage(2);
+        MP_data A(T);
+        A(0) = 15;
+        A(1) = 10;
+        A(2) = 5;
+        MP_random_data combined(T);
+        combined(T) = A(T-1) + rVar(T);
+        MP_variable y(T);
+        MP_constraint randomConstraint1(T),randomConstraint2(T),randomConstraint3(T);
+        //randomConstraint1(T) = y(T) <= combined(T);
+        //randomConstraint3(T+2) = y(T+2) <= combined(T+2)+rVar(T+1);
+        randomConstraint2(T+1) = y(T+1) <= combined(T+1);
+        testModel.setObjective(y(T.last()));
+        testModel.attach();
+        testModel.solve(MP_model::MAXIMIZE);
+        EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
+        EXPECT_DOUBLE_EQ(11.5,testModel.Solver->getObjValue());
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+        y.display("y");
+        rVar.display("RandomVars");
+        combined.display("CombinedData");
+        // We should have a better way to check for certain values.. (like the level command)
+    }
+
+    TEST_F(MP_modelTest,SimpleTestThatHasToBeRenamed){
+        MP_model testModel(new OsiClpSolverInterface());
+        MP_stage T(2);
+        MP_data a;
+        MP_random_data b(T);
+        DiscreteUniformRandomVariable* xy = new DiscreteUniformRandomVariable(0,10,11);
+        a() = 10;
+        b(T.last()) = xy;
+
+        MP_variable x(T);
+        MP_variable y(T);
+        y.upperLimit() = 10;
+
+        MP_constraint firstConstraint,secondConstraint,thirdConstraint(T);
+        //firstConstraint() = a()*x() <= 20;
+        //secondConstraint() = y()*x() <= 10;
+        thirdConstraint(T+1) = b(T+1)*x(T+1) <= y(T+1);
+        testModel.setObjective(x(T.last()));
+        testModel.solve(MP_model::MAXIMIZE);
+        
+        // How to test for infeasible models? Is this the point? No it is not..
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+    }
+
+    TEST_F(MP_modelTest,SuchThatTest){
+        MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger());
+
+        MP_set A(2);
+        MP_set B(3);
+        MP_set C(2);
+        MP_set D(2);
+
+        MP_subset<2> AB(A,B);
+        AB.insert(0,0);
+        AB.insert(0,1);
+
+        MP_subset<2> CD(C,D);
+        CD.insert(0,0);
+
+        MP_subset<2> BC(B,C);
+        BC.insert(0,0);
+        BC.insert(0,1);
+        BC.insert(1,1);
+
+        MP_data dA(A);
+
+        dA(0) = 1;
+        dA(1) = 10;
+
+        MP_variable x1(A), x2(A),x3(B,C),x4(B);
+        x1.upperLimit(A) = 10;
+        x2.upperLimit(A) = 10;
+        x3.upperLimit(B,C) = 10;
+        x4.upperLimit(B) = 10;
+
+        MP_constraint constr1(A), constr2(AB);
+        constr1(A) = sum( BC(B,C),3*x3(B,C))  <= dA(A);
+        constr2(AB(A,B)) = x2(A)+x4(B) <= dA(A); //constr(AB) = dA(A) <= x2(A); does not work
+
+        testModel.setObjective(sum(A, x1(A) + x2(A)) + sum(B.such_that(BC(B,C))*C.such_that(BC(B,C)), x3(B,C)   ));
+        testModel.attach(testModel.Solver);
+        testModel.solve(MP_model::MAXIMIZE);
+
+        x1.display();
+        x2.display();
+        EXPECT_DOUBLE_EQ(31.333333333333336,testModel->getObjValue());
+    }
+
+    TEST_F(MP_modelTest,SuchThatRandomTest){
+        MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger());
+
+        MP_set A(2);
+        MP_set B(3);
+        MP_set C(4);
+        MP_set D(5);
+        MP_stage T(3);
+        MP_scenario_set scen(4);
+
+        MP_subset<2> AB(A,B);
+        AB.insert(0,0);
+        AB.insert(0,1);
+
+        MP_subset<2> CD(C,D);
+        CD.insert(0,0);
+
+        MP_subset<2> BC(B,C);
+        BC.insert(0,0);
+        BC.insert(0,1);
+        BC.insert(1,1);
+
+        MP_data dA(A);
+        dA(0) = 1;
+        dA(1) = 10;
+
+        double dbvalues[2][4] = { {1,2,3,4 }, {5,6,7,8 }}; 
+
+        MP_random_data dB(dbvalues[0,0],T);
+
+        MP_variable x1(A), x2(A),x3(B,C),x4(B),x5(A,T);
+        x1.upperLimit(A) = 10;
+        x2.upperLimit(A) = 10;
+        x3.upperLimit(B,C) = 10;
+        x4.upperLimit(B) = 10;
+
+        MP_constraint constr1(A), constr2(AB),constr3(T);
+        constr1(A) = sum( BC(B,C),3*x3(B,C))  <= dA(A);
+        constr2(AB(A,B)) = x2(A)+x4(B) <= dA(A); //constr(AB) = dA(A) <= x2(A); does not work
+        constr3(T) = sum(A,x5(A,T)) <= dB(T);
+
+        testModel.setObjective(sum(A.such_that(AB(A,B)), x2(A)) + sum(B.such_that(BC(B,C))*C.such_that(BC(B,C)), x3(B,C)   ));
+        testModel.attach(testModel.Solver);
+        testModel.solve(MP_model::MAXIMIZE);
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+
+        x1.display();
+        x2.display();
+        EXPECT_DOUBLE_EQ(4.0/3,testModel->getObjValue());
+    }
+
+
+    TEST_F(UseCaseTest,RandomWalkTest){ //Seed: 1015576855 im vergleich zu 1106783986
+        const int numStage = 3;
+        unsigned int seed = 2013598861;
+        MP_model testModel(new OsiClpSolverInterface(),new NormalMessenger(),seed);
+
+        MP_stage T(numStage);
+
+        RandomVariable* randomVars[numStage-1] = { new DiscreteUniformRandomVariable(-1,1,2), new DiscreteUniformRandomVariable(4,5,2) };
+        
+        MP_random_data randomWalkVar(&randomVars[0],T);
+        MP_random_data sumR(T);
+        MP_data blubb(T);
+        blubb(0) = 5;
+        blubb(1) = 10;
+        blubb(2) = 20;
+        //sumR(0) = 0;
+        sumR(T) = blubb(T) + randomWalkVar(T);
+
+        MP_variable x(T);
+        MP_variable y(T);
+
+        MP_constraint firstConstraint(T),secondConstraint(T);
+        MP_constraint thirdConstraint;
+        //firstConstraint(T+1) = x(T+1) <= blubb(T) + randomWalkVar(T+1);
+
+        secondConstraint(T+1) = y(T+1) == sumR(T+1) + y(T);
+        firstConstraint(T+1) = x(T+1) <= y(T+1);
+        thirdConstraint() = y(0) <= Constant(0);
+
+        //MP_constraint secondConstraint(T);
+        //secondConstraint(T+1) = 2*y(T+1) + x(T+1) <= randomWalkVar(T+1);
+        MP_expression objective( x(T.last()) );
+
+        testModel.setObjective(objective);
+        testModel.attach();
+        blubb.display("Blubb");
+        sumR.display("SumR");
+        randomWalkVar.display("RandomWalkVar");
+        std::cout << std::endl;
+        testModel.solve(MP_model::MAXIMIZE);
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+        //sumR.display("RandomValues?");
+        x.display("Werte");
+        sumR.display("SumR");
+        EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
+        EXPECT_DOUBLE_EQ(34.5,testModel.Solver->getObjValue());
+
+    }
 
     // Tests if scenario based random variables gets correctly read in.
     TEST_F(RandomVariableTest,ScenarioBasedRandomVariableInitializationTest){
@@ -173,14 +582,18 @@ namespace flopc {
 
     }
 
+
+
+
+
     //Test if Conditional Sampling works (for seed 0 for every RV. This means values are highly correlated)
     TEST_F(RandomVariableTest,DISABLED_ConditionalSamplingTest){
         MP_model testModel2(new OsiClpSolverInterface());
         MP_stage T(3);
         //TODO: We have to write a good seed generation routine...
         // Idea: At the moment of sampling total number of sampling variables is known. One can divide the seeds evenly.
-        RandomVariable* scenarioValues[2] = { new DiscreteUniformRandomVariable(0,10,1,10),new DiscreteUniformRandomVariable(0,10,2,10)};
-        RandomVariable* scenarioValues1[2] = { new DiscreteUniformRandomVariable(10,20,1,10),new DiscreteUniformRandomVariable(10,20,2,10)};
+        RandomVariable* scenarioValues[2] = { new DiscreteUniformRandomVariable(0,10,11),new DiscreteUniformRandomVariable(0,10,11)};
+        RandomVariable* scenarioValues1[2] = { new DiscreteUniformRandomVariable(10,20,11),new DiscreteUniformRandomVariable(10,20,11)};
         MP_random_data rvar(&scenarioValues[0],T);
         MP_random_data rvar2(&scenarioValues1[0],T);
         MP_variable x(T);
@@ -209,7 +622,7 @@ namespace flopc {
 
     // Simple Example Model to test fundamental ScenTree Generation and Solving Capabilites
     TEST_F(UseCaseTest,InvestmentExampleTest){
-        
+
         MP_model investmentModel(new OsiClpSolverInterface());
         MP_data initialWealth,goal;
         initialWealth() = 55; //set data
@@ -255,8 +668,9 @@ namespace flopc {
 
         investmentModel.setObjective( valueFunction );
         investmentModel.attach(investmentModel.Solver);
-        //this->testCorrectStageAssignment(investmentModel);
-        //investmentModel.solve(MP_model::MAXIMIZE);
+        this->testCorrectStageAssignment(investmentModel);
+        investmentModel.solve(MP_model::MAXIMIZE);
+         writeReadSMPSTest(investmentModel,MP_model::MAXIMIZE,"test");
 
         //for (int i = 0; i < scen.size();i++){
         //    for (int j = 0; j < T.size(); j++){
@@ -265,8 +679,8 @@ namespace flopc {
         //}
 
         ////Compare solution values.
-        //EXPECT_NEAR(4.142141441,investmentModel.Solver->getObjValue(),0.00000001);
-        //EXPECT_EQ(MP_model::OPTIMAL,investmentModel.getStatus());
+        EXPECT_NEAR(4.142141441,investmentModel.Solver->getObjValue(),0.000001);
+        EXPECT_EQ(MP_model::OPTIMAL,investmentModel.getStatus());
         std::vector< std::pair<double,double> > wsResults = investmentModel.smiModel->solveWS(investmentModel.Solver, MP_model::MAXIMIZE);
         EXPECT_EQ(numScen,wsResults.size());
         double result = investmentModel.smiModel->getWSValue(investmentModel.Solver, MP_model::MAXIMIZE);
@@ -278,6 +692,7 @@ namespace flopc {
         EXPECT_DOUBLE_EQ(result,tempResult);
         EXPECT_NEAR(10.76479,result,0.0001);
     }
+
 
     TEST_F(MP_modelTest,RandomParameterInObjectiveTest){
         MP_model testModel(new OsiClpSolverInterface());
@@ -294,10 +709,11 @@ namespace flopc {
         objective = rvar(T.last())*x(T.last());
         testModel.setObjective( objective );
         //If we want other probs, we have to attach them
-        testModel.Probabilities(probabilities);
+        testModel.setProbabilities(probabilities);
         testModel.attach();
         testModel.solve(MP_model::MAXIMIZE);
-        
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
         EXPECT_DOUBLE_EQ(52,testModel->getObjValue());
     }
@@ -321,6 +737,7 @@ namespace flopc {
         intModel.attach(intModel.Solver);
         this->testCorrectStageAssignment(intModel);
         intModel.solve(MP_model::MINIMIZE);
+        writeReadSMPSTest(intModel,MP_model::MINIMIZE,"test");
         const double * colSolution = intModel->getColSolution();
         for (int i = 0; i < intModel->getNumCols(); i++)
             cout << "Column " << i << ": " << colSolution[i] << endl;
@@ -351,6 +768,7 @@ namespace flopc {
         intModel.attach(intModel.Solver);
         this->testCorrectStageAssignment(intModel);
         intModel.solve(MP_model::MINIMIZE);
+        writeReadSMPSTest(intModel,MP_model::MINIMIZE,"test");
         EXPECT_EQ(6,intModel->getObjValue());
         EXPECT_TRUE(intModel->isInteger(0));
         EXPECT_TRUE(intModel->isInteger(1));
@@ -361,13 +779,22 @@ namespace flopc {
     // Test several data combining constraints
     TEST_F(MP_modelTest,DataTest){
         MP_data data1;
+        data1.setName("d1");
         MP_data data2;
+        data2.setName("d2");
         data1() = 7;
         data2() = 10;
         MP_data data3;
+        data3.setName("d3");
         MP_data data4;
+        MP_data data5;
+        data5.setName("data5");
+        data4.setName("data4");
         data4() = data2();
         data3() = data1() + data2();
+        data5() = data2();
+        MP_data data6;
+        data6() = data5() + data2();
         MP_variable x;
 
         MP_constraint constraint1,constraint2;
@@ -378,9 +805,11 @@ namespace flopc {
         testModel.attach(testModel.Solver);
         testModel.solve(MP_model::MAXIMIZE);
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
+        // We do not have a model that contains randomness, so there is not much sense in writing a SMPS file.
+        // It is not possible anyway as no SmiScnModel gets created.
     }
 
-    // Dacota test Model
+    // Dacota  Model to test the EV-, EEV- and WS-Problems
     TEST_F(UseCaseTest,DacotaModel) {
         MP_model dacota(new OsiClpSolverInterface()); 
         MP_stage T(2);
@@ -392,8 +821,8 @@ namespace flopc {
         prob(low)    = 0.3;
         prob(normal) = 0.4;
         prob(high)   = 0.3;
-        dacota.Probabilities(prob);
-        
+        dacota.setProbabilities(prob);
+
         enum {desk, table, chair, numProducts};
         MP_set P(numProducts);
 
@@ -435,15 +864,29 @@ namespace flopc {
             sum(P, y(T+1,P) * sellingPrice(P))
             - sum(R, x(R) * resourceCost(R))
             );
+
         dacota.attach(dacota.Solver);
         this->testCorrectStageAssignment(dacota);
-        double eev = dacota.smiModel->solveEEV(dacota.Solver, MP_model::MAXIMIZE);
-        cout << "EEV: " << eev;
-        //dacota.solve(MP_model::MAXIMIZE);
-        //EXPECT_DOUBLE_EQ(1730.0,dacota->getObjValue());
-        //EXPECT_EQ(MP_model::OPTIMAL,dacota.getStatus());
-        //double result = dacota.smiModel->getWSValue(dacota.Solver, MP_model::MAXIMIZE);
-        cout << "Finished";
+
+        // solve EV-, EEV-, WS- and here-and-now-Problem
+        double ev, eev, ws, hereAndNow;
+
+        ev = dacota.smiModel->solveEV(dacota.Solver, MP_model::MAXIMIZE);
+        EXPECT_EQ(ev, 4165);
+
+        eev = dacota.smiModel->solveEEV(dacota.Solver, MP_model::MAXIMIZE);
+        EXPECT_NEAR(eev, 1545, 0.0001);
+
+        ws = dacota.smiModel->getWSValue(dacota.Solver, MP_model::MAXIMIZE);
+        EXPECT_EQ(ws, 4165);
+
+        // we have to attach the solver again, otherwise the program crashes
+        dacota.attach(dacota.Solver);
+        dacota.solve(MP_model::MAXIMIZE);
+        writeReadSMPSTest(dacota,MP_model::MAXIMIZE,"test");
+        hereAndNow = dacota->getObjValue();
+        EXPECT_DOUBLE_EQ(1730.0, hereAndNow);
+        EXPECT_EQ(MP_model::OPTIMAL,dacota.getStatus());
     }
 
     // Test complex combinations of random variables in constraints
@@ -475,6 +918,7 @@ namespace flopc {
         testModel2.attach(testModel2.Solver);
         this->testCorrectStageAssignment(testModel2);
         testModel2.solve(MP_model::MINIMIZE); 
+        writeReadSMPSTest(testModel2,MP_model::MINIMIZE,"test");
         EXPECT_NEAR(4.5,testModel2->getObjValue(),0.001);
         EXPECT_EQ(MP_model::OPTIMAL,testModel2.getStatus());
     }
@@ -498,8 +942,8 @@ namespace flopc {
         MP_random_data rvar(&scenarios[0][0][0],T,demands);
         MP_variable x(T,demands);
         MP_variable firstStageVar;
-        firstStageVar.lowerLimit = 5;
-        firstStageVar.upperLimit = 10;
+        firstStageVar.lowerLimit() = 5;
+        firstStageVar.upperLimit() = 10;
         MP_constraint constraint1(T),constraint2(T);
         //What is with StairCase Structure?!
         constraint1(T+1) = sum(demands,x(T+1,demands)*rvar(T+1,demands)) + firstStageVar() >= sum(demands,x(T,demands));
@@ -508,6 +952,7 @@ namespace flopc {
         testModel2.attach(testModel2.Solver);
         this->testCorrectStageAssignment(testModel2);
         testModel2.solve(MP_model::MINIMIZE);
+        writeReadSMPSTest(testModel2,MP_model::MINIMIZE,"test");
         EXPECT_NEAR(0,testModel2.Solver->getObjValue(),0.000001);
         EXPECT_EQ(MP_model::OPTIMAL,testModel2.getStatus());
     }
@@ -515,40 +960,42 @@ namespace flopc {
 
     TEST_F(RandomVariableTest,ScenarioRandomVariableConstructionTest2){
         MP_model testModel(new OsiClpSolverInterface());
+        MP_stage T(2);
         //Create RV via double array. 
         MP_set autos(4); //We have a set with elements 0 to 3
         enum {numScen = 3};
         MP_scenario_set scen(numScen);
-        double rvArr[4][numScen] = { {1,2,3},{4,5,6},{7,8,9},{10,11,12} };
-        MP_random_data rvar1;
-        MP_random_data rvar2(&rvArr[0][0],autos);
+        double rvArr[1][4][numScen] = {{ {1,2,3},{4,5,6},{7,8,9},{10,11,12} }};
+        ASSERT_THROW(MP_random_data rvar1,invalid_argument_exception);
+        MP_random_data rvar2(&rvArr[0][0][0],T,autos);
         //Expect invalid argument exception
         //EXPECT_THROW(MP_random_data rvar2(&rvArr[0][0],autos),invalid_argument_exception);
-        EXPECT_DOUBLE_EQ(rvArr[0][0], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(0)) )->getSampledValue(0) );
-        EXPECT_DOUBLE_EQ(rvArr[0][1], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(0)) )->getSampledValue(1) );
-        EXPECT_DOUBLE_EQ(rvArr[0][2], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(0)) )->getSampledValue(2) );
-        EXPECT_DOUBLE_EQ(rvArr[3][0], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(3)) )->getSampledValue(0) );
-        EXPECT_DOUBLE_EQ(rvArr[3][1], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(3)) )->getSampledValue(1) );
-        EXPECT_DOUBLE_EQ(rvArr[3][2], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(3)) )->getSampledValue(2) );
+        EXPECT_DOUBLE_EQ(rvArr[0][0][0], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(1,0)) )->getSampledValue(0) );
+        EXPECT_DOUBLE_EQ(rvArr[0][0][1], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(1,0)) )->getSampledValue(1) );
+        EXPECT_DOUBLE_EQ(rvArr[0][0][2], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(1,0)) )->getSampledValue(2) );
+        EXPECT_DOUBLE_EQ(rvArr[0][3][0], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(1,3)) )->getSampledValue(0) );
+        EXPECT_DOUBLE_EQ(rvArr[0][3][1], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(1,3)) )->getSampledValue(1) );
+        EXPECT_DOUBLE_EQ(rvArr[0][3][2], ( dynamic_cast<ScenarioRandomVariable* > (rvar2(1,3)) )->getSampledValue(2) );
     }
 
-    // Compile only check
-    TEST_F(MP_modelTest,SimpleRandomVariableExpressionParsingTest){
-        //Tests RV without sets and some combinations. Compile-Time Test
-        MP_random_data rVar1;
-        MP_variable x1;
-        MP_variable y1;
-        MP_variable x2;
-        MP_variable y2;
-        MP_constraint exp1;
-        //Test some combinations of left and right hand side
-        //More than 1 assignments to a MP_expression can lead to curious behaviour
-        //Question: Why is that?
-        exp1() = 3*x1() + rVar1()*y1() <= 7;
-        exp1() = 4*x1()+5*x2() <= 10;
-        exp1() = rVar1()*4 + y2()*rVar1() <= 8; //How can this work? constant get implicitly converted to expression..
-        //Somehow we have to check if the rhs is properly evaluated in the end
-    }
+    // Compile only check: Uncomment to detect ill-formed programs
+    //TEST_F(MP_modelTest,SimpleRandomVariableExpressionParsingTest){
+    //    //Tests RV without sets and some combinations. Compile-Time Test
+    //    MP_stage T(2);
+    //    MP_random_data rVar1(T);
+    //    MP_variable x1;
+    //    MP_variable y1;
+    //    MP_variable x2;
+    //    MP_variable y2;
+    //    MP_constraint exp1;
+    //    //Test some combinations of left and right hand side
+    //    //More than 1 assignments to a MP_expression can lead to curious behaviour
+    //    //Question: Why is that?
+    //    exp1() = 3*x1() + rVar1()*y1() <= 7;
+    //    //exp1() = 4*x1()+5*x2() <= 10;
+    //    //exp1() = rVar1()*4 + y2()*rVar1() <= 8; //How can this work? constant get implicitly converted to expression..
+    //    //Somehow we have to check if the rhs is properly evaluated in the end
+    //}
 
     TEST_F(UseCaseTest,SampleOnlyTest){
         MP_model testModel (new OsiClpSolverInterface());
@@ -557,8 +1004,8 @@ namespace flopc {
         MP_stage T(2);
         MP_set cars(numCars);
         MP_set colors(numColors);
-        RandomVariable* var[1] = { new DiscreteUniformRandomVariable(0,1,1,2) };
-        RandomVariable* var1[1] = { new DiscreteUniformRandomVariable(3,4,1,2) };
+        RandomVariable* var[1] = { new DiscreteUniformRandomVariable(0,1,20) };
+        RandomVariable* var1[1] = { new DiscreteUniformRandomVariable(3,4,20) };
         MP_random_data demand(&var[0],T);
         MP_random_data price(&var1[0],T);
 
@@ -572,13 +1019,44 @@ namespace flopc {
         testModel.attach();
         testModel.solve(MP_model::MINIMIZE);
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
-        
+        //demand.display("Demand");
+        //price.display("Price");
+        std::vector<double> sampledValues = var[0]->getSampledValues();
+        for (int i = 0; i < sampledValues.size(); i++){
+            EXPECT_LE(0,sampledValues[i]);
+            EXPECT_GE(1,sampledValues[i]);
+        }
+        sampledValues = var1[0]->getSampledValues();
+        for (int i = 0; i < sampledValues.size(); i++){
+            EXPECT_LE(3,sampledValues[i]);
+            EXPECT_GE(4,sampledValues[i]);
+        }
         testModel.setSampleOnlyScenarioGeneration(true,10);
-        
+
         testModel.attach();
         testModel.solve(MP_model::MINIMIZE);
+        writeReadSMPSTest(testModel,MP_model::MINIMIZE,"test");
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
-
+        //demand.display("Demand");
+        //price.display("Price
+        sampledValues = var[0]->getSampledValues();
+        for (int i = 0; i < sampledValues.size(); i++){
+            EXPECT_LE(0,sampledValues[i]);
+            EXPECT_GE(1,sampledValues[i]);
+        }
+        sampledValues = var1[0]->getSampledValues();
+        for (int i = 0; i < sampledValues.size(); i++){
+            EXPECT_LE(3,sampledValues[i]);
+            EXPECT_GE(4,sampledValues[i]);
+        }
+        std::vector<double> prob = testModel.getProbabilities();
+        double sum = 0;
+        for (int i = 0 ; i < testModel.getScenSet().size(); i++){
+            //std::cout << " Sc." << i << ": " << prob[i];
+            sum += prob[i];
+        }
+        std::cout << std::endl;
+        EXPECT_DOUBLE_EQ(1,sum);
 
 
     }
@@ -586,14 +1064,14 @@ namespace flopc {
 
 
     // Random bounds test
-    TEST_F(MP_modelTest,RandomBoundsTest){
+    TEST_F(MP_modelTest,DISABLED_RandomBoundsTest){
         MP_model testModel2(new OsiClpSolverInterface());
         MP_stage T(2);
         MP_scenario_set scen(2);
         MP_data prob(scen);
         prob(0) = 0.5;
         prob(1) = 0.5;
-        testModel2.Probabilities(prob);
+        testModel2.setProbabilities(prob);
         double scenarioValues[1][2] = { {1,2} };
         MP_random_data var(&scenarioValues[0][0],T);
         MP_variable x(T);
@@ -602,13 +1080,15 @@ namespace flopc {
         MP_constraint con2(T);
         con1(T) = x(T) <= var(T);
         con2(T) = y(T) >= var(T);
-        y.lowerLimit(T) = var(T);
-        x.lowerLimit(T) = var(T); //Set different lower limits
+        //TODO: Enable lowerLimit again if working
+        //y.lowerLimit(T) = var(T);
+        //x.lowerLimit(T) = var(T); //Set different lower limits
         MP_expression objective;
         objective = x(T+1);
         testModel2.setObjective(objective);
         testModel2.attach(testModel.Solver);
         testModel2.solve(MP_model::MINIMIZE);
+        writeReadSMPSTest(testModel2,MP_model::MINIMIZE,"test");
         EXPECT_EQ(MP_model::OPTIMAL,testModel2.getStatus());
         EXPECT_EQ(1.5,testModel2->getObjValue());
         //Test Bounds
@@ -618,7 +1098,7 @@ namespace flopc {
     }
 
     // Random bounds
-    TEST_F(MP_modelTest,ComplicatedRandomBoundsTest){
+    TEST_F(MP_modelTest,DISABLED_ComplicatedRandomBoundsTest){
         MP_model testModel2(new OsiClpSolverInterface());
         MP_stage T(3);
         MP_set elm(0);
@@ -626,13 +1106,15 @@ namespace flopc {
         double scenarioValues[2][2] = { {1,2},{3,4} };
         MP_random_data var(&scenarioValues[0][0],T);
         MP_variable x(T);
-        x.lowerLimit = var(T);
-        x.upperLimit = var(T)+5;
+        // TODO: Reenable limits
+        //x.lowerLimit = var(T);
+        //x.upperLimit = var(T)+5;
         MP_constraint con1(T);
         con1(T+1) = x(T+1) <= var(T+1)+2.5;
         testModel2.setObjective(x(T+1));
         testModel2.attach(testModel.Solver);
         testModel2.solve(MP_model::MAXIMIZE);
+        writeReadSMPSTest(testModel2,MP_model::MAXIMIZE,"test");
         EXPECT_EQ(MP_model::OPTIMAL,testModel2.getStatus());
         //TODO: Test appearance of RandomVariable vector
         EXPECT_DOUBLE_EQ(4,testModel2->getObjValue());
@@ -651,7 +1133,7 @@ namespace flopc {
         //Test some combinations of left and right hand side
         exp1(T+1) = 3*x(T) + 4*y2(T+1) <= 9;
         exp1(T) = y2(T)*4 <= rVar1(T);
-        exp1(T+1) = y2(T+1)*rVar1(T+1) <= 8;
+        //exp1(T+1) = y2(T+1)*rVar1(T+1) <= 8;
         //Only latest assignment remains.. clearly this is correct behaviour
     }
 
@@ -680,6 +1162,7 @@ namespace flopc {
         testModel.attach(testModel.Solver);
         //We need to do some tests here..
         testModel.solve(MP_model::MAXIMIZE);
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
         //Print some results..
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
         EXPECT_EQ(77.25,testModel->getObjValue()); //Normal Solver gets called, as no random vars were specified
@@ -711,111 +1194,117 @@ namespace flopc {
         // Test RV Usage by Assignment or Initialization.
         enum {Audi, BMW, Ford, numCars};
         enum {DB,EuroBahn,numTrains};
+        MP_stage T(2);
         MP_set cars(numCars);
         MP_set trains(numTrains);
-        MP_random_data vars(cars); //Initialize RV with set
+        MP_random_data vars(T,cars); //Initialize RV with set
         DiscreteUniformRandomVariable *x,*y,*z;
         x = new DiscreteUniformRandomVariable();
         y = new DiscreteUniformRandomVariable();
         z = new DiscreteUniformRandomVariable();
-        vars(BMW) = x; 
-        vars(Audi) = y;
-        vars(Ford) = z;
+        vars(1,BMW) = x; 
+        vars(1,Audi) = y;
+        vars(1,Ford) = z;
+        vars(1,BMW)->setStage(1);
+        vars(1,Audi)->setStage(1);
+        vars(1,Ford)->setStage(1);
+        //Stage setting is not yet supported, TODO
         MP_variable test(cars,trains);
-        RandomVariable* varsArr[3] = { new DiscreteUniformRandomVariable(),new DiscreteUniformRandomVariable(),new DiscreteUniformRandomVariable() }; //Initialize RV with Array of RV
+        RandomVariable* varsArr[1][3] = {{ new DiscreteUniformRandomVariable(0,2,1),new DiscreteUniformRandomVariable(0,3,1),new DiscreteUniformRandomVariable(0,4,1) }}; //Initialize RV with Array of RV
         // Need to delete Array as RV does not take ownership..
         // Maybe store boost::shared_ptr<> to RV?
         // Then the values assigned to the RV get managed by the RV and released too
         // No Deletion of array values necessary afterwards..
-        MP_random_data vars2(&varsArr[0],cars);
+        MP_random_data vars2(&varsArr[0][0],T,cars);
         //Check if vars2 contains these random variables
-        EXPECT_EQ(varsArr[0],vars2(0)); //only checks pointer
-        EXPECT_EQ(varsArr[1],vars2(1));
-        EXPECT_EQ(varsArr[2],vars2(2));
-        MP_constraint constraint1(trains);
-        constraint1(trains) = sum(cars,test(cars,trains)) <= 20;
+        EXPECT_EQ(varsArr[0][0],vars2(1,0)); //only checks pointer
+        EXPECT_EQ(varsArr[0][1],vars2(1,1));
+        EXPECT_EQ(varsArr[0][2],vars2(1,2));
+        MP_constraint constraint1(trains,T);
+        constraint1(trains,T+1) = sum(cars,test(cars,trains)) <= sum(cars,vars2(T+1,cars));
         testModel.setObjective( sum(cars*trains,test(cars,trains)) );
         testModel.attach();
         testModel.solve(MP_model::MAXIMIZE);
+
+        EXPECT_DOUBLE_EQ(9,testModel->getObjValue());
         
+        // as stage setting is not yet implemented, this cant work - right?!
+        //writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+        
+
     }
 
     //RandomVariable Sampling Tests..
     TEST_F(RandomVariableTest,RandomVariableSamplingTest){
         MP_scenario_set scenSet(3);
-        double vals[4][3] = { {4, 3, 2},{2,1,5},{7,3,2},{1,5,7} };
+        MP_stage T(2);
+        double vals[1][4][3] = {{ {4, 3, 2},{2,1,5},{7,3,2},{1,5,7} }};
         MP_set testSet(4);
-        MP_random_data rVarScenario(&vals[0][0],testSet);
+        MP_random_data rVarScenario(&vals[0][0][0],T,testSet);
         //MP_random_data rVarDiscrete;
         //MP_random_data rVarContinuous;
-        DiscreteUniformRandomVariable* rv = new DiscreteUniformRandomVariable(-3,2,1.0/2);
-        ContinuousUniformRandomVariable* rv2 = new ContinuousUniformRandomVariable(-2,2); 
+        DiscreteUniformRandomVariable* rv = new DiscreteUniformRandomVariable(-3,2,6);
+        ContinuousUniformRandomVariable* rv2 = new ContinuousUniformRandomVariable(-2,2, new BracketMeanDiscretization(20)); 
         rv->Seed(static_cast<unsigned int>(std::time(0)));
-        rv->sample(20);
         std::vector<double> sampledValues = rv->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i],-3);
             EXPECT_LE(sampledValues[i],2);
         }
         rv2->Seed(static_cast<unsigned int>(std::time(0)));
-        rv2->sample(20);
         sampledValues = rv2->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i],-2);
             EXPECT_LE(sampledValues[i],2);
         }
-        ScenarioRandomVariable* rv3 = dynamic_cast<ScenarioRandomVariable*>(rVarScenario(0));
+        ScenarioRandomVariable* rv3 = dynamic_cast<ScenarioRandomVariable*>(rVarScenario(1,0));
         rv3->sample();
         sampledValues = rv3->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
-            EXPECT_EQ(vals[0][i],sampledValues[i]);
+            EXPECT_EQ(vals[0][0][i],sampledValues[i]);
         }
-        
-        ContinuousLogNormalRandomVariable* rv4 = new ContinuousLogNormalRandomVariable(1,0.5);
+
+        ContinuousLogNormalRandomVariable* rv4 = new ContinuousLogNormalRandomVariable(1,0.5, new BracketMeanDiscretization(20) );
         rv4->Seed(static_cast<unsigned int>(std::time(0)));
-        rv4->sample(20);
         sampledValues = rv4->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i], 0);
         }
-        
-        ContinuousNormalRandomVariable* rv5 = new ContinuousNormalRandomVariable(0,1);
+
+        ContinuousNormalRandomVariable* rv5 = new ContinuousNormalRandomVariable(0,1,new BracketMeanDiscretization(20));
         rv5->Seed(static_cast<unsigned int>(std::time(0)));
-        rv5->sample(20);
         sampledValues = rv5->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i], -4);
             EXPECT_LE(sampledValues[i], 4);
         }
-        
-        ContinuousExponentialRandomVariable* rv6 = new ContinuousExponentialRandomVariable(1);
+
+        ContinuousExponentialRandomVariable* rv6 = new ContinuousExponentialRandomVariable(1,new BracketMeanDiscretization(20));
         rv6->Seed(static_cast<unsigned int>(std::time(0)));
-        rv6->sample(20);
         sampledValues = rv6->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i], 0);
         }
-        
-        ContinuousTriangleRandomVariable* rv7 = new ContinuousTriangleRandomVariable(0,1,2);
+
+        ContinuousTriangleRandomVariable* rv7 = new ContinuousTriangleRandomVariable(0,1,2,new BracketMeanDiscretization(20));
         rv7->Seed(static_cast<unsigned int>(std::time(0)));
-        rv7->sample(20);
         sampledValues = rv7->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i], 0);
             EXPECT_LE(sampledValues[i], 2);
         }
-        
+
         DiscreteGeometricRandomVariable* rv8 = new DiscreteGeometricRandomVariable(0.5);
         rv8->Seed(static_cast<unsigned int>(std::time(0)));
-        rv8->sample(20);
+        //rv8->sample(20);
         sampledValues = rv8->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i], 1);
         }
-        
+
         DiscreteBernoulliRandomVariable* rv9 = new DiscreteBernoulliRandomVariable(0.5);
         rv9->Seed(static_cast<unsigned int>(std::time(0)));
-        rv9->sample(20);
+        //rv9->sample(20);
         sampledValues = rv9->getSampledValues();
         for (std::vector<double>::size_type i = 1; i < sampledValues.size();++i){
             EXPECT_GE(sampledValues[i], 0);
@@ -850,10 +1339,10 @@ namespace flopc {
         double scenarios[10] = {0,1,2,3,4,5,6,7,8,9};
         MP_random_data rvar(&scenarios[0],T);
         MP_variable x;
-        x.lowerLimit = 0;
+        x.lowerLimit() = 0;
 
         MP_variable y(T);
-        y.lowerLimit = 0;
+        y.lowerLimit(T) = 0;
         MP_constraint constraint1(T),con2;
         constraint1(T+1) = x()+y(T+1)*(rvar(T+1)+testValue) >= 7;
         testModel2.setObjective(x());
@@ -864,6 +1353,7 @@ namespace flopc {
         EXPECT_EQ(testValue,testModel2.Solver->getMatrixByRow()->getCoefficient(1,1));
         EXPECT_EQ(testValue+1,testModel2.Solver->getMatrixByRow()->getCoefficient(2,2));
         EXPECT_EQ(testValue+5,testModel2.Solver->getMatrixByRow()->getCoefficient(6,6));
+        writeReadSMPSTest(testModel2,MP_model::MINIMIZE,"test");
         //testModel2.detach();
         //double scenarios2[10] = {0,1,2,3,4,5,6,7,8,9};
         //MP_random_data rvar2(&scenarios2[0],T);
@@ -887,7 +1377,7 @@ namespace flopc {
     TEST_F(RandomVariableTest,RepeatedSamplingTest){
         MP_model testModel(new OsiClpSolverInterface());
         MP_stage T(2);
-        RandomVariable* randomVars[1] = { new DiscreteUniformRandomVariable(0,10,1,10) };
+        RandomVariable* randomVars[1] = { new DiscreteUniformRandomVariable(0,10,11) };
         MP_random_data rvar(&randomVars[0],T);
         MP_variable x(T);
         MP_constraint con1(T),con2(T);
@@ -901,6 +1391,7 @@ namespace flopc {
         testModel.attach();
         testModel.solve(MP_model::MAXIMIZE);
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
         //EXPECT_DOUBLE_EQ(4.8,testModel->getObjValue());
     }
 
@@ -914,28 +1405,27 @@ namespace flopc {
         MP_random_data rvar(&scenarios[0][0],T);
         MP_variable x;
         MP_variable y(T);
-        y.lowerLimit = 1;
-        MP_constraint constraint1(T),constraint2;
+        y.lowerLimit(T) = 1;
+        MP_constraint constraint1(T),constraint2(T);
         MP_data testData(&testValues[0],T);
         MP_random_data combinedData(T);
         combinedData(T) = testData(T)*rvar(T); // Necessitates an update for index expressions? Indices on the right hand side should store the same index as item on the left hand side, so if left hand side item changes, all other indices change too. This necessitates an index update mechanism, so that they are linked. => Indices need to be stored as pointers. 
         constraint1(T+1) = x()-y(T+1)*combinedData(T+1) >= 7;
         // This Constraint does not hold for all recourse variables (aka global constraint), but for each scenario individually.
-        constraint2() = sum(T,y(T)) <= 20;
+        constraint2(T) = y(T) >= 20;
         testModel2.setObjective(x());
         testModel2.attach(testModel2.Solver);
         testModel2.solve(MP_model::MINIMIZE);
         //TODO: We need to test the results, as otherwise this test is meaningless
         //EXPECT_EQ(1,testModel2.RandomVariables.size());
         EXPECT_EQ(MP_model::OPTIMAL,testModel2.getStatus());
-        EXPECT_EQ(34,testModel2->getObjValue());
+        EXPECT_EQ(547,testModel2->getObjValue());
+        writeReadSMPSTest(testModel2,MP_model::MINIMIZE,"test");
     }
 
     TEST_F(MP_modelTest,InvalidArgumentTest){
         MP_model testModel(new OsiClpSolverInterface()); // Without Solver
-        
-        
-        MP_random_data();
+        ASSERT_THROW(MP_random_data();,invalid_argument_exception);
 
     }
 
@@ -1058,7 +1548,8 @@ namespace flopc {
         assert(m1->getNumRows()==11);
         assert(m1->getNumCols()==47);
         assert(m1->getNumElements()==96);
-        assert(m1->getObjValue()>=1566.03 && m1->getObjValue()<=1566.05);
+        EXPECT_GE(m1->getObjValue(),1566.03);
+        EXPECT_LE(m1->getObjValue(),1566.05);
 
         y.display("y first model");
         ab.display("ab");
@@ -1069,7 +1560,7 @@ namespace flopc {
         x.display("x");
 
         m2.add(ab).add(yd).add(bd).add(bcd2).add(ocd);
-        y.upperLimit = m2->getInfinity();
+        y.upperLimit(j,h) = m2->getInfinity();
 
         m2.minimize(oc() + bc());
 
@@ -1079,14 +1570,13 @@ namespace flopc {
 
         // Optimal objective value m1: 1566.04218913
         // Optimal objective value m2: 1566.04218913 (like m1)
-        assert(m2->getObjValue()>=1566.03 && m2->getObjValue()<=1566.05);
+        EXPECT_GE(m2->getObjValue(),1566.03);
+        EXPECT_LE(m2->getObjValue(),1566.05);
 
-        CoinRelFltEq eq;
-        assert( eq(m2->getObjValue(),1566.04218913) );
-        assert( eq(m1->getObjValue(),1566.04218913) );
+        EXPECT_DOUBLE_EQ( 1566.042189132706,m2->getObjValue());
+        EXPECT_DOUBLE_EQ( 1566.0421891327067,m1->getObjValue());
         y.display("y second model");
     }
-
 
 } //end namespace
 
@@ -1095,7 +1585,7 @@ int main(int argc, char *argv[]) {
     //VLDDisable();
     ::testing::InitGoogleTest(&argc, argv);
     //VLDEnable();
-    //::testing::GTEST_FLAG(filter) = "RandomVariableTest.*";
+    //::testing::GTEST_FLAG(filter) = "*.RandomWalkTest";
     //_CrtMemState memstate;
     //_CrtMemCheckpoint(&memstate);
 
@@ -1109,4 +1599,3 @@ int main(int argc, char *argv[]) {
     //_CrtDumpMemoryLeaks();
     return result;
 }
-

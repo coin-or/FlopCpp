@@ -7,6 +7,9 @@
 #include "flopc.hpp"
 using namespace flopc;
 
+using std::cout;
+using std::endl;
+
 int main() {
     const int numJ =  4;
     const int numT = 10;

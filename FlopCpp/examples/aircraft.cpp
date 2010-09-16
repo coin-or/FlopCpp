@@ -3,6 +3,9 @@
 using namespace flopc;
 #include <OsiCbcSolverInterface.hpp>
 
+using std::cout;
+using std::endl;
+
 /*The objective of this model is to allocate aircrafts to routes to maximize
 the expected profit when traffic demand is uncertain. Two different
 formulations are used, the delta and the lambda formualation.

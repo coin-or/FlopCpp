@@ -3,6 +3,9 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
+using std::cout;
+using std::endl;
+
 /* Peacefully Coexisting Armies of Queens - tight 
 
  This is a tighter formulation than the original COEX problem.

@@ -31,20 +31,17 @@ namespace flopc {
             const MP_index_exp& i5,
             int s = 0) ;
 
-        ~DataRef() {} 
+        virtual ~DataRef() { } 
         DataRef& such_that(const MP_boolean& b);
 
         //Get Value via current settings for MP_index_exp
         virtual double evaluate(int scenario) const;
         virtual int getStage() const;
-        virtual void propagateIndexExpression(const MP_index_exp& i1,const MP_index_exp& i2,const MP_index_exp& i3,const MP_index_exp& i4,const MP_index_exp& i5) const;
-        virtual void insertRandomVariables(std::vector< std::set<RandomVariable*> >&v) const;
-
+        virtual void propagateIndexExpressions(const MP_index_exp& i1,const MP_index_exp& i2,const MP_index_exp& i3,const MP_index_exp& i4,const MP_index_exp& i5);
+        
         const DataRef& operator=(const DataRef& r); 
         const DataRef& operator=(const Constant& c);
 
-        //Get RandomVariable
-        virtual RandomVariable* getRandomVariable() const;
 
         //Set value in D via current MP_index_exp
         void evaluate_lhs(double v) const;
@@ -57,6 +54,7 @@ namespace flopc {
         MP_data* D;
     private:
         mutable MP_index_exp I1,I2,I3,I4,I5;
+        MP_index_exp origI1,origI2,origI3,origI4,origI5;
         Constant C;
         int stochastic;
         MP_boolean B;
@@ -123,9 +121,11 @@ namespace flopc {
         ~MP_data() {
             if (manageData == true) delete[] v;
             //Delete DataRefs ?
-            if (!myrefs.empty()){
-                
-            }
+            //if (!myrefs.empty()){
+            //    for (int i = 0; i < myrefs.size();i++)
+            //        // We only want to delete the data if it was not used in the model. This is most likely an error in the modelling process.
+            //        delete myrefs[i];                
+            //}
 
         }
 
@@ -179,7 +179,7 @@ namespace flopc {
         /// For displaying data in a human readable format.
         void display(string s = "");
     protected:
-        vector<DataRef*> myrefs;
+        vector<Constant> myrefs;
     private:
         MP_data(const MP_data&); // Forbid copy constructor
         MP_data& operator=(const MP_data&); // Forbid assignment

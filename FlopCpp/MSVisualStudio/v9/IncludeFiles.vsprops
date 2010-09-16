@@ -8,7 +8,7 @@
 		Name="VCCLCompilerTool"
 		UseUnicodeResponseFiles="false"
 		AdditionalOptions="/WL"
-		AdditionalIncludeDirectories="../../../../Smi/src;../../../../Osi/src;../../../../FlopCpp/src;../../../../Cbc/src;../../../../Clp/src;../../../../Osi/src/OsiCbc;../../../../Osi/src/OsiCpx;../../../../Osi/src/OsiClp;../../../../BuildTools/headers;../../../../CoinUtils/src;../../../../ThirdParty/gtest/include;../../../../ThirdParty/boost;../../../../ThirdParty/glog/src/windows"
+		AdditionalIncludeDirectories="../../../../Smi/src;../../../../Osi/src;../../../../FlopCpp/src;../../../../Cbc/src;../../../../Clp/src;../../../../Osi/src/OsiCbc;../../../../Osi/src/OsiCpx;../../../../Osi/src/OsiClp;../../../../BuildTools/headers;../../../../PFunc/include;../../../../CoinUtils/src;../../../../ThirdParty/gtest/include;../../../../ThirdParty/boost;../../../../ThirdParty/glog/src/windows"
 		RuntimeLibrary="1"
 	/>
 	<Tool

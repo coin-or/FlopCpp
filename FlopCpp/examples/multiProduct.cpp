@@ -3,6 +3,9 @@
 #include <flopc.hpp>
 using namespace flopc;
 
+using std::cout;
+using std::endl;
+
 void MultiProduct(
     MP_set& Cities,
     MP_set& Products,

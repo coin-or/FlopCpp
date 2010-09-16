@@ -1,7 +1,13 @@
 // $Id$
+#include <iostream>
+
 #include "flopc.hpp"
 using namespace flopc;
 #include "OsiClpSolverInterface.hpp"
+
+
+using std::cout;
+using std::endl;
 
 /* Benders decomposition for a simple transportation problem
 with stochastic demands. For details see: Erwin Kalvelagen:

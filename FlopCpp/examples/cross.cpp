@@ -3,6 +3,9 @@
 using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 
+using std::cout;
+using std::endl;
+
 /* Alcuin's River Crossing  
 
 A farmer carrying a bushel of corn and accompanied by a goose

@@ -20,11 +20,21 @@ namespace flopc {
         return MP_domain(const_cast<MP_domain_set*>(this));
     }
 
+    MP_index_base* MP_domain_set::insertIndexExpr( const MP_index_exp& expr)
+    {
+        throw not_implemented_error();
+        return expr.operator->(); //TODO: We have to redo this eventually?
+    }
+
+    MP_index_base* MP_domain_set::deepCopy() const
+    {
+        return getIndex();
+    }
     class Functor_conditional : public Functor {
     public:
         Functor_conditional(const Functor* f, const std::vector<MP_boolean> & condition)
             : F(f), Condition(condition) {}
-        virtual ~Functor_conditional() {}
+        virtual ~Functor_conditional() { }
         void operator()() const {
             bool goOn = true;
             for (size_t i = 0; i<Condition.size(); i++) {
@@ -82,14 +92,24 @@ MP_domain MP_domain::such_that(const MP_boolean& b) {
 void MP_domain::forall(const Functor& op) const {
     forall(&op);
 }
-void MP_domain::forall(const Functor* op) const {
+void MP_domain::forall(const Functor* op, bool deleteFunctor) const {
+    bool conditionalFunctor = false;
     if (condition.size()>0) {
+        conditionalFunctor = true;
         last->donext = new Functor_conditional(op,condition);
     } else {
         last->donext = op;
     }
     //Iterate over all elements of the domain and call op on them.
     operator->()->operator()();
+    // Delete conditional functor, if any
+    if (conditionalFunctor)
+        delete last->donext;
+    if (deleteFunctor){
+        delete op;
+        last->donext = NULL;
+        op = NULL;
+    }
 }
 
 const MP_set_base* MP_domain_set::getSet() const {
@@ -128,6 +148,8 @@ MP_index* MP_domain_set::getIndex() const {
     return I;
 }
 
+
+
 //This operator creates a new domain from two already existing domains
 //What happens is this
 // 1: Check if the first or second MP_domain is empty. If that is the case, return the other one. If both are empty, an empty domain is returned.
@@ -142,12 +164,12 @@ flopc::MP_domain flopc::operator*(const flopc::MP_domain& a, const flopc::MP_dom
         return a;
     } else { //Both Domains are nonempty
         //Create new Domain by copying a
-        MP_domain retval = a;
+        MP_domain retval(a);
         // Set functor of what a's last pointer currently points to, to MP_domain_base of a to b's MP_domain_base
         retval.last->donext = b.operator->();
-        //Memory Management: increment both counters
-        const_cast<MP_domain&>(b).increment();
-        const_cast<MP_domain&>(a).increment();
+        //Memory Management: increment both counters: Should be done by default?
+        //const_cast<MP_domain&>(b).increment();
+        //const_cast<MP_domain&>(a).increment();
         //Set last pointer of new MP_domain to what b currently points to
         retval.last = b.last;
         //Subsets only: If there are any conditions on b, transfer them to new MP_domain

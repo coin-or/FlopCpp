@@ -15,9 +15,6 @@ using std::set;
 #include "MP_domain.hpp"
 #include "MP_constant.hpp"
 #include "MP_utilities.hpp"
-#include "MP_random_data.hpp"
-
-
 
 namespace flopc {
 
@@ -25,6 +22,8 @@ namespace flopc {
     class TerminalExpression; 
     class MP_variable;
     class VariableRef;
+    class RandomDataRef;
+    class RandomConstant;
 
     class MP {
         friend class MP_expression;
@@ -36,6 +35,7 @@ namespace flopc {
         friend class MP_expression_base;
         friend class VariableRef;
         friend class MP_variable;
+        friend class RandomDataRef;
 
         struct Coef {
             Coef(int c, int r, double v, int s = 0,int rs = 0,const std::vector<double>& scen = std::vector<double>()) : 
@@ -81,7 +81,9 @@ namespace flopc {
         public:
             GenerateFunctor(MP_constraint* r, vector<Coef>& cfs): R(r), Coefs(cfs) {}
 
-            void setMultiplicator(vector<Constant>& mults, double m) {
+            virtual~ GenerateFunctor() {  }
+
+            void setMultiplicator(vector<TerminalExpression*>& mults, double m) {
                 multiplicators = mults;
                 M = m;
             }
@@ -98,7 +100,7 @@ namespace flopc {
 
             MP_constraint* R;
             //Temporary values
-            vector<Constant> multiplicators; //Coefficients?
+            vector<TerminalExpression*> multiplicators; //Coefficients?
             double M; // sign (1=lhs, -1=rhs)
             const TerminalExpression* C; //Current 
             //End Temporary values
@@ -126,6 +128,7 @@ namespace flopc {
     @note FOR INTERNAL USE: This is not normally used directly by the
     calling code.
     */
+
     class MP_expression_base {
         friend class MP_expression;
         friend class Handle<MP_expression_base*>;
@@ -134,17 +137,22 @@ namespace flopc {
     public:
         MP_expression_base() : count(0) {}
 
-        //TODO: Comments needed. What do these methods do?
+        // Return values
         virtual double level() const = 0; 
+
+        // Generate coefficients for current expression
         virtual void generate(const MP_domain& domain,
-            vector<Constant> multiplicators,
+            vector<TerminalExpression*> multiplicators,
             MP::GenerateFunctor &f,
             double m) const = 0;
 
+        // Insert variables available in this expression in v
         virtual void insertVariables(set<MP_variable *>& v) const = 0; //Insert given Variables to the Model?!
 
+        // Insert random variables available in this expression in v
         virtual void insertRandomVariables(std::vector< std::set<RandomVariable*> >& v) const = 0;
 
+        // Destruct this MP_expression_base, virtual due to virtual inheritance hierarchy with polymorphism..
         virtual ~MP_expression_base() {}
     };
 
@@ -168,11 +176,13 @@ namespace flopc {
         MP_expression(const Constant& c);
         /// Constructor which (silently) converts a VariableRef to a MP_expression
         MP_expression(const VariableRef& v);
-        MP_expression(MP_expression_base* r) : Handle<MP_expression_base*>(r) {}
+        /// Constructor which (silently) converts a RandomDataRef to a MP_expression
+        MP_expression(const RandomConstant &r);
+        MP_expression(MP_expression_base* r);
+        
     };
 
-
-    /** @brief The base class for all expressions.
+    /** @brief The base class for all terminal expressions, i.e. expressions that lead to a certain value for a given column/row.
     @ingroup INTERNAL_USE
     @note FOR INTERNAL USE: This is not normally used directly by the
     calling code.
@@ -185,8 +195,25 @@ namespace flopc {
         virtual double getValue(int scenario = getZero) const = 0; 
         virtual int getColumn() const = 0;
         virtual int getStage() const = 0;
-        virtual RandomVariable* getRandomVariable() const = 0;
     };
+
+    //class Expression_random : public TerminalExpression {
+    //public:
+    //    virtual ~Expression_random() {};
+
+    //    // Return value of this expression for current random variable
+    //    virtual double getValue(int scenario) const; 
+    //    // Return column to which this expression belongs
+    //    virtual int getColumn() const;
+    //    // Return stage to which this expression belongs
+    //    virtual int getStage() const;
+    //    // Return one of the random variable present in this random expression
+    //    void generate(const MP_domain& domain,
+    //        vector<TerminalExpression *> multiplicators,
+    //        MP::GenerateFunctor& f,
+    //        double m) const;
+
+    //};
 
     /** Semantic representation of a variable in a Math Program
     @ingroup INTERNAL_USE
@@ -207,16 +234,8 @@ namespace flopc {
 
         void insertRandomVariables(std::vector< std::set<RandomVariable*> >& v) const;
 
-        virtual double getValue(int scenario) const { 
-            return 1.0;
-        }
+        virtual double getValue(int scenario) const;
         virtual int getStage() const;
-
-        virtual RandomVariable* getRandomVariable() const {
-            return 0;
-        }
-
-
 
     private:
         VariableRef(MP_variable* v, 
@@ -233,7 +252,7 @@ namespace flopc {
         VariableRef& operator=(const VariableRef&);
 
         void generate(const MP_domain& domain,
-            vector<Constant> multiplicators,
+            vector<TerminalExpression *> multiplicators,
             MP::GenerateFunctor& f,
             double m) const;
 
@@ -244,16 +263,12 @@ namespace flopc {
         const MP_index_exp I1,I2,I3,I4,I5;
     };
 
-
-
-    /** Semantic representation of a random variable in a Math Program
-    @ingroup INTERNAL_USE
-    @see MP_variable for a public interface.
-    */
-
-
     /// @ingroup PublicInterface
     MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator+(const MP_expression& e1, const RandomConstant& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator+(const RandomConstant& e1, const MP_expression& e2);
     /// @ingroup PublicInterface
     MP_expression operator+(const MP_expression& e1, const Constant& e2);
     /// @ingroup PublicInterface
@@ -261,15 +276,33 @@ namespace flopc {
     /// @ingroup PublicInterface
     MP_expression operator-(const MP_expression& e1, const MP_expression& e2);
     /// @ingroup PublicInterface
+    MP_expression operator-(const MP_expression& e1, const RandomConstant& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator-(const RandomConstant& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
     MP_expression operator-(const MP_expression& e1, const Constant& e2);
     /// @ingroup PublicInterface
     MP_expression operator-(const Constant& e1, const MP_expression& e2);
+    /// @ingroup PublicInterface
+    MP_expression operator*(const RandomConstant& e1, const MP_expression& e2); 
+    /// @ingroup PublicInterface
+    MP_expression operator*(const MP_expression& e1, const RandomConstant& e2);
     /// @ingroup PublicInterface
     MP_expression operator*(const Constant& e1, const MP_expression& e2); 
     /// @ingroup PublicInterface
     MP_expression operator*(const MP_expression& e1, const Constant& e2);
     /// @ingroup PublicInterface
+    //MP_expression operator*(const RandomDataRef& e1, const MP_expression& e2); 
+    ///// @ingroup PublicInterface
+    //MP_expression operator*(const MP_expression& e1, const RandomDataRef& e2); 
+    /// @ingroup PublicInterface
+    MP_expression operator/(const MP_expression& e1, const RandomConstant& e2);
+    /// @ingroup PublicInterface
     MP_expression operator/(const MP_expression& e1, const Constant& e2);
+    /// @ingroup PublicInterface
+    //MP_expression operator/(const RandomDataRef& e1, const MP_expression& e2);
+    ///// @ingroup PublicInterface
+    //MP_expression operator/(const MP_expression& e1, const RandomDataRef& e2);
     /// @ingroup PublicInterface
     MP_expression sum(const MP_domain& d, const MP_expression& e);
 

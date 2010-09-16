@@ -23,11 +23,8 @@ DataRef::DataRef(MP_data* d,
                  const MP_index_exp& i4,
                  const MP_index_exp& i5,
                  int s) : 
-D(d),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),C(0),stochastic(s) {
-    //if (!d->myrefs.empty()){ //Myrefs is not empty.. so copy Constant from last DataRef TODO: Think about that if we know why we have a vector here in the first place?!
-    //    C = (*d->myrefs.back()).C;
-    //}
-}
+D(d),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),origI1(MP_index_exp::getEmpty()),origI2(MP_index_exp::getEmpty()),origI3(MP_index_exp::getEmpty()),origI4(MP_index_exp::getEmpty()),origI5(MP_index_exp::getEmpty()),C(0),stochastic(s) {
+ }
 
 const DataRef& DataRef::operator=(const Constant& c) {
     C = c;
@@ -36,7 +33,9 @@ const DataRef& DataRef::operator=(const Constant& c) {
 }
 
 const DataRef& DataRef::operator=(const DataRef& r) { 
-    return operator=(Constant(const_cast<DataRef*>(&r)));
+    if (this == &r)
+        return *this;
+    return operator=(Constant(r));
 }
 
 void DataRef::operator()() const {
@@ -48,9 +47,6 @@ DataRef& DataRef::such_that(const MP_boolean& b) {
     return *this;
 }
 
-RandomVariable* DataRef::getRandomVariable() const {
-    return C->getRandomVariable();
-}
 
 
 
@@ -106,6 +102,10 @@ void DataRef::evaluate_lhs(double v) const {
     if (i != outOfBound) {
         D->v[i] = v;
     }
+    else {
+        DLOG(ERROR) << "An index not suitable for the given set appears. Please recheck your model formulation.";
+        throw invalid_argument_exception(); //This should not happen!
+    }
 }
 
 void MP_data::operator()() const {
@@ -132,19 +132,40 @@ DataRef& flopc::MP_data::operator()( const MP_index_exp& lcli1 /*= MP_index_exp:
 {
     // Why do we return more than one DataRefs? Why do we return only a new DataRef?
     //Answer: Depends on the calling context, depending on the index expressions. These can be different from one call to another and we need different DataRef to obey the indexation.
-    myrefs.push_back(new DataRef(this, lcli1, lcli2, lcli3, lcli4, lcli5));
-    return *myrefs.back();
+    DataRef* dPtr = new DataRef(this, lcli1, lcli2, lcli3, lcli4, lcli5);
+    myrefs.push_back(Constant(dPtr));
+    return *dPtr;
 
 }
 
-    void DataRef::propagateIndexExpression(const MP_index_exp& i1,const MP_index_exp& i2,const MP_index_exp& i3,const MP_index_exp& i4,const MP_index_exp& i5) const{
-        I1 = i1;
-        I2 = i2;
-        I3 = i3;
-        I4 = i4;
-        I5 = i5;
+    void DataRef::propagateIndexExpressions(const MP_index_exp& i1,const MP_index_exp& i2,const MP_index_exp& i3,const MP_index_exp& i4,const MP_index_exp& i5) {
+        //TODO: Test for correct assignments of indices
+        if (&i1 != &MP_index_exp::getEmpty()){ //We have no empty indices, so we can update our values
+            // Store old values
+            const MP_index_exp& empty(MP_index_exp::getEmpty());
+            if (origI1.operator!=(MP_index_exp::getEmpty()) ){ // We already have values stored, restore old values
+                I1 = origI1;
+                I2 = origI2;
+                I3 = origI3;
+                I4 = origI4;
+                I5 = origI5;
+
+            }
+            else { // We have not yet stored values
+                origI1 = I1.deepCopyIndexExpression();
+                origI2 = I2.deepCopyIndexExpression();
+                origI3 = I3.deepCopyIndexExpression();
+                origI4 = I4.deepCopyIndexExpression();
+                origI5 = I5.deepCopyIndexExpression();
+            }
+            I1 = I1->insertIndexExpr(i1);
+            I2 = I2->insertIndexExpr(i2);
+            I3 = I3->insertIndexExpr(i3);
+            I4 = I4->insertIndexExpr(i4);
+            I5 = I5->insertIndexExpr(i5);
+
+        }
     }
 
- void DataRef::insertRandomVariables(std::vector< std::set<RandomVariable*> >& v) const {
-    }  
+
 

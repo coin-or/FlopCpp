@@ -4,6 +4,9 @@ using namespace flopc;
 #include "OsiCbcSolverInterface.hpp"
 #include "CoinFloatEqual.hpp"
 
+using std::cout;
+using std::endl;
+
 
 
 namespace Aircraft {

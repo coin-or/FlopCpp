@@ -5,7 +5,11 @@
 #include "MP_set.hpp"
 #include "MP_model.hpp"
 #include <sstream>
+#include <iostream>
 using namespace flopc;
+
+using std::cout;
+using std::endl;
 
 namespace flopc {
 
@@ -26,26 +30,20 @@ namespace flopc {
 	  //stage gets initalized with 0 by MP_model constructor and belongs to the current model
       this->setName(MP_model::stageString); //Assign stageString to MP_stage set to identify it later on.
 	  if (MP_model::getCurrentModel() != 0)
-		MP_model::getCurrentModel()->Stage(*this);
+		MP_model::getCurrentModel()->setStage(*this);
 	  }
 
-  MP_stage::~MP_stage() {
-      //if (MP_model::getCurrentModel() != 0 && &MP_model::getCurrentModel()->Stage() == this)
-      //    MP_model::getCurrentModel()->Stage(0); //Set Stage to 0.
-  }
+  MP_stage::~MP_stage() { }
 
   MP_scenario_set::MP_scenario_set( int i /*= 0*/ ):MP_set(i)
 	  {
 	  //During first initialization, currentModel pointer is zero. Under this circumstances,
 	  //stage gets initalized with 0 by MP_model constructor and belongs to the current model
 	  if (MP_model::getCurrentModel() != 0)
-		  MP_model::getCurrentModel()->ScenSet(*this);
+		  MP_model::getCurrentModel()->setScenSet(*this);
 	  }
 
-    MP_scenario_set::~MP_scenario_set() {
-      //if (MP_model::getCurrentModel() != 0 && &MP_model::getCurrentModel()->ScenSet() == this)
-      //    MP_model::getCurrentModel()->ScenSet(0); //Set Stage to 0.
-  }
+    MP_scenario_set::~MP_scenario_set() { }
 
   flopc::MP_domain SUBSETREF::getDomain( MP_set* s ) const
   {
@@ -61,4 +59,16 @@ namespace flopc {
   {
       return 0;
   }
+
+  MP_index_base* SUBSETREF::insertIndexExpr( const MP_index_exp& expr)
+  {
+      throw not_implemented_error();
+      return getIndex(); //TODO: We have to redo this eventually?
+  }
+
+  MP_index_base* SUBSETREF::deepCopy() const
+  {
+      return getIndex();
+  }
+
 }

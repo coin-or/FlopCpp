@@ -9,6 +9,9 @@
 #include "flopc.hpp"
 using namespace flopc;
 
+using std::cout;
+using std::endl;
+
 int readFile(string fname, map<string, vector<double> >& d) {
     std::ifstream file(fname.c_str());
     string cline;

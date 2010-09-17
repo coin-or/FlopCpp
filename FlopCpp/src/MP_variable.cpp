@@ -13,6 +13,7 @@ using std::endl;
 #include "MP_constant.hpp" 
 #include "MP_model.hpp"
 #include "SmiScnModel.hpp"
+#include "MP_index.hpp"
 using namespace flopc;
 
 
@@ -164,3 +165,20 @@ void MP_variable::free()
         type = type::discrete;
 }
 
+
+const VariableRef& flopc::MP_variable::operator()( const MP_index_exp& d1 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& d2 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& d3 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& d4 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& d5 /*= MP_index_exp::getEmpty() */ )
+{
+    if (MP_model::getCurrentModel()->checkSemantic()){
+        LOG_IF(WARNING,S1->getIndex() != &MP_set::getEmpty() && d1->getIndex() != S1->getIndex() && d1->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()  ) << "First index given to MP_variable with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S2->getIndex() != &MP_set::getEmpty() && d2->getIndex() != S2->getIndex() && d2->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Second index given to MP_variable with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S3->getIndex() != &MP_set::getEmpty() && d3->getIndex() != S3->getIndex() && d3->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Third index given to MP_variable with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S4->getIndex() != &MP_set::getEmpty() && d4->getIndex() != S4->getIndex() && d4->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Fourth index given to MP_variable with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S5->getIndex() != &MP_set::getEmpty() && d5->getIndex() != S5->getIndex() && d5->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Fifth index given to MP_variable with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+    }
+    //TODO: Look at lower/upperLimits again
+    //lowerLimit->propagateIndexExpressions(d1,d2,d3,d4,d5);
+    //upperLimit->propagateIndexExpressions(d1,d2,d3,d4,d5);
+    VariableRef* vPtr = new VariableRef(this, d1, d2, d3, d4, d5);
+    myrefs.push_back(MP_expression(vPtr));
+    return *vPtr;
+}

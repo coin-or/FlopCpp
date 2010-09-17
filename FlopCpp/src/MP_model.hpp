@@ -311,6 +311,9 @@ namespace flopc {
         void setSample(bool sample) { doSample = sample; }
         bool getSample() { return doSample; }
 
+        void enableSemanticCheck(bool semanticCheck);
+        bool checkSemantic();
+
         const SmiScnModel* getSmi() const { return smiModel; }
         SmiScnModel* getSmi() { return smiModel; }
 
@@ -359,6 +362,7 @@ namespace flopc {
         int defaultSampleSize;
         bool sampleOnly;
         bool doSample;
+        bool semantic;
 
     private:
         int m;
@@ -382,6 +386,7 @@ namespace flopc {
         int *rowIndirection;
         MP_status mSolverState;
         boost::shared_ptr<Uniform01Generator> uniformGenerator;
+        
     public: //TODO: As long as we have no correct OsiStochasticSolverInterface, this will do
         SmiScnModel *smiModel;
 

@@ -72,16 +72,17 @@ namespace flopc {
     template<int nbr, class T>
     vector<T> makeVector(T i1, T i2=0, T i3=0, T i4=0, T i5=0) {
         assert(nbr<6);
-        vector<T> S(nbr);
-        S[0] = i1; 
+        vector<T> S;
+        S.reserve(nbr);
+        S.push_back(i1); 
         if (nbr==1) return S;
-        S[1] = i2;
+        S.push_back(i2);
         if (nbr==2) return S;
-        S[2] = i3;
+        S.push_back(i3);
         if (nbr==3) return S;
-        S[3] = i4;
+        S.push_back(i4);
         if (nbr==4) return S;
-        S[4] = i5; 
+        S.push_back(i5);
         return S;
     }
 

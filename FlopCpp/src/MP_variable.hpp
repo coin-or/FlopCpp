@@ -64,14 +64,7 @@ namespace flopc {
             const MP_index_exp& d3 = MP_index_exp::getEmpty(),
             const MP_index_exp& d4 = MP_index_exp::getEmpty(), 
             const MP_index_exp& d5 = MP_index_exp::getEmpty()
-            ) {
-                //TODO: Look at lower/upperLimits again
-                //lowerLimit->propagateIndexExpressions(d1,d2,d3,d4,d5);
-                //upperLimit->propagateIndexExpressions(d1,d2,d3,d4,d5);
-                VariableRef* vPtr = new VariableRef(this, d1, d2, d3, d4, d5);
-                myrefs.push_back(MP_expression(vPtr));
-                return *vPtr; 
-        }
+            );
 
         /// Call this method to turn the variable into a binary variable
         void binary();

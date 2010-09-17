@@ -138,6 +138,7 @@ namespace flopc{
         std::vector<double> values; //All values are equally probable
         std::map<double,double> valuesMap; //Value with it's probability. One can get the number of occurences by : prob/1 (and round that)
         int defaultSampleSize;
+        int currentSampleSize;
         boost::shared_ptr<DiscretizationMethod> dm;
         sampleVector discreteDistribution;
 
@@ -325,10 +326,10 @@ namespace flopc{
     };
 
     //Class that defines indexable random_variables. Contains concrete RandomVariables.
-    class MP_random_data : public Functor, public Named //, public boost::enable_shared_from_this //We want to allow names, computation of flattened arrays and functors
+    class MP_random_data : public Functor, private Named //, public boost::enable_shared_from_this //We want to allow names, computation of flattened arrays and functors
     {
     public:
-
+        
         MP_random_data(const MP_set_base &s1 = MP_set::getEmpty(), 
             const MP_set_base &s2 = MP_set::getEmpty(), 
             const MP_set_base &s3 = MP_set::getEmpty(),
@@ -362,6 +363,9 @@ namespace flopc{
 
         /// For displaying data in a human readable format.
         void display(const std::string& s = "", int scenario = 0); //TODO: Eventually we can remove scenario
+
+        void setName(const std::string&);
+        std::string getName() const;
 
     protected:
 

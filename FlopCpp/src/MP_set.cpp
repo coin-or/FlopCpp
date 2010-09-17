@@ -63,12 +63,11 @@ namespace flopc {
   MP_index_base* SUBSETREF::insertIndexExpr( const MP_index_exp& expr)
   {
       throw not_implemented_error();
-      return getIndex(); //TODO: We have to redo this eventually?
   }
 
   MP_index_base* SUBSETREF::deepCopy() const
   {
-      return getIndex();
+      throw not_implemented_error();
   }
 
 }

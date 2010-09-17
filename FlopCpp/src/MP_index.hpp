@@ -55,6 +55,13 @@ namespace flopc {
     class MP_index : public MP_index_base {
         friend class MP_domain_set;
         friend class MP_index_constant;
+        // We need friend classes that can do semantic checking..
+        friend class MP_data;
+        friend class MP_random_data_impl;
+        friend class MP_variable;
+        //friend class MP_subset<nbr>;
+        // End Semantic check
+
         template<int nbr> friend class MP_domain_subset;
     public:
         /// Default constructor. 
@@ -246,6 +253,30 @@ namespace flopc {
         virtual MP_index_base* insertIndexExpr(const MP_index_exp&);
         MP_index_exp left;
         Constant right;
+    };
+
+    class MP_index_constant : public MP_index_base {
+        friend class MP_index_exp;
+    public:
+    private:
+        MP_index_constant(const Constant& c) : indexPtr(new MP_index()),C(c) { indexPtr->assign(c->evaluate());}
+        ~MP_index_constant() { delete indexPtr; }
+        int evaluate() const {
+            return int(C->evaluate()); 
+        }
+        MP_index* getIndex() const {
+            // Return a new MP_index pointer (?)
+            // We can not return a null pointer. We have to return a pointer to this?
+            return indexPtr;
+        }
+        virtual MP_domain getDomain(MP_set* s) const;
+        virtual MP_index_base* deepCopy() const { return MP_index_exp::getEmpty().operator->(); }
+        virtual MP_index_base* insertIndexExpr(const MP_index_exp& expr) { 
+            return expr.operator->();
+            throw invalid_argument_exception(); //TODO: What is it with this?
+        }
+        MP_index* indexPtr;
+        Constant C;
     };
 
 

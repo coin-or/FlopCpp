@@ -98,7 +98,7 @@ void VerboseMessenger::objectiveDebug(const vector<MP::Coef>& cfs) const {
 }
 
 MP_model::MP_model(OsiSolverInterface* s, Messenger* m, unsigned int seed ) : 
-Solver(s),messenger(m),stage(0),scenSet(0),Objective(0),defaultSampleSize(0),sampleOnly(false),doSample(false),
+Solver(s),messenger(m),stage(0),scenSet(0),Objective(0),defaultSampleSize(0),sampleOnly(false),doSample(false),semantic(true),
 m(0), n(0), nz(0),Cst(0),Clg(0),Rnr(0),Elm(0), bl(0), bu(0), c(0),l(0),u(0),colStage(0),rowStage(0),colIndirection(0),rowIndirection(0),
 mSolverState(((s==0)?(MP_model::DETACHED):(MP_model::SOLVER_ONLY))),uniformGenerator(new Uniform01Generator()),smiModel(0) {
     MP_model::current_model = this;
@@ -406,6 +406,8 @@ void MP_model::attachStochastic(){
 
 }
 
+
+
 void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sample-function?!
     if (_solver == 0) {//No solver was given
         if (Solver == 0) {// No solver was set: Attachment is not possible, so we return and set state to detached.
@@ -481,7 +483,7 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         cfs.clear();
         //}//End parallel
     }
-    DLOG(INFO) << "Zeit zum Generieren der Koeffizienten: " << CoinCpuTime()-timeBegin << "s";
+    DLOG(INFO) << "Time for coefficient generation: " << CoinCpuTime()-timeBegin << "s";
     nz = coefs.size();
     realn = n;
 
@@ -756,12 +758,12 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         //    (*j)->bounds(randomCoefs);
         //}
         // As these bounds were generated in the variables section, the columns are wrong. This means we have to update that 
-        for (int i = 0; i < randomCoefs.size();i++) {
-            for (int j = 0; j < randomCoefs[i].size();j++) {
-                assert( colIndirection[randomCoefs[i][j]->col] != outOfBound);
-                randomCoefs[i][j]->col = colIndirection[randomCoefs[i][j]->col];
-            }
-        }
+        //for (int i = 0; i < randomCoefs.size();i++) {
+        //    for (int j = 0; j < randomCoefs[i].size();j++) {
+        //        assert( colIndirection[randomCoefs[i][j]->col] != outOfBound);
+        //        randomCoefs[i][j]->col = colIndirection[randomCoefs[i][j]->col];
+        //    }
+        //}
         // Add all other random coefs to randomCoefs.
         for ( int i = 0; i != coefs.size(); i++){
             if ( !coefs[i]->scenVector.empty() ) { //We have scenario values
@@ -769,7 +771,13 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
                 randomCoefs[coefs[i]->randomStage].push_back(coefs[i]);
             }
         }
+        // We can assert some stuff here
+        for (int i = 1; i < stage.size(); i++){
+            LOG_IF(WARNING, randomCoefs[i].empty()) << "There are no Random Parameters defined for stage " << i+1 << ". Continue only if you know what you are doing.";
+        }
+
     }//end if stage
+
 
     // Generate objective function coefficients
     vector<TerminalExpression*> v;
@@ -782,7 +790,7 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
     if (stage.size()){
         for ( int i = 0; i != coefs.size(); i++){
             //Set correct rowIndex and colIndex via colIndirection
-            DLOG_IF(INFO,colIndirection[coefs[i]->col] == outOfBound) << "Some of your variables in your objective function do not appear in your model. Please check your model for validity. Take a closer look at indexed variables.";
+            LOG_IF(INFO,colIndirection[coefs[i]->col] == outOfBound) << "Some of your variables in your objective function do not appear in your model. Please check your model for validity. Take a closer look at indexed variables.";
             assert(colIndirection[coefs[i]->col] != outOfBound); // Asssert that all variables in the objective function already appear in a constraint.
             if (coefs[i]->col == -1){ //Handle constant terms in the objective function later (for now set coefficient value)
                coefs[i]->col = colIndirection[n]; //or realn
@@ -1516,6 +1524,15 @@ namespace flopc {
         return !identical; 
     }
 
+    void MP_model::enableSemanticCheck( bool semanticCheck )
+    {
+        semantic = semanticCheck;
+    }
+
+    bool MP_model::checkSemantic()
+    {
+        return semantic;
+    }
     std::string printMatrix(CoinPackedMatrix* matrix_,int n, int m, double* clo, double* cup, double* obj, double* rlo, double* rup, int* colStage = 0, int* rowStage = 0){
         printf("Print Problem\n");
         printf("Objective: ");

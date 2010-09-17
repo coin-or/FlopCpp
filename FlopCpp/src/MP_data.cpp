@@ -12,6 +12,7 @@ using std::endl;
 #include "MP_set.hpp" 
 #include "MP_constant.hpp" 
 #include "MP_expression.hpp" 
+#include "MP_model.hpp"
 
 using namespace flopc;
 double MP_data::outOfBoundData = 0;
@@ -24,7 +25,7 @@ DataRef::DataRef(MP_data* d,
                  const MP_index_exp& i5,
                  int s) : 
 D(d),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),origI1(MP_index_exp::getEmpty()),origI2(MP_index_exp::getEmpty()),origI3(MP_index_exp::getEmpty()),origI4(MP_index_exp::getEmpty()),origI5(MP_index_exp::getEmpty()),C(0),stochastic(s) {
- }
+}
 
 const DataRef& DataRef::operator=(const Constant& c) {
     C = c;
@@ -63,7 +64,7 @@ double DataRef::evaluate(int scenario) const {
     if ( i == outOfBound ) { //This is interesting behaviour. What happens if indexing expressions are so that multiplicative stuff needs to be done? Zero migth be the correct answer?
         return 0;
     } else { //What would happen if we would evaluate C?
-         return D->v[i];
+        return D->v[i];
         //return C->evaluate(scenario);
     }
 }
@@ -130,42 +131,47 @@ DataRef& flopc::DataRef::probability( double p )
 
 DataRef& flopc::MP_data::operator()( const MP_index_exp& lcli1 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& lcli2 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& lcli3 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& lcli4 /*= MP_index_exp::getEmpty()*/, const MP_index_exp& lcli5 /*= MP_index_exp::getEmpty() */ )
 {
-    // Why do we return more than one DataRefs? Why do we return only a new DataRef?
-    //Answer: Depends on the calling context, depending on the index expressions. These can be different from one call to another and we need different DataRef to obey the indexation.
+    if (MP_model::getCurrentModel()->checkSemantic()){
+        LOG_IF(WARNING,S1.getIndex() != &MP_set::getEmpty() && lcli1->getIndex() != S1.getIndex() && lcli1->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "First index given to MP_data with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S2.getIndex() != &MP_set::getEmpty() && lcli2->getIndex() != S2.getIndex() && lcli2->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Second index given to MP_data with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S3.getIndex() != &MP_set::getEmpty() && lcli3->getIndex() != S3.getIndex() && lcli3->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Third index given to MP_data with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S4.getIndex() != &MP_set::getEmpty() && lcli4->getIndex() != S4.getIndex() && lcli4->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Fourth index given to MP_data with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+        LOG_IF(WARNING,S5.getIndex() != &MP_set::getEmpty() && lcli5->getIndex() != S5.getIndex() && lcli5->getDomain(&MP_set::getEmpty()) != MP_domain::getEmpty()) << "Fifth index given to MP_data with name " << this->getName() << " does not correspond to the defined index. This may lead to subtle errors. Continue only if you know what you are doing.";
+    }
+
     DataRef* dPtr = new DataRef(this, lcli1, lcli2, lcli3, lcli4, lcli5);
     myrefs.push_back(Constant(dPtr));
     return *dPtr;
 
 }
 
-    void DataRef::propagateIndexExpressions(const MP_index_exp& i1,const MP_index_exp& i2,const MP_index_exp& i3,const MP_index_exp& i4,const MP_index_exp& i5) {
-        //TODO: Test for correct assignments of indices
-        if (&i1 != &MP_index_exp::getEmpty()){ //We have no empty indices, so we can update our values
-            // Store old values
-            const MP_index_exp& empty(MP_index_exp::getEmpty());
-            if (origI1.operator!=(MP_index_exp::getEmpty()) ){ // We already have values stored, restore old values
-                I1 = origI1;
-                I2 = origI2;
-                I3 = origI3;
-                I4 = origI4;
-                I5 = origI5;
-
-            }
-            else { // We have not yet stored values
-                origI1 = I1.deepCopyIndexExpression();
-                origI2 = I2.deepCopyIndexExpression();
-                origI3 = I3.deepCopyIndexExpression();
-                origI4 = I4.deepCopyIndexExpression();
-                origI5 = I5.deepCopyIndexExpression();
-            }
-            I1 = I1->insertIndexExpr(i1);
-            I2 = I2->insertIndexExpr(i2);
-            I3 = I3->insertIndexExpr(i3);
-            I4 = I4->insertIndexExpr(i4);
-            I5 = I5->insertIndexExpr(i5);
+void DataRef::propagateIndexExpressions(const MP_index_exp& i1,const MP_index_exp& i2,const MP_index_exp& i3,const MP_index_exp& i4,const MP_index_exp& i5) {
+    if (&i1 != &MP_index_exp::getEmpty()){ //We have no empty indices, so we can update our values
+        // Store old values
+        const MP_index_exp& empty(MP_index_exp::getEmpty());
+        if (origI1.operator!=(MP_index_exp::getEmpty()) ){ // We already have values stored, restore old values
+            I1 = origI1;
+            I2 = origI2;
+            I3 = origI3;
+            I4 = origI4;
+            I5 = origI5;
 
         }
+        else { // We have not yet stored values
+            origI1 = I1.deepCopyIndexExpression();
+            origI2 = I2.deepCopyIndexExpression();
+            origI3 = I3.deepCopyIndexExpression();
+            origI4 = I4.deepCopyIndexExpression();
+            origI5 = I5.deepCopyIndexExpression();
+        }
+        I1 = I1->insertIndexExpr(i1);
+        I2 = I2->insertIndexExpr(i2);
+        I3 = I3->insertIndexExpr(i3);
+        I4 = I4->insertIndexExpr(i4);
+        I5 = I5->insertIndexExpr(i5);
+
     }
+}
 
 
 

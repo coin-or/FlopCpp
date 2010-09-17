@@ -43,38 +43,13 @@ namespace flopc {
         return MP_index_exp( operator->()->deepCopy());
     }
 
-    class MP_index_constant : public MP_index_base {
-        friend class MP_index_exp;
-    public:
-    private:
-        MP_index_constant(const Constant& c) : indexPtr(new MP_index()),C(c) { indexPtr->assign(c->evaluate());}
-        ~MP_index_constant() { delete indexPtr; }
-        int evaluate() const {
-            return int(C->evaluate()); 
-        }
-        MP_index* getIndex() const {
-            // Return a new MP_index pointer (?)
-            // We can not return a null pointer. We have to return a pointer to this?
-            return indexPtr;
-        }
-        virtual MP_domain getDomain(MP_set* s) const{
-            return MP_domain::getEmpty();
-        }
-        virtual MP_index_base* deepCopy() const { return MP_index_exp::getEmpty().operator->(); }
-        virtual MP_index_base* insertIndexExpr(const MP_index_exp& expr) { 
-            return expr.operator->();
-            throw invalid_argument_exception(); //TODO: What is it with this?
-        }
-        MP_index* indexPtr;
-        Constant C;
-    };
-
-    class MP_index_subsetRef : public MP_index_base {
+    // Wrapper around templatized SubsetRef, that does the actual work.
+    class MP_index_subset : public MP_index_base {
         friend class MP_index_exp;
     private:
-        MP_index_subsetRef(const SUBSETREF& s) : S(&s) {}
+        MP_index_subset(const SUBSETREF& s) : S(&s) {}
         int evaluate() const {
-            return int(S->evaluate()); 
+            return S->evaluate(); 
         }
         MP_index* getIndex() const {
             return S->getIndex();
@@ -82,9 +57,11 @@ namespace flopc {
         virtual MP_domain getDomain(MP_set* s) const{
             return MP_domain(S->getDomain(s));
         }
-        virtual MP_index_base* deepCopy() const { return S->getIndex(); }
+        virtual MP_index_base* deepCopy() const { return S->deepCopy(); }
         virtual MP_index_base* insertIndexExpr(const MP_index_exp& expr) { 
-            throw not_implemented_error();return expr.operator->(); }
+            return (const_cast<SUBSETREF*>(S))->insertIndexExpr(expr);    
+        }
+
         const SUBSETREF* S;
     };
 
@@ -122,6 +99,7 @@ namespace flopc {
             return this;
         }
         else {
+            LOG(ERROR) << "Most probably wrong indexation for a multiplication.";
             throw invalid_argument_exception();
         }
         return this;
@@ -140,6 +118,7 @@ namespace flopc {
             left = expr;
         }
         else {
+            LOG(ERROR) << "Most probably wrong indexation for a sum.";
             throw invalid_argument_exception();
         }
         return this;
@@ -157,10 +136,16 @@ namespace flopc {
             left = expr;
        }
         else {
+            LOG(ERROR) << "Most probably wrong indexation for a difference.";
             throw invalid_argument_exception();
         }
         return this;
 
+    }
+
+    MP_domain MP_index_constant::getDomain( MP_set* s ) const
+    {
+        return MP_domain::getEmpty();
     }
 } // End of namespace flopc
 
@@ -187,7 +172,7 @@ MP_index_exp::MP_index_exp(int i) :
 Handle<MP_index_base*>(new MP_index_constant(Constant(i))) {} 
 
 MP_index_exp::MP_index_exp(const SUBSETREF& s) : 
-Handle<MP_index_base*>(new MP_index_subsetRef(s)) {}
+Handle<MP_index_base*>(new MP_index_subset(s)) {}
 
 MP_index_exp::MP_index_exp(const Constant& c) : 
 Handle<MP_index_base*>(new MP_index_constant(c)) {}

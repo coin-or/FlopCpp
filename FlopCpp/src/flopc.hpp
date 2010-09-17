@@ -51,7 +51,7 @@ namespace flopc {
       @ingroup PublicInterface
   */
   inline void forall(const MP_domain& d, const Functor& f) {
-    d.forall(&f,true);
+    d.forall(&f,false);
   }
     
   /** @brief Global function for performing a Functor without having a set

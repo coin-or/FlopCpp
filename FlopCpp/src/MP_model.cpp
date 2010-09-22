@@ -88,7 +88,7 @@ void VerboseMessenger::constraintDebug(string name, const vector<MP::Coef>& cfs)
 }
 
 void VerboseMessenger::objectiveDebug(const vector<MP::Coef>& cfs) const {
-    DLOG(INFO) <<"Objective "<<endl;
+    DLOG(INFO) <<"FlopCpp: Objective "<<endl;
     for (unsigned int j=0; j<cfs.size(); j++) {
         int col=cfs[j].col;
         int row=cfs[j].row;
@@ -275,7 +275,7 @@ void MP_model::maximize() {
         attach(Solver);
         solve(MP_model::MAXIMIZE);
     } else {
-        LOG(ERROR) <<"no solver specified"<<endl;
+        LOG(ERROR) << "FlopCpp Error: no solver specified"<<endl;
     }
 }
 
@@ -285,7 +285,7 @@ void MP_model::maximize(const MP_expression &obj) {
         attach(Solver);
         solve(MP_model::MAXIMIZE);
     } else {
-        LOG(ERROR) << "no solver specified" << endl;
+        LOG(ERROR) << "FlopCpp Error: no solver specified" << endl;
     }
 }
 
@@ -457,8 +457,6 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
 
     // We need to generate all the values we need at this point, if they are not already present.
     // For now: Simple Check: All randomVariables are either ScenarioRandomVars OR (exclusive) Independently distributed RandomVars. (This check is done in sampleRandomVariates method).
-
-    // TODO: Can we use more intelligent ways of storing the values (sparse arrays..)?
     sampleRandomVariates(RandomVariables);
 
     // Generate coefficient matrix and right hand side. All Variables and Constraints needs their offset for that to work
@@ -771,11 +769,6 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
                 randomCoefs[coefs[i]->randomStage].push_back(coefs[i]);
             }
         }
-        // We can assert some stuff here
-        for (int i = 1; i < stage.size(); i++){
-            LOG_IF(WARNING, randomCoefs[i].empty()) << "There are no Random Parameters defined for stage " << i+1 << ". Continue only if you know what you are doing.";
-        }
-
     }//end if stage
 
 
@@ -804,6 +797,10 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
             //Add coefficient to Random Coefficients
             if ( !coefs[i]->scenVector.empty() ) { //We have scenario values
                 randomCoefs[coefs[i]->randomStage].push_back(coefs[i]);
+            }
+            // Check if we have random parameters in every stage. Otherwise weird behaviour can occur while trying to load it into the solver.
+            for (int i = 1; i < stage.size(); i++){
+                LOG_IF(ERROR, randomCoefs[i].empty()) << "FlopCpp Error: there are no Random Parameters defined for stage " << i+1 << ".";
             }
         }
     }
@@ -889,8 +886,8 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         }
 
         // Get SmiScnModel that holds a generated ScenarioTree.
-        //TODO: Think about that. Maybe the attach function should just set the SmiCoreData object and return with that
         smiModel = generateScenarioTree(randomCoefs,osiCore);
+        // Check if we eliminated RV in some stages ( could be
         if (smiModel == 0)
             //We were not sucessful in creating a scenario tree. Try normal operation. TODO: Think about reversed matrix..
             Solver->loadProblem(n,m,Cst,Rnr,Elm,l,u,c,bl,bu);
@@ -959,7 +956,7 @@ void MP_model::sampleRandomVariates(std::vector<std::set<RandomVariable*> >& rv)
         if (probabilities.empty()){ //If probabilities are not of the correct size, we are wrong, probably a user error (assert)
             probabilities = std::vector<double>(scenSet.size(),1.0/scenSet.size());
         }
-        assert(probabilities.size() == scenSet.size());
+        CHECK_EQ(probabilities.size(),scenSet.size()) << "You have a different number of probabilities compared to your scenario set.";
         return;
     }
 

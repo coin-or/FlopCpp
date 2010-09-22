@@ -199,6 +199,24 @@ namespace flopc {
              MP_expression left,right;
     };
 
+    class Expression_unary_operator : public MP_expression_base, public MP  {
+    protected:
+        Expression_unary_operator(const MP_expression& e1) : 
+             left(e1) {}
+
+             void insertVariables(set<MP_variable*>& v) const {
+                 left->insertVariables(v);
+
+             }
+
+             void insertRandomVariables(std::vector< std::set<RandomVariable*> >& v) const {
+                 left->insertRandomVariables(v);
+
+             }
+
+             MP_expression left;
+    };
+
     class Expression_plus : public Expression_operator {
         friend MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
         friend MP_expression operator+(const MP_expression& e1, const Constant& e2);
@@ -241,13 +259,28 @@ namespace flopc {
            }
     };
 
+    class Expression_unary_minus : public Expression_unary_operator {
+        friend MP_expression operator-(const MP_expression& e1);
+    private:
+        Expression_unary_minus(const MP_expression& e1) : 
+           Expression_unary_operator(e1) {}
+           double level() const { 
+               return -left->level();
+           }
+           void generate(const MP_domain& domain,
+               vector<TerminalExpression *> multiplicators,
+               MP::GenerateFunctor& f,
+               double m) const {
+                   left->generate(domain, multiplicators, f, -m);
+           }
+    };
+
     class Expression_mult : public MP_expression_base,  MP  {
         friend MP_expression operator*(const Constant& e1, const MP_expression& e2); 
         friend MP_expression operator*(const MP_expression& e1, const Constant& e2);
         friend MP_expression operator*(const RandomConstant& e1, const MP_expression& e2);
         friend MP_expression operator*(const MP_expression& e1, const RandomConstant& e2);
-        //friend MP_expression operator*(const RandomDataRef& e1, const MP_expression& e2);
-        //friend MP_expression operator*(const MP_expression& e1, const RandomDataRef& e2);
+
 
     private:
         Expression_mult(const RandomConstant& e1, const MP_expression& e2) : 
@@ -376,6 +409,9 @@ namespace flopc {
     }
     MP_expression operator-(const RandomConstant& e1, const MP_expression& e2) {
         return new Expression_minus(e1, e2);
+    }
+    MP_expression operator-(const MP_expression& e1){
+        return new Expression_unary_minus(e1);
     }
 
     MP_expression operator*(const Constant& e1, const MP_expression& e2) {
@@ -548,11 +584,15 @@ void MP::GenerateFunctor::operator()() const {
                     for (int i = 0; i < MP_model::getCurrentModel()->getScenSet().size(); i++ ){
                         scenarioValues.push_back(sideOfConstraint*C->getValue(i));
                     }
-                    double meanValue = 0;
-                    std::vector<double> probs = MP_model::getCurrentModel()->getProbabilities();
-                    for (int j = 0; j < scenarioValues.size(); j++)
-                        meanValue += scenarioValues[j]*probs[j];
-                    val = meanValue;
+
+                    // If we sample we may want to replace the mean value, otherwise we probably don't
+                    if (MP_model::getCurrentModel()->getSample() ){
+                        double meanValue = 0;
+                        std::vector<double> probs = MP_model::getCurrentModel()->getProbabilities();
+                        for (int j = 0; j < scenarioValues.size(); j++)
+                            meanValue += scenarioValues[j]*probs[j];
+                        val = meanValue;
+                    }
 
                     // We have to replace the mean value?
                 }

@@ -492,7 +492,7 @@ namespace flopc{
         const MP_index_exp& i3,
         const MP_index_exp& i4,
         const MP_index_exp& i5) :
-    RV(rv),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),visited(false) {}
+    RV(rv),I1(i1),I2(i2),I3(i3),I4(i4),I5(i5),copy1(I1.deepCopyIndexExpression()),copy2(I2.deepCopyIndexExpression()),copy3(I3.deepCopyIndexExpression()),copy4(I4.deepCopyIndexExpression()),copy5(I5.deepCopyIndexExpression()),visited(false) { }
 
     RandomDataRef::RandomDataRef( const RandomDataRef& ref)
         :
@@ -501,7 +501,7 @@ namespace flopc{
         I2(ref.I2),
         I3(ref.I3),
         I4(ref.I4),
-        I5(ref.I5),
+        I5(ref.I5),copy1(I1.deepCopyIndexExpression()),copy2(I2.deepCopyIndexExpression()),copy3(I3.deepCopyIndexExpression()),copy4(I4.deepCopyIndexExpression()),copy5(I5.deepCopyIndexExpression()),
         B(ref.B),
         visited(ref.visited)
     {}
@@ -521,59 +521,129 @@ namespace flopc{
     }
 
     const RandomDataRef& RandomDataRef::operator=( RandomVariable* c )
-    { // Ist das so sinnvoll? Normalerweise eher weniger.. aber für den Einzelfall geeignet
-        if (RV->c.isDefined())
-            throw not_implemented_error(); //UseCase: We already have a Constant, this should not be the case..
-
-        RV->operator()( I1->evaluate(),(int)I2->evaluate(),I3->evaluate(),(int)I4->evaluate(),(int)I5->evaluate() ) = c; 
-        // Set correct stage for variable.
-        //Set stage to correct value
-        switch (RV->stage){
-    case 0: c->setStage((int)I1->evaluate() ); break;
-    case 1: c->setStage((int)I2->evaluate() ); break;
-    case 2: c->setStage((int)I3->evaluate() ); break;
-    case 3: c->setStage((int)I4->evaluate() ); break;
-    case 4: c->setStage((int)I5->evaluate() ); break;
+    { 
+        if (c == NULL)
+            return *this;
+        if (RV->c.isDefined()){
+            LOG(ERROR) << "FlopCpp Error: you defined this MP_random_data " << RV->getName() << "to hold an algebraic combination of other elements, so you must not assign a RandomVariable to it.";
+            throw not_implemented_error(); 
         }
+
+        RV->operator()( (int)I1->evaluate(),(int)I2->evaluate(),(int)I3->evaluate(),(int)I4->evaluate(),(int)I5->evaluate() ) = c; 
+        //    // Set correct stage for variable.
+        //    //Set stage to correct value
+            switch (RV->stage){
+        case 0: c->setStage((int)I1->evaluate() ); break;
+        case 1: c->setStage((int)I2->evaluate() ); break;
+        case 2: c->setStage((int)I3->evaluate() ); break;
+        case 3: c->setStage((int)I4->evaluate() ); break;
+        case 4: c->setStage((int)I5->evaluate() ); break;
+            }
         return *this;
     }
 
     void RandomDataRef::propagateIndexExpressions( const MP_index_exp& i1, const MP_index_exp& i2,const MP_index_exp& i3, const MP_index_exp& i4,const MP_index_exp& i5 )
     {
-        //TODO: We have to inspect the indices to keep correct ordering in case we mixed something up..
         // If we are asked to propagate IndexExpressions with EmptyIndices, we propagate our stored indices
         if (RV->c.isDefined()){ // We do not store RV, so we are more a container that holds an algebraic formula involving random data. Propagate Indices downwards.
             if (&i1 == &MP_index_exp::getEmpty()){ // If the sets are empty
                 RV->c->propagateIndexExpressions(I1,I2,I3,I4,I5);
+                return;
             }
-            else {
-                // Replace own indices with the given ones. 
-                // Make deep copys of all indices
-                MP_index_exp copy1(I1.deepCopyIndexExpression());
-                MP_index_exp copy2(I2.deepCopyIndexExpression());
-                MP_index_exp copy3(I3.deepCopyIndexExpression());
-                MP_index_exp copy4(I4.deepCopyIndexExpression());
-                MP_index_exp copy5(I5.deepCopyIndexExpression());
-                I1->insertIndexExpr(i1);
-                I2->insertIndexExpr(i2);
-                I3->insertIndexExpr(i3);
-                I4->insertIndexExpr(i4);
-                I5->insertIndexExpr(i5);
-                RV->c->propagateIndexExpressions(I1,I2,I3,I4,I5);
-                I1 = copy1;
-                I2 = copy2;
-                I3 = copy3;
-                I4 = copy4;
-                I5 = copy5;
-            }
+        } 
+        // We have to make deepCopy's only once, this is during construction. TradeOff/evaluation necessary to make a final decision, we can still change this.
+        // Restore original decisions so that every RDR can work with the same set of indices.
+        I1 = copy1;
+        I2 = copy2;
+        I3 = copy3;
+        I4 = copy4;
+        I5 = copy5;
+
+        // Now things get complicated: When is this method called? During coefficient generation. 
+        // We are in a RandomDataRef that is not the first one ( i.e. in a chained RandomDataRef, but NOT in the beginning.
+        // Ordering of our RDR can differ from ordering of calling RDR. Find correct indices and propagate these
+        // We ensured already that we used correct indices during the creation of RandomDataRef with semantic checking!
+        // 
+        MP_index* tempPtr = i1->getIndex();
+        vector<bool> bools(5,false);
+        if ( tempPtr == I1->getIndex() )
+        { I1 = I1->insertIndexExpr(i1); bools[0] = true; }
+        else if (tempPtr == I2->getIndex() )
+        {  I2 = I2->insertIndexExpr(i1); bools[1] = true; }
+        else if (tempPtr == I3->getIndex() )
+        {   I3 = I3->insertIndexExpr(i1);bools[2] = true; }
+        else if (tempPtr == I4->getIndex() )
+        {   I4 = I4->insertIndexExpr(i1);bools[3] = true; }
+        else if (tempPtr == I5->getIndex() )
+        {   I5 = I5->insertIndexExpr(i1);bools[4] = true; }
+
+        // Go for the second index
+        if ( i2.operator==(MP_index_exp::getEmpty()) )
+            goto stop;
+        tempPtr = i2->getIndex();
+        if ( !bools[1] && tempPtr == I2->getIndex())
+        {   I2 = I2->insertIndexExpr(i2); bools[1] = true; }
+        else if (!bools[2] && tempPtr == I3->getIndex() )
+        {   I3 = I3->insertIndexExpr(i2);bools[2] = true; }
+        else if (!bools[3] && tempPtr == I4->getIndex() )
+        {   I4 = I4->insertIndexExpr(i2);bools[3] = true; }
+        else if (!bools[4] && tempPtr == I5->getIndex() )
+        {   I5 = I5->insertIndexExpr(i2);bools[4] = true; }
+        else if (!bools[1] &&tempPtr == I1->getIndex() )
+        {   I1 = I1->insertIndexExpr(i2);bools[0] = true; }
+
+        // Go for the third index
+        if ( i3.operator==(MP_index_exp::getEmpty()) )
+            goto stop;
+        tempPtr = i3->getIndex();
+        if ( !bools[1] && tempPtr == I2->getIndex())
+        {   I2 = I2->insertIndexExpr(i2); bools[1] = true; }
+        else if (!bools[2] && tempPtr == I3->getIndex() )
+        {   I3 = I3->insertIndexExpr(i2);bools[2] = true; }
+        else if (!bools[3] && tempPtr == I4->getIndex() )
+        {   I4 = I4->insertIndexExpr(i2);bools[3] = true; }
+        else if (!bools[4] && tempPtr == I5->getIndex() )
+        {   I5 = I5->insertIndexExpr(i2);bools[4] = true; }
+        else if (!bools[1] &&tempPtr == I1->getIndex() )
+        {   I1 = I1->insertIndexExpr(i2);bools[0] = true; }
+
+        // Go for the fourth index
+        if ( i4.operator==(MP_index_exp::getEmpty()) )
+            goto stop;
+        tempPtr = i4->getIndex();
+        if ( !bools[1] && tempPtr == I2->getIndex())
+        {   I2 = I2->insertIndexExpr(i2); bools[1] = true; }
+        else if (!bools[2] && tempPtr == I3->getIndex() )
+        {   I3 = I3->insertIndexExpr(i2);bools[2] = true; }
+        else if (!bools[3] && tempPtr == I4->getIndex() )
+        {   I4 = I4->insertIndexExpr(i2);bools[3] = true; }
+        else if (!bools[4] && tempPtr == I5->getIndex() )
+        {   I5 = I5->insertIndexExpr(i2);bools[4] = true; }
+        else if (!bools[1] &&tempPtr == I1->getIndex() )
+        {   I1 = I1->insertIndexExpr(i2);bools[0] = true; }
+
+        // Go for the fifth index
+        if ( i5.operator==(MP_index_exp::getEmpty()) )
+            goto stop;
+        tempPtr = i5->getIndex();
+        if ( !bools[1] && tempPtr == I2->getIndex())
+        {   I2 = I2->insertIndexExpr(i2); bools[1] = true; }
+        else if (!bools[2] && tempPtr == I3->getIndex() )
+        {   I3 = I3->insertIndexExpr(i2);bools[2] = true; }
+        else if (!bools[3] && tempPtr == I4->getIndex() )
+        {   I4 = I4->insertIndexExpr(i2);bools[3] = true; }
+        else if (!bools[4] && tempPtr == I5->getIndex() )
+        {   I5 = I5->insertIndexExpr(i2);bools[4] = true; }
+        else if (!bools[1] &&tempPtr == I1->getIndex() )
+        {   I1 = I1->insertIndexExpr(i2);bools[0] = true; }
+        else
+            LOG(INFO) << "You linked a MP_random_data to another MP_random_data with different indices.";
+
+stop:
+        if (RV->c.isDefined()){
+            RV->c->propagateIndexExpressions(I1,I2,I3,I4,I5);
         }
-        else { // We should have RandomVariables associated with us.
-            if (&i1 != &MP_index_exp::getEmpty()){ // NO empty indices, update indices
-                // TODO: Take care here. We do not want to simply replace the indices but transform them.
-                //I1->insertIndice(i1,i2,i3,i4,i5);
-                I1 = i1; I2 = i2; I3 = i3; I4 = i4; I5 = i5;
-            }
-        }
+
 
     }
 
@@ -606,12 +676,12 @@ namespace flopc{
     int RandomDataRef::getStage() const
     {	//We do not know which of these sets is the stage set, so we have to check all (but could abort after we found one)
         switch (RV->stage){ // We know which index keeps the stage.
-            case 0 : return I1->evaluate();
-            case 1 : return I2->evaluate();
-            case 2 : return I3->evaluate();
-            case 3 : return I4->evaluate();
-            case 4 : return I5->evaluate();
-            default: throw invalid_argument_exception();
+    case 0 : return I1->evaluate();
+    case 1 : return I2->evaluate();
+    case 2 : return I3->evaluate();
+    case 3 : return I4->evaluate();
+    case 4 : return I5->evaluate();
+    default: throw invalid_argument_exception();
         }
     }
 
@@ -765,7 +835,7 @@ namespace flopc{
         step = double(end-start)/sampleSize;
         defaultSampleSize = sampleSize;
         if (step == 0.0){
-            LOG(ERROR) << "UniformRandomVariable from start " << start << " to " << end << "has stepwidth zero.";
+            LOG(ERROR) << "FlopCpp Error: UniformRandomVariable from start " << start << " to " << end << "has stepwidth zero.";
             throw invalid_argument_exception();
         }
         dm = boost::shared_ptr<DiscretizationMethod>(dmPtr);

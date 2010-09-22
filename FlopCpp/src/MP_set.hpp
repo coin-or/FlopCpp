@@ -248,7 +248,7 @@ namespace flopc {
             for (int i=0; i<nbr; i++) {
                 if ( S[i]->check(args[i]) == outOfBound ) {
                     isOk = false;
-                    LOG(ERROR) << "You supplied wrong arguments for the indexation of SubSet " << this->getName() << " for the " << i << ". argument.";
+                    LOG(ERROR) << "FlopCpp Error: you supplied wrong arguments for the indexation of SubSet " << this->getName() << " for the " << i+1 << ". argument.";
                 }
             }
             if (isOk == true) {

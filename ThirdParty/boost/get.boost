@@ -14,7 +14,7 @@ fi
 mirror=ignum
 echo "Downloading boost source code..."
 echo "If downloading the file fails, you can download the file itself and unzip the content in the current directory."
-$wgetcmd "http://downloads.sourceforge.net/project/boost/boost/1.43.0/boost_1_43_0.tar.gz?use_mirror=$mirror"
+$wgetcmd "http://downloads.sourceforge.net/project/boost/boost/1.43.0/boost_1_43_0.tar.gz?use_mirror=$mirror" -O boost_1_43_0.tar.gz
 
 echo "Uncompressing tarball.."
 tar --overwrite -xzf boost_1_43_0.tar.gz

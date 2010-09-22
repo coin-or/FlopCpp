@@ -259,7 +259,7 @@ namespace flopc {
         friend class MP_index_exp;
     public:
     private:
-        MP_index_constant(const Constant& c) : indexPtr(new MP_index()),C(c) { indexPtr->assign(c->evaluate());}
+        MP_index_constant(const Constant& c) : indexPtr(new MP_index()),C(c) { indexPtr->assign((int)(c->evaluate()));}
         ~MP_index_constant() { delete indexPtr; }
         int evaluate() const {
             return int(C->evaluate()); 
@@ -270,7 +270,7 @@ namespace flopc {
             return indexPtr;
         }
         virtual MP_domain getDomain(MP_set* s) const;
-        virtual MP_index_base* deepCopy() const { return MP_index_exp::getEmpty().operator->(); }
+        virtual MP_index_base* deepCopy() const { return new MP_index_constant(C); }
         virtual MP_index_base* insertIndexExpr(const MP_index_exp& expr) { 
             return expr.operator->();
             throw invalid_argument_exception(); //TODO: What is it with this?

@@ -37,6 +37,8 @@ namespace flopc {
         friend class MP_variable;
         friend class RandomDataRef;
 
+        // TODO: Efficiency improvement: Do not store vectors but pointer to vectors?
+        // Or: Do not store Coef's in vectors but pointer to Coef's?
         struct Coef {
             Coef(int c, int r, double v, int s = 0,int rs = 0,const std::vector<double>& scen = std::vector<double>()) : 
         col(c), row(r), varStage(s),randomStage(rs), val(v), scenVector(scen)  {}
@@ -284,6 +286,8 @@ namespace flopc {
     /// @ingroup PublicInterface
     MP_expression operator-(const Constant& e1, const MP_expression& e2);
     /// @ingroup PublicInterface
+    MP_expression operator-(const MP_expression& e1);
+    /// @ingroup PublicInterface
     MP_expression operator*(const RandomConstant& e1, const MP_expression& e2); 
     /// @ingroup PublicInterface
     MP_expression operator*(const MP_expression& e1, const RandomConstant& e2);
@@ -291,18 +295,10 @@ namespace flopc {
     MP_expression operator*(const Constant& e1, const MP_expression& e2); 
     /// @ingroup PublicInterface
     MP_expression operator*(const MP_expression& e1, const Constant& e2);
-    /// @ingroup PublicInterface
-    //MP_expression operator*(const RandomDataRef& e1, const MP_expression& e2); 
-    ///// @ingroup PublicInterface
-    //MP_expression operator*(const MP_expression& e1, const RandomDataRef& e2); 
-    /// @ingroup PublicInterface
+     /// @ingroup PublicInterface
     MP_expression operator/(const MP_expression& e1, const RandomConstant& e2);
     /// @ingroup PublicInterface
     MP_expression operator/(const MP_expression& e1, const Constant& e2);
-    /// @ingroup PublicInterface
-    //MP_expression operator/(const RandomDataRef& e1, const MP_expression& e2);
-    ///// @ingroup PublicInterface
-    //MP_expression operator/(const MP_expression& e1, const RandomDataRef& e2);
     /// @ingroup PublicInterface
     MP_expression sum(const MP_domain& d, const MP_expression& e);
 

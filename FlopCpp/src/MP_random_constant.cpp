@@ -547,5 +547,9 @@ namespace flopc {
 
     }
 
+    void RandomDataRef::operator()() const
+    {
+
+    }
 } // End of namespace flopc
 

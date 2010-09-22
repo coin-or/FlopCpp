@@ -23,11 +23,11 @@ namespace flopc {
     }
 
     MP_index_base* MP_index::insertIndexExpr( const MP_index_exp& expr)
-    {
+    { // We should replace this MP_index with the MP_index_exp we got. How can this possibly work?
         if (this->getIndex() == expr->getIndex()){
             return expr.operator->();
         }
-        else{ // We should check for indices, which can be instantiated during the display and generation methiod
+        else{ // We should check for indices, which can be instantiated during the display and generation method
             return this->getIndex();
         }
         throw not_implemented_error();

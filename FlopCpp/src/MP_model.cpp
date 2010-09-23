@@ -872,10 +872,9 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         
         //matrix.removeGaps(); //What is this for?
         Solver->loadProblem(matrix, l, u, c, bl, bu); //Generate Core Data, in Solver
-        SmiCoreData *osiCore = 0; //Create CoreData Node. Needs to be deleted in case of stochastic solver.
+        SmiCoreData *osiCore = NULL; //Create CoreData Node. Needs to be deleted in case of stochastic solver.
         if (!integerIndices.empty()){ //suffices, because every binary is also an integer
             Solver->setInteger(&integerIndices[0],integerIndices.size());
-            osiCore = new SmiCoreData(Solver,stage.size(),colStage,rowStage,&integerIndices[0]); //Create CoreData Node. Needs to be deleted in case of stochastic solver.
             if (!binaryIndices.empty())
                 osiCore = new SmiCoreData(Solver,stage.size(),colStage,rowStage,&integerIndices[0],integerIndices.size(), &binaryIndices[0],binaryIndices.size()); 
             else
@@ -888,11 +887,12 @@ void MP_model::attach(OsiSolverInterface *_solver) { //TODO: give pointer to sam
         // Get SmiScnModel that holds a generated ScenarioTree.
         smiModel = generateScenarioTree(randomCoefs,osiCore);
         // Check if we eliminated RV in some stages ( could be
-        if (smiModel == 0)
+        if (smiModel == 0){
             //We were not sucessful in creating a scenario tree. Try normal operation. TODO: Think about reversed matrix..
             Solver->loadProblem(n,m,Cst,Rnr,Elm,l,u,c,bl,bu);
-        else
-            smiModel->Core(osiCore); //Let smiModel handle disposal of SmiCoreData
+            // We have to delete the osiCore:
+            delete osiCore;
+        }
     }
     else {
         Solver->loadProblem(n, m, Cst, Rnr, Elm, l, u, c, bl, bu);
@@ -1119,12 +1119,12 @@ void MP_model::detach() {
     mSolverState = MP_model::DETACHED;
     if (Solver)
         delete Solver;
-    Solver = 0;
+    Solver = NULL;
     //Delete stochastic information. We have this, if we have a time structure AND we have attached a solver.
     if (stage.size() > 0 && smiModel != 0){ 
-        smiModel->releaseSolver(); //TODO: This can be deleted, if stochasticSolverInterface is ready.
+        smiModel->releaseSolver(); //TODO: until we have a stochastic solver
         delete smiModel;
-        smiModel = 0;
+        smiModel = NULL;
         if (n > 0){
             delete [] colStage;
             delete [] colIndirection;
@@ -1460,7 +1460,7 @@ namespace flopc {
         }
 
         SmiScnModel *smiModel = new SmiScnModel(); //Create new SmiScnModel
-        smiModel->Core(smiCore);
+        smiModel->setCore(smiCore);
 
         //int numOfIrrelevantScen = std::count(branchStageVec.begin(),branchStageVec.end(),outOfBound);
         // scenarios needs to be added in correct ordering, i.e. every scenario that depends on another one can be only inserted after the dependent one.

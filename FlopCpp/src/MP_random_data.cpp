@@ -92,7 +92,7 @@ namespace flopc{
         }; 
 
         //Do a shallow copy (leave values in original arrays). This means we do want to delete the created RandomVariables
-        MP_random_data_impl(double* array, const MP_set_base &s1, const MP_set_base &s2, const                   MP_set_base &s3, const MP_set_base &s4, const MP_set_base &s5):
+        MP_random_data_impl(double* array, const MP_set_base &s1, const MP_set_base &s2, const MP_set_base &s3, const MP_set_base &s4, const MP_set_base &s5):
         RowMajor(s1.size(),s2.size(),s3.size(),s4.size(),s5.size()),
             S1(s1),S2(s2),S3(s3),S4(s4),S5(s5),c(0),values(new RandomVariable*[size()]),myrefs(),manageData(true),stage(-1) {  //Consistency check?
                 initialize();

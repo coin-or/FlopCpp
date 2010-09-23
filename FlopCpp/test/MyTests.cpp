@@ -306,6 +306,7 @@ namespace flopc {
         MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger());
         MP_stage T(2);
         MP_random_data rvar(T);
+        // MP_random_data should delete all the RV it get's assigned..
         rvar(1) = new ContinuousNormalRandomVariable(0,1, new BracketMeanDiscretization(10));
         rvar(1)->setStage(1);
         //rvar2(1) = new ContinuousNormalRandomVariable(0,1, new BracketMedianDiscretization(5));
@@ -315,11 +316,14 @@ namespace flopc {
         con(T) = x(T) <= rvar(T);
         testModel.setObjective( x(T.last()) );
         testModel.solve(MP_model::MAXIMIZE);
+        // We assign a new RV to the old one, we have to delete the old one before
+        delete rvar(1);
         rvar(1) = new ContinuousNormalRandomVariable(0,1, new BracketMedianDiscretization(10));
         rvar(1)->setStage(1);
         testModel.setObjective( x(T.last()) );
         testModel.attach();
         testModel.solve(MP_model::MAXIMIZE);
+        delete rvar(1);
         rvar(1) = new ContinuousExponentialRandomVariable(1, new BracketMedianDiscretization(10));
         rvar(1)->setStage(1);
         testModel.setObjective( x(T.last()) );
@@ -354,6 +358,7 @@ namespace flopc {
         randomConstraint2(T+1) = y(T+1) <= combined(T+1);
         testModel.setObjective(y(T.last()));
         testModel.attach();
+        //EXPECT_THROW(testModel.attach(),std::exception);
         testModel.solve(MP_model::MAXIMIZE);
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
         EXPECT_DOUBLE_EQ(5,testModel.Solver->getObjValue());
@@ -491,9 +496,9 @@ namespace flopc {
         dA(0) = 1;
         dA(1) = 10;
 
-        double dbvalues[2][4] = { {1,2,3,4 }, {5,6,7,8 }}; 
+        double dbvalues[2][4] = { {1,2,3,4 }, {5,6,7,8 } }; 
 
-        MP_random_data dB(dbvalues[0,0],T);
+        MP_random_data dB( &dbvalues[0][0],T);
 
         MP_variable x1(A), x2(A),x3(B,C),x4(B),x5(A,T);
         x1.upperLimit(A) = 10;
@@ -592,8 +597,8 @@ namespace flopc {
         MP_stage T(3);
         //TODO: We have to write a good seed generation routine...
         // Idea: At the moment of sampling total number of sampling variables is known. One can divide the seeds evenly.
-        RandomVariable* scenarioValues[2] = { new DiscreteUniformRandomVariable(0,10,11),new DiscreteUniformRandomVariable(0,10,11)};
-        RandomVariable* scenarioValues1[2] = { new DiscreteUniformRandomVariable(10,20,11),new DiscreteUniformRandomVariable(10,20,11)};
+        RandomVariable* scenarioValues[2] = { new DiscreteUniformRandomVariable(0,10,11),new DiscreteUniformRandomVariable(0,10,5)};
+        RandomVariable* scenarioValues1[2] = { new DiscreteUniformRandomVariable(10,20,5),new DiscreteUniformRandomVariable(10,20,5)};
         MP_random_data rvar(&scenarioValues[0],T);
         MP_random_data rvar2(&scenarioValues1[0],T);
         MP_variable x(T);
@@ -712,10 +717,11 @@ namespace flopc {
         testModel.setProbabilities(probabilities);
         testModel.attach();
         testModel.solve(MP_model::MAXIMIZE);
-        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
-
         EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
         EXPECT_DOUBLE_EQ(52,testModel->getObjValue());
+        writeReadSMPSTest(testModel,MP_model::MAXIMIZE,"test");
+
+
     }
 
 
@@ -871,10 +877,10 @@ namespace flopc {
         // solve EV-, EEV-, WS- and here-and-now-Problem
         double ev, eev, ws, hereAndNow;
 
-        ev = dacota.smiModel->solveEV(dacota.Solver, MP_model::MAXIMIZE);
+        ev = dacota.smiModel->getEVValue(dacota.Solver, MP_model::MAXIMIZE);
         EXPECT_EQ(ev, 4165);
 
-        eev = dacota.smiModel->solveEEV(dacota.Solver, MP_model::MAXIMIZE);
+        eev = dacota.smiModel->getEEVValue(dacota.Solver, MP_model::MAXIMIZE);
         EXPECT_NEAR(eev, 1545, 0.0001);
 
         ws = dacota.smiModel->getWSValue(dacota.Solver, MP_model::MAXIMIZE);
@@ -1310,6 +1316,14 @@ namespace flopc {
             EXPECT_GE(sampledValues[i], 0);
             EXPECT_LE(sampledValues[i], 1);
         }
+        delete rv;
+        delete rv2;
+        delete rv4;
+        delete rv5;
+        delete rv6;
+        delete rv7;
+        delete rv8;
+        delete rv9;
         cout << "Finished.";
     }
 
@@ -1426,6 +1440,86 @@ namespace flopc {
     TEST_F(MP_modelTest,InvalidArgumentTest){
         MP_model testModel(new OsiClpSolverInterface()); // Without Solver
         ASSERT_THROW(MP_random_data();,invalid_argument_exception);
+
+    }
+
+    // Test if RV in MP_subset's work correctly
+    TEST_F(MP_modelTest,RandomSubsetTest){
+        MP_model testModel(new OsiClpSolverInterface(), new VerboseMessenger(), 2617119269);
+        testModel.setSample(true);
+
+        enum {numStage = 3};
+        MP_stage T(numStage);
+
+        enum {NodeA, NodeB, NodeC, NodeD, numNodes};
+        MP_set nodes(numNodes);
+        nodes.setName("nodes");
+
+        MP_subset<2> arcs(nodes,nodes);
+        arcs.insert(NodeA,NodeB);
+        arcs.insert(NodeA,NodeC);
+        arcs.insert(NodeA,NodeD);
+        arcs.insert(NodeB, NodeC);
+        arcs.insert(NodeB,NodeD);
+        arcs.insert(NodeC,NodeD);
+
+        MP_random_data zeroOne(T);
+        zeroOne.setName("zeroOne");
+
+        MP_data zeroTest(T);
+        zeroTest(T) = 1;
+        zeroTest.display("zeroTest");
+        
+        zeroOne(1) = new DiscreteBernoulliRandomVariable(0.5);
+        zeroOne(1)->setStage(1);
+        zeroOne(2) = new DiscreteUniformRandomVariable(5,6,3);
+        zeroOne(2)->setStage(2);
+
+        MP_random_data combined(T);
+        combined(T) = zeroTest(T) + zeroOne(T);
+
+        MP_data testData(T,arcs);
+
+        MP_random_data arcsInStage(T,arcs);
+        arcsInStage.setName("arcsInStage");
+        forall(T, testData(T,arcs) = 0 );
+        forall(arcs, testData(T.last(),arcs) = zeroTest(T.last()) );
+        testData.display("testData");
+        forall(T,arcsInStage(T,arcs) = 0 );
+        arcsInStage(T,arcs) = combined(T);
+        arcsInStage.display("arcsInStage");
+        //arcsInStage(T+1,arcs) = zeroOne(T+1);
+
+        MP_variable x(T);
+
+        MP_constraint constraint1(T);
+
+        constraint1(T+1) = sum(arcs, arcsInStage(T+1,arcs)) <= x(T+1);
+        MP_expression objective( x(T.last())+x(1) );
+
+        testModel.setObjective(objective);
+        testModel.solve(MP_model::MINIMIZE);
+        EXPECT_EQ(51,testModel->getObjValue());
+        EXPECT_EQ(MP_model::OPTIMAL,testModel.getStatus());
+        
+    }
+
+    TEST_F(UseCaseTest,UnaryMinusTest){
+        MP_model testModel(new OsiClpSolverInterface());
+
+        MP_variable x;
+        MP_data y;
+        y() = 5;
+
+        MP_constraint z1,z2;
+        z1() = -x() >= -10;
+        z2() = -y() >= -x();
+
+        testModel.setObjective(x());
+        testModel.solve(MP_model::MAXIMIZE);
+        ASSERT_EQ(10,testModel->getObjValue());
+        testModel.solve(MP_model::MINIMIZE);
+        ASSERT_EQ(5,testModel->getObjValue());
 
     }
 
@@ -1582,13 +1676,8 @@ namespace flopc {
 
 //TODO: Write Tests for right-hand-side with RV and constant term
 int main(int argc, char *argv[]) {
-    //VLDDisable();
     ::testing::InitGoogleTest(&argc, argv);
-    //VLDEnable();
-    //::testing::GTEST_FLAG(filter) = "*.RandomWalkTest";
-    //_CrtMemState memstate;
-    //_CrtMemCheckpoint(&memstate);
-
+    //::testing::GTEST_FLAG(filter) = "*.RandomParameterIn*";
     google::InitGoogleLogging(argv[0]);
 #ifndef _MSC_VER
     google::InstallFailureSignalHandler(); //This does not work under windows (prints out stacktrace)

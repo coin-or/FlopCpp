@@ -10,17 +10,21 @@ if test ! $wgetcount = 1; then
   exit -1
 fi
 echo "Downloading glog source code"
-$wgetcmd http://google-glog.googlecode.com/files/glog-0.3.0.tar.gz
+majorVersion=0.3.1
+minorVersion=1
+version=${majorVersion}-${minorVersion}
+
+$wgetcmd http://google-glog.googlecode.com/files/glog-${version}.tar.gz
 
 echo "Uncompressing tarball.."
-tar -xzf glog-0.3.0.tar.gz
+tar -xzf glog-${version}.tar.gz
 
 echo "Move files in correct location"
-mv glog-0.3.0/* ./
+mv glog-${majorVersion}/* ./
 
 echo "Cleaning up"
-rmdir glog-0.3.0
-rm glog-0.3.0.tar.gz
+rmdir glog-${majorVersion}
+rm glog-${version}.tar.gz
 
 echo "Configuring glog"
 ./configure prefix=`pwd`

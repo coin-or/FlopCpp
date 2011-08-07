@@ -2,6 +2,7 @@
 #include "TestBed.hpp"
 
 #include <iostream>
+#include <cstring>
 
 TestBed *TestItem::theBed=NULL;
 

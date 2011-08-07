@@ -128,6 +128,8 @@ FlopCpp/src/config_flopcpp_default.h -text
 FlopCpp/src/flopc.cpp -text
 FlopCpp/src/flopc.hpp -text
 FlopCpp/test/unitTest.cpp -text
+FlopCpp/unittest/Makefile.am -text
+FlopCpp/unittest/Makefile.in -text
 FlopCpp/unittest/TestBed.cpp -text
 FlopCpp/unittest/TestBed.hpp -text
 FlopCpp/unittest/TestItem.cpp -text
@@ -135,7 +137,6 @@ FlopCpp/unittest/TestItem.hpp -text
 FlopCpp/unittest/booleanTest.cpp -text
 FlopCpp/unittest/constantTest.cpp -text
 FlopCpp/unittest/indexTest.cpp -text
-FlopCpp/unittest/makeUnittest -text
 FlopCpp/unittest/setTest.cpp -text
 FlopCpp/unittest/unitTest.cpp -text
 FlopCpp/unittest/unitTest.hpp -text

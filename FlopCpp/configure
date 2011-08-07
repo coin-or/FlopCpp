@@ -21270,6 +21270,11 @@ fi
 
 
 
+if test $coin_has_osi != yes ; then
+  { { echo "$as_me:$LINENO: error: Required package Osi not available." >&5
+echo "$as_me: error: Required package Osi not available." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 echo "$as_me:$LINENO: checking for COIN-OR package Cbc" >&5
 echo $ECHO_N "checking for COIN-OR package Cbc... $ECHO_C" >&6
@@ -22478,7 +22483,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                            ac_config_files="$ac_config_files Makefile examples/Makefile src/Makefile test/Makefile flopcpp.pc flopcpp-uninstalled.pc"
+                                                                      ac_config_files="$ac_config_files Makefile examples/Makefile src/Makefile test/Makefile unittest/Makefile flopcpp.pc flopcpp-uninstalled.pc"
 
 
 # Here put the location and name of the configuration header file
@@ -23192,6 +23197,7 @@ do
   "examples/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "test/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
+  "unittest/Makefile" ) CONFIG_FILES="$CONFIG_FILES unittest/Makefile" ;;
   "flopcpp.pc" ) CONFIG_FILES="$CONFIG_FILES flopcpp.pc" ;;
   "flopcpp-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES flopcpp-uninstalled.pc" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;

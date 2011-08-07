@@ -35,15 +35,18 @@ EXTRA_DIST =
 ########################################################################
 
 test: all
+	cd unittest; make test
 	cd test; make test
 
 unitTest: test
 
 clean-local:
 	if test -r test/Makefile; then cd test; make clean; fi
+	if test -r unittest/Makefile; then cd unittest; make clean; fi
 
 distclean-local:
 	if test -r test/Makefile; then cd test; make distclean; fi
+	if test -r unittest/Makefile; then cd unittest; make distclean; fi
 
 .PHONY: test unitTest
 

@@ -57,6 +57,9 @@ AC_COIN_INIT_AUTO_TOOLS
 #############################################################################
 
 AC_COIN_CHECK_PACKAGE(Osi, [osi], [FlopCpp])
+if test $coin_has_osi != yes ; then
+  AC_MSG_ERROR([Required package Osi not available.])
+fi
 AC_COIN_CHECK_PACKAGE(Cbc, [osi-cbc])
 AC_COIN_CHECK_PACKAGE(Clp, [osi-clp])
 
@@ -100,6 +103,7 @@ AC_CONFIG_FILES([Makefile
                  examples/Makefile
                  src/Makefile
                  test/Makefile
+                 unittest/Makefile
                  flopcpp.pc
                  flopcpp-uninstalled.pc])
 

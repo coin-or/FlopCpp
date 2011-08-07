@@ -42,8 +42,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_HAS_CBC_TRUE@noinst_PROGRAMS = unitTest$(EXEEXT)
-subdir = test
+noinst_PROGRAMS = unitTest$(EXEEXT)
+subdir = unittest
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -55,8 +55,9 @@ CONFIG_HEADER = $(top_builddir)/src/config.h \
 	$(top_builddir)/src/config_flopcpp.h
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am__unitTest_SOURCES_DIST = unitTest.cpp
-@COIN_HAS_CBC_TRUE@am_unitTest_OBJECTS = unitTest.$(OBJEXT)
+am_unitTest_OBJECTS = booleanTest.$(OBJEXT) constantTest.$(OBJEXT) \
+	indexTest.$(OBJEXT) setTest.$(OBJEXT) TestBed.$(OBJEXT) \
+	TestItem.$(OBJEXT) unitTest.$(OBJEXT)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 am__DEPENDENCIES_1 =
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -70,7 +71,7 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(unitTest_SOURCES)
-DIST_SOURCES = $(am__unitTest_SOURCES_DIST)
+DIST_SOURCES = $(unitTest_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -252,15 +253,15 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-@COIN_HAS_CBC_TRUE@unitTest_SOURCES = unitTest.cpp
+unitTest_SOURCES = booleanTest.cpp constantTest.cpp indexTest.cpp setTest.cpp TestBed.cpp TestItem.cpp unitTest.cpp
 
 # List libraries of COIN-OR projects
-@COIN_HAS_CBC_TRUE@unitTest_LDADD = ../src/libFlopCpp.la $(FLOPCPP_LIBS) $(CBC_LIBS)
-@COIN_HAS_CBC_TRUE@unitTest_DEPENDENCIES = ../src/libFlopCpp.la $(FLOPCPP_DEPENDENCIES) $(CBC_DEPENDENCIES)
+unitTest_LDADD = ../src/libFlopCpp.la $(FLOPCPP_LIBS)
+unitTest_DEPENDENCIES = ../src/libFlopCpp.la $(FLOPCPP_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-@COIN_HAS_CBC_TRUE@AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` $(FLOPCPP_CFLAGS) $(CBC_CFLAGS)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` $(FLOPCPP_CFLAGS)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` 
@@ -285,9 +286,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  test/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  unittest/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  test/Makefile
+	  $(AUTOMAKE) --foreign  unittest/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -322,6 +323,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestBed.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TestItem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/booleanTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/constantTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indexTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitTest.Po@am__quote@
 
 .cpp.o:
@@ -523,11 +530,8 @@ uninstall-am: uninstall-info-am
 	uninstall-info-am
 
 
-@COIN_HAS_CBC_TRUE@test: unitTest$(EXEEXT)
-@COIN_HAS_CBC_TRUE@	./unitTest$(EXEEXT)
-
-@COIN_HAS_CBC_FALSE@test:
-@COIN_HAS_CBC_FALSE@	echo "Need CBC to run test."
+test: unitTest$(EXEEXT)
+	./unitTest$(EXEEXT)
 
 .PHONY: test
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

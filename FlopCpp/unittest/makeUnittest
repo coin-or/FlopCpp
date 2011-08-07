@@ -1,1 +1,0 @@
-g++ *.cpp -I. -I../../include  -L../../lib -L../lib -Wl,-rpath,../../lib  -lFlopCpp -lCoinUtils -o unittest

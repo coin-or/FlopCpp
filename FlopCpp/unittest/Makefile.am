@@ -2,7 +2,7 @@
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-## $Id$
+## $Id: Makefile.am 264 2011-08-07 01:26:00Z tkr $
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
@@ -12,28 +12,20 @@ AUTOMAKE_OPTIONS = foreign
 #                         unitTest for FlopCpp                         #
 ########################################################################
 
-if COIN_HAS_CBC
-
 noinst_PROGRAMS = unitTest
 
-unitTest_SOURCES = unitTest.cpp
+unitTest_SOURCES = booleanTest.cpp constantTest.cpp indexTest.cpp setTest.cpp TestBed.cpp TestItem.cpp unitTest.cpp
 
 # List libraries of COIN-OR projects
-unitTest_LDADD = ../src/libFlopCpp.la $(FLOPCPP_LIBS) $(CBC_LIBS)
-unitTest_DEPENDENCIES = ../src/libFlopCpp.la $(FLOPCPP_DEPENDENCIES) $(CBC_DEPENDENCIES)
+unitTest_LDADD = ../src/libFlopCpp.la $(FLOPCPP_LIBS)
+unitTest_DEPENDENCIES = ../src/libFlopCpp.la $(FLOPCPP_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` $(FLOPCPP_CFLAGS) $(CBC_CFLAGS)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` $(FLOPCPP_CFLAGS)
 
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)
-
-else
-
-test:
-	echo "Need CBC to run test."
-endif
 
 .PHONY: test
 

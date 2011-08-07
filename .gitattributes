@@ -72,7 +72,10 @@ FlopCpp/MSVisualStudio/v9/examples/transport/transport.vcproj -text
 FlopCpp/MSVisualStudio/v9/examples/xbsl/xbsl.vcproj -text
 FlopCpp/MSVisualStudio/v9/libflopc.vcproj -text
 FlopCpp/README -text
+FlopCpp/config.guess -text
+FlopCpp/config.sub -text
 FlopCpp/configure -text
+FlopCpp/depcomp -text
 FlopCpp/examples/CEPFlopCppModel.cpp -text
 FlopCpp/examples/aircraft.cpp -text
 FlopCpp/examples/ampl.cpp -text
@@ -99,6 +102,9 @@ FlopCpp/examples/transport.cpp -text
 FlopCpp/examples/xbsl.cpp -text
 FlopCpp/flopcpp-uninstalled.pc.in -text
 FlopCpp/flopcpp.pc.in -text
+FlopCpp/install-sh -text
+FlopCpp/ltmain.sh -text
+FlopCpp/missing -text
 FlopCpp/src/FlopCppConfig.h -text
 FlopCpp/src/MP_boolean.cpp -text
 FlopCpp/src/MP_boolean.hpp -text

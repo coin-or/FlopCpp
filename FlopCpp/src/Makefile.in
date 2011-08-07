@@ -70,7 +70,7 @@ am_libFlopCpp_la_OBJECTS = MP_boolean.lo MP_constant.lo \
 	MP_index.lo MP_model.lo MP_set.lo MP_utilities.lo \
 	MP_variable.lo
 libFlopCpp_la_OBJECTS = $(am_libFlopCpp_la_OBJECTS)
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
+depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)

@@ -12,7 +12,7 @@
 #
 # Copyright 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is part of the open source package Coin which is distributed
+# This file is part of the open source package FlopC++ which is distributed
 # under the Common Public License.
 ## --------------------- ##
 ## M4sh Initialization.  ##
@@ -473,7 +473,6 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subdirs_all="$ac_subdirs_all ThirdParty/ASL"
 ac_subdirs_all="$ac_subdirs_all CoinUtils"
 ac_subdirs_all="$ac_subdirs_all Osi"
 ac_subdirs_all="$ac_subdirs_all Clp"
@@ -1130,9 +1129,6 @@ Optional Packages:
   --with-tags[=TAGS]
                           include additional configurations [automatic]
 
-  --with-asl-lib linker flags for using project ASL
-  --with-asl-incdir directory with header files for using project ASL
-  --with-asl-datadir directory with data files for using project ASL
   --with-coinutils-lib linker flags for using project CoinUtils
   --with-coinutils-incdir directory with header files for using project
                           CoinUtils
@@ -1298,7 +1294,7 @@ gives unlimited permission to copy, distribute and modify it.
 
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package Coin which is distributed
+This file is part of the open source package FlopC++ which is distributed
 under the Common Public License.
 _ACEOF
   exit 0
@@ -4283,7 +4279,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4286:" \
+echo "$as_me:4282:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6549,7 +6545,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6552 "configure"' > conftest.$ac_ext
+  echo '#line 6548 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8513,11 +8509,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8516: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8512: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8520: \$? = $ac_status" >&5
+   echo "$as_me:8516: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8781,11 +8777,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8784: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8780: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8788: \$? = $ac_status" >&5
+   echo "$as_me:8784: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8885,11 +8881,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8888: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8884: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8892: \$? = $ac_status" >&5
+   echo "$as_me:8888: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11230,7 +11226,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11233 "configure"
+#line 11229 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11330,7 +11326,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11333 "configure"
+#line 11329 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13674,11 +13670,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13677: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13673: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13681: \$? = $ac_status" >&5
+   echo "$as_me:13677: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13778,11 +13774,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13781: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13777: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13785: \$? = $ac_status" >&5
+   echo "$as_me:13781: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15348,11 +15344,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15351: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15347: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15355: \$? = $ac_status" >&5
+   echo "$as_me:15351: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15452,11 +15448,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15455: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15451: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15459: \$? = $ac_status" >&5
+   echo "$as_me:15455: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17659,11 +17655,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17662: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17658: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17666: \$? = $ac_status" >&5
+   echo "$as_me:17662: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17927,11 +17923,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17930: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17926: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17934: \$? = $ac_status" >&5
+   echo "$as_me:17930: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18031,11 +18027,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18034: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18030: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18038: \$? = $ac_status" >&5
+   echo "$as_me:18034: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20938,130 +20934,6 @@ fi
 #############################################################################
 #                  Check which subprojects are there                        #
 #############################################################################
-
-
-echo "$as_me:$LINENO: checking whether source of project ASL is available and should be compiled" >&5
-echo $ECHO_N "checking whether source of project ASL is available and should be compiled... $ECHO_C" >&6
-
-coin_has_asl=notGiven
-coin_reason=
-
-# check if user wants to skip project in any case
-
-if test x"$COIN_SKIP_PROJECTS" != x; then
-  for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "ASL"; then
-      coin_has_asl="no"
-      coin_reason="ASL has been specified in COIN_SKIP_PROJECTS"
-    fi
-
-    if test $dir = "ThirdParty/ASL"; then
-      coin_has_asl="no"
-      coin_reason="ThirdParty/ASL has been specified in COIN_SKIP_PROJECTS"
-    fi
-  done
-fi
-
-if test "$coin_has_asl" != no; then
-
-# Check whether --with-m4_tolower(ASL) or --without-m4_tolower(ASL) was given.
-if test "${with_asl+set}" = set; then
-  withval="$with_asl"
-  if test "$withval" = no ; then
-       coin_has_asl="no"
-       coin_reason="--without-asl has been specified"
-     fi
-
-fi;
-fi
-
-if test "$coin_has_asl" != no; then
-
-# Check whether --with-m4_tolower(ASL)-lib or --without-m4_tolower(ASL)-lib was given.
-if test "${with_asl_lib+set}" = set; then
-  withval="$with_asl_lib"
-  if test "$withval" = no ; then
-       coin_has_asl="no"
-       coin_reason="--without-asl-lib has been specified"
-     else
-       coin_has_asl="no"
-       coin_reason="--with-asl-lib has been specified"
-     fi
-fi;
-fi
-
-if test "$coin_has_asl" != no; then
-
-# Check whether --with-m4_tolower(ASL)-incdir or --without-m4_tolower(ASL)-incdir was given.
-if test "${with_asl_incdir+set}" = set; then
-  withval="$with_asl_incdir"
-  if test "$withval" = no ; then
-       coin_has_asl="no"
-       coin_reason="--without-asl-incdir has been specified"
-     else
-       coin_has_asl="no"
-       coin_reason="--with-asl-incdir has been specified"
-     fi
-fi;
-fi
-
-if test "$coin_has_asl" != no; then
-
-# Check whether --with-m4_tolower(ASL)-datadir or --without-m4_tolower(ASL)-datadir was given.
-if test "${with_asl_datadir+set}" = set; then
-  withval="$with_asl_datadir"
-  if test "$withval" = no ; then
-       coin_has_asl="no"
-       coin_reason="--without-asl-datadir has been specified"
-     else
-       coin_has_asl="no"
-       coin_reason="--with-asl-datadir has been specified"
-     fi
-fi;
-fi
-
-
-
-
-
-# check if project is available in present directory
-if test "$coin_has_asl" = notGiven; then
-  coin_has_asl=no
-  if test -d $srcdir/ThirdParty/ASL; then
-    coin_reason="source in ThirdParty/ASL"
-    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
-    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
-    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
-    for i in $srcdir/ThirdParty/ASL/solvers/asl.h; do
-         if test -r $i; then
-           coin_has_asl="yes"
-         else
-           coin_has_asl="no"
-           coin_reason="source file $i not available"
-           break
-         fi
-       done
-
-  fi
-fi
-
-if test -z "$coin_reason" ; then
-  echo "$as_me:$LINENO: result: $coin_has_asl" >&5
-echo "${ECHO_T}$coin_has_asl" >&6
-else
-  echo "$as_me:$LINENO: result: $coin_has_asl, $coin_reason" >&5
-echo "${ECHO_T}$coin_has_asl, $coin_reason" >&6
-fi
-
-if test "$coin_has_asl" = yes ; then
-  if test -r $srcdir/ThirdParty/ASL/configure; then
-    coin_subdirs="$coin_subdirs ThirdParty/ASL"
-
-
-subdirs="$subdirs ThirdParty/ASL"
-
-  fi
-fi
 
 
 echo "$as_me:$LINENO: checking whether source of project CoinUtils is available and should be compiled" >&5

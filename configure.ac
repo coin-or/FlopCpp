@@ -17,7 +17,7 @@ AC_INIT([FlopCpp],[trunk],[flopcpp@list.coin-or.org])
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package Coin which is distributed
+This file is part of the open source package FlopC++ which is distributed
 under the Common Public License.])
 
 AC_REVISION(0.9)
@@ -43,7 +43,6 @@ AC_COIN_CREATE_LIBTOOL
 #                  Check which subprojects are there                        #
 #############################################################################
 
-AC_COIN_MAIN_PACKAGEDIR(ASL, ThirdParty, [solvers/asl.h])
 AC_COIN_MAIN_PACKAGEDIR(CoinUtils)
 AC_COIN_MAIN_PACKAGEDIR(Osi)
 AC_COIN_MAIN_PACKAGEDIR(Clp)

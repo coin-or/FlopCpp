@@ -263,9 +263,9 @@ void MP_model::attach(OsiSolverInterface *_solver) {
 	    (*i)->coefficients(f);
 	}
     }
-    nz = coefs.size();
+    nz = static_cast<int>(coefs.size());
 
-    messenger->statistics(Constraints.size(),m,Variables.size(),n,nz);
+    messenger->statistics(static_cast<int>(Constraints.size()),m,static_cast<int>(Variables.size()),n,nz);
 
     Elm = new double[nz]; 
     Rnr = new int[nz];    

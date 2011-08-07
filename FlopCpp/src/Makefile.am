@@ -45,11 +45,7 @@ libFlopCpp_la_LDFLAGS = $(LT_LDFLAGS)
 # being compiled.
 AM_CPPFLAGS = $(FLOPCPP_CFLAGS)
 
-# List additional defines
-AM_CPPFLAGS += -DCOIN_NO_CLP_MESSAGE -DUSE_FLOPCPPCONFIG
-
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
+# This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` 
 
 ########################################################################
@@ -57,7 +53,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install/coin'
+# and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 
 includecoin_HEADERS = \
@@ -73,10 +69,6 @@ includecoin_HEADERS = \
 	MP_set.hpp \
 	MP_utilities.hpp \
 	MP_variable.hpp
-
-#############################################################################
-# Create the Config.h file that always defines HAVE_CONFIG_H and install it #
-#############################################################################
 
 install-exec-local:
 	$(install_sh_DATA) config_flopcpp.h $(DESTDIR)$(includecoindir)/FlopCppConfig.h

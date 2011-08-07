@@ -156,8 +156,10 @@ int main() {
     // Optimal objective value m2: 1566.04 (like m1)
     assert(m2->getObjValue()>=1566.03 && m2->getObjValue()<=1566.05);
     CoinRelFltEq eq(1.e-05);
-    float m1ObjValue=m1->getObjValue();
-    float m2ObjValue=m2->getObjValue();
+#ifndef NDEBUG
+    double m1ObjValue=m1->getObjValue();
+    double m2ObjValue=m2->getObjValue();
+#endif
     assert( eq(m2ObjValue,1566.04) );
     assert( eq(m1ObjValue,1566.04) );
 

@@ -12,26 +12,29 @@ AUTOMAKE_OPTIONS = foreign
 #                         unitTest for FlopCpp                         #
 ########################################################################
 
+if COIN_HAS_CBC
+
 noinst_PROGRAMS = unitTest
 
 unitTest_SOURCES = unitTest.cpp
 
-# List libraries of COIN projects
-unitTest_LDADD = ../src/libFlopCpp.la $(FLOPCPP_LIBS)
-unitTest_DEPENDENCIES = ../src/libFlopCpp.la $(FLOPCPP_DEPENDENCIES)
+# List libraries of COIN-OR projects
+unitTest_LDADD = ../src/libFlopCpp.la $(FLOPCPP_LIBS) $(CBC_LIBS)
+unitTest_DEPENDENCIES = ../src/libFlopCpp.la $(FLOPCPP_DEPENDENCIES) $(CBC_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` $(FLOPCPP_CFLAGS)
-
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` 
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src` $(FLOPCPP_CFLAGS) $(CBC_CFLAGS)
 
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)
 
 .PHONY: test
+
+endif
+
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` 
 
 ########################################################################
 #                          Cleaning stuff                              #

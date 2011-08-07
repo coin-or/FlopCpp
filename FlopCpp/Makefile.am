@@ -63,7 +63,7 @@ if COIN_HAS_PKGCONFIG
 	$(PKG_CONFIG) --libs flopcpp > $(addlibsdir)/flopcpp_addlibs.txt
 else
 if COIN_CXX_IS_CL
-	echo "/libpath:`$(CYGPATH_W) @abs_lib_dir@` libFlopCpp.lib @FLOPCPP_LIBS_INSTALLED@" > $(addlibsdir)/flopcpp_addlibs_cpp.txt
+	echo "-libpath:`$(CYGPATH_W) @abs_lib_dir@` libFlopCpp.lib @FLOPCPP_LIBS_INSTALLED@" > $(addlibsdir)/flopcpp_addlibs_cpp.txt
 else
 	echo -L@abs_lib_dir@ -lFlopCpp @FLOPCPP_LIBS_INSTALLED@ > $(addlibsdir)/flopcpp_addlibs.txt
 endif
@@ -79,4 +79,4 @@ uninstall-hook:
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES =
 
-include ../BuildTools/Makemain.inc
+include BuildTools/Makemain.inc

@@ -56,17 +56,9 @@ AC_COIN_INIT_AUTO_TOOLS
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_CHECK_PACKAGE(CoinUtils, [coinutils], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Cgl, [cgl], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Clp, [osi-clp], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Cbc, [osi-cbc], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Cplex,[osi-cplex], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Mosek,[osi-mosek], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Soplex,[osi-soplex], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Xpress,[osi-xpress], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Gurobi,[osi-gurobi], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Glpk,[osi-glpk], [FlopCpp])
-AC_COIN_CHECK_PACKAGE(Smi, [smi], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Osi, [osi], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Cbc, [osi-cbc])
+AC_COIN_CHECK_PACKAGE(Clp, [osi-clp])
 
 ##############################################################################
 #                   VPATH links for example input files                      #
@@ -108,8 +100,8 @@ AC_CONFIG_FILES([Makefile
                  examples/Makefile
                  src/Makefile
                  test/Makefile
-		 flopcpp.pc
-		 flopcpp-uninstalled.pc])
+                 flopcpp.pc
+                 flopcpp-uninstalled.pc])
 
 # Here put the location and name of the configuration header file
 AC_CONFIG_HEADER([src/config.h src/config_flopcpp.h])

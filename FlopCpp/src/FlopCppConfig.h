@@ -3,8 +3,7 @@
  *
  * On systems where the code is configured with the configure script
  * (i.e., compilation is always done with HAVE_CONFIG_H defined), this
- * header file includes the automatically generated header file, and
- * undefines macros that might configure with other Config.h files.
+ * header file includes the automatically generated header file.
  *
  * On systems that are compiled in other ways (e.g., with the
  * Developer Studio), a header files is included to define those
@@ -21,20 +20,9 @@
 #define __FLOPCPPCONFIG_H__
 
 #ifdef HAVE_CONFIG_H
-#ifdef FLOPCPP_BUILD
-#include "config.h"
-#else
 #include "config_flopcpp.h"
-#endif
-
-#else /* HAVE_CONFIG_H */
-
-#ifdef FLOPCPP_BUILD
-#include "config_default.h"
 #else
 #include "config_flopcpp_default.h"
 #endif
-
-#endif /* HAVE_CONFIG_H */
 
 #endif /*__FLOPCPPCONFIG_H__*/

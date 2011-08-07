@@ -17,7 +17,7 @@ AC_INIT([FlopCpp],[trunk],[flopcpp@list.coin-or.org])
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package Coin which is distributed
+This file is part of the open source package FlopC++ which is distributed
 under the Common Public License.])
 
 # List one file in the package so that the configure script can test
@@ -92,6 +92,8 @@ AC_COIN_VPATH_LINK(examples/tap.cpp)
 AC_COIN_VPATH_LINK(examples/train.cpp)
 AC_COIN_VPATH_LINK(examples/transport.cpp)
 AC_COIN_VPATH_LINK(examples/xbsl.cpp)
+AC_COIN_VPATH_LINK(examples/runall)
+AC_COIN_VPATH_LINK(examples/runone)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

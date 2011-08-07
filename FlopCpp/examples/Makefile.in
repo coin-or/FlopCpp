@@ -1,14 +1,45 @@
-###########################################################################
-# directories for finding COIN packages
-###########################################################################
+# Copyright (C) 2006 International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Common Public License.
 
-COININCDIR = @abs_include_dir@/coin
+# $Id: Makefile.in 726 2006-04-17 04:16:00Z andreasw $
 
-COINLIBDIR = @abs_lib_dir@
+##########################################################################
+#    You can modify this example makefile to fit for your own program.   #
+#    Usually, you only need to change the five CHANGEME entries below.   #
+##########################################################################
 
-###########################################################################
-# Compiler
-###########################################################################
+# To compile other examples, either changed the following line, or
+# add the argument EXNAME=example_name to make
+EXNAME = aircraft
+
+# CHANGEME: This should be the name of your executable
+EXE = $(EXNAME)@EXEEXT@
+
+# CHANGEME: Here is the name of all object files corresponding to the source
+#           code that you wrote in order to define the problem statement
+OBJS =  $(EXNAME).@OBJEXT@
+
+# CHANGEME: Additional libraries
+ADDLIBS =
+
+# CHANGEME: Additional flags for compilation (e.g., include flags)
+ADDINCFLAGS =
+
+# CHANGEME: Directory to the sources for the (example) problem definition
+# files
+SRCDIR = @srcdir@
+VPATH = @srcdir@
+
+##########################################################################
+#  Usually, you don't have to change anything below.  Note that if you   #
+#  change certain compiler options, you might have to recompile the      #
+#  COIN package.                                                         #
+##########################################################################
+
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
+COIN_CXX_IS_CL = @COIN_CXX_IS_CL_TRUE@TRUE
+COIN_HAS_DATASTOCHASTIC = @COIN_HAS_DATASTOCHASTIC_TRUE@TRUE
 
 # C++ Compiler command
 CXX = @CXX@
@@ -19,52 +50,42 @@ CXXFLAGS = @CXXFLAGS@
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
-###########################################################################
-# define SMI libs
-###########################################################################
-
-COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
-
-ifeq ($(COIN_HAS_PKGCONFIG),TRUE)
-LIBS += `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs flopcpp`
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags flopcpp osi-cbc osi-clp`
 else
-LIBS += -L@abs_lib_dir@ -lFlopCpp @FLOPCPP_LIBS_INSTALLED@
+  INCL = @FLOPCPP_CFLAGS_INSTALLED@ @CBC_CFLAGS_INSTALLED@ @CLP_CFLAGS_INSTALLED@
+endif
+INCL += $(ADDINCFLAGS)
+
+# Linker flags
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs flopcpp osi-cbc osi-clp`
+else
+  ifeq ($(COIN_CXX_IS_CL), TRUE)
+    LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libSmi.lib @FLOPCPP_LIBS_INSTALLED@ @CBC_LIBS_INSTALLED@ @CLP_LIBS_INSTALLED@
+  else
+    LIBS = -L@abs_lib_dir@ -lFlopCpp @CBC_LIBS_INSTALLED@ @CLP_LIBS_INSTALLED@
+  endif
 endif
 
-###########################################################################
-# define CFLAGS
-###########################################################################
-
+# The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
 
-CFLAGS = -I`$(CYGPATH_W) $(COININCDIR)`
+all: $(EXE)
 
-ifeq ($(COIN_HAS_PKGCONFIG),TRUE)
-CFLAGS += `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags flopcpp`
-else
-CFLAGS += @FLOPCPP_CFLAGS_INSTALLED@
-endif
+.SUFFIXES: .cpp .o .obj
 
-CXXFLAGS += $(CFLAGS)
+$(EXE): $(OBJS)
+	bla=;\
+	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
+	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) -o $@ $$bla $(LIBS) $(ADDLIBS)
 
-LDFLAGS	= $(CXXLINKFLAGS) $(LIBS) 
+clean:
+	rm -rf $(EXE) $(OBJS)
 
-###############################################################################
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
 
-.DELETE_ON_ERROR:
-
-.PHONY: default
-
-default: all
-
-###############################################################################
-
-all :	aircraft transport ampl magic multiProduct tap \
-        coex coexx cross xbsl cuttingStock gapmin stochbenders \
-	mine train bid sudoku stampl
-
-clean:	
-	@rm aircraft transport ampl magic multiProduct tap \
-	coex coexx cross xbsl cuttingStock gapmin stochbenders \
-	mine train bid sudoku stampl
-###############################################################################
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

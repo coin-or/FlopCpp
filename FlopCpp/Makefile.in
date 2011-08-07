@@ -772,8 +772,8 @@ uninstall-info: uninstall-info-recursive
 ########################################################################
 
 test: all
-	cd test; make test
 	cd unittest; make test
+	cd test; make test
 
 unitTest: test
 

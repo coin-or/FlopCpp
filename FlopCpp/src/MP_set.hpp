@@ -240,7 +240,7 @@ public:
 	    std::map<vector<int>, int>::const_iterator pos;
 	    pos = elements.find(args);
 	    if (pos==elements.end()) {  // insert if not existent
-		const int v = elements.size();
+		const int v = static_cast<int>(elements.size());
 		elements[args] = v;
 	    }
 	}
@@ -256,7 +256,7 @@ public:
 	return *new InsertFunctor<nbr>(this,makeVector<nbr>(i1, i2, i3, i4, i5));
     }
     virtual int size() const {
-	return elements.size();
+	return static_cast<int>(elements.size());
     }
 
 private:

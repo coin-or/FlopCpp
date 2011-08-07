@@ -11,7 +11,7 @@
 #
 # Copyright 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is part of the open source package Coin which is distributed
+# This file is part of the open source package FlopC++ which is distributed
 # under the Common Public License.
 ## --------------------- ##
 ## M4sh Initialization.  ##
@@ -1265,7 +1265,7 @@ gives unlimited permission to copy, distribute and modify it.
 
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package Coin which is distributed
+This file is part of the open source package FlopC++ which is distributed
 under the Common Public License.
 _ACEOF
   exit 0
@@ -22471,6 +22471,26 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="examples/xbsl.cpp"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="examples/runall"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="examples/runone"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done

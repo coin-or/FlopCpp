@@ -1,4 +1,6 @@
-echo "Starting test: " $1
+echo "Building example: " $1
+make EXNAME=$1 || exit 1
+echo "Starting example: " $1
 ./$1 > $1.output
 grep -i assert $1.output 
 grep passed $1.output 

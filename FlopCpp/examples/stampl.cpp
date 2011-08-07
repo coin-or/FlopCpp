@@ -84,7 +84,7 @@ Stage_i::Stage_i(int numINSTR, MP_data& Return, int n, Stage* p, MP_data& Good, 
     Final_wealth = children[0]->Final_wealth + children[1]->Final_wealth;
 }
 
-main() {
+int main() {
     const int numStages = 4;
     MP_model::getDefaultModel().setSolver(new OsiCbcSolverInterface);
     MP_model::getDefaultModel().verbose();

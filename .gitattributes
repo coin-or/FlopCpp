@@ -97,8 +97,9 @@ FlopCpp/examples/train.cpp -text
 FlopCpp/examples/train.dat -text
 FlopCpp/examples/transport.cpp -text
 FlopCpp/examples/xbsl.cpp -text
+FlopCpp/flopcpp-uninstalled.pc.in -text
+FlopCpp/flopcpp.pc.in -text
 FlopCpp/flopcpp_addlibs.txt.in -text
-FlopCpp/inc/config_flopcpp.h.in -text
 FlopCpp/src/FlopCppConfig.h -text
 FlopCpp/src/MP_boolean.cpp -text
 FlopCpp/src/MP_boolean.hpp -text
@@ -122,6 +123,10 @@ FlopCpp/src/MP_utilities.cpp -text
 FlopCpp/src/MP_utilities.hpp -text
 FlopCpp/src/MP_variable.cpp -text
 FlopCpp/src/MP_variable.hpp -text
+FlopCpp/src/config.h.in -text
+FlopCpp/src/config_default.h -text
+FlopCpp/src/config_flopcpp.h.in -text
+FlopCpp/src/config_flopcpp_default.h -text
 FlopCpp/src/flopc.cpp -text
 FlopCpp/src/flopc.hpp -text
 FlopCpp/test/unitTest.cpp -text

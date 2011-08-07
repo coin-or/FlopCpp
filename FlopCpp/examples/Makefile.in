@@ -1,44 +1,53 @@
-CoinDir  := ../..
-FlopcDir := ..
+###########################################################################
+# directories for finding COIN packages
+###########################################################################
 
-## uncomment line below to be able to use OSL
-##USE_OSL := YES
+COININCDIR = @abs_include_dir@/coin
 
-CXX      := g++
-CXXFLAGS := -g
+COINLIBDIR = @abs_lib_dir@
 
-IncDir	:= $(CoinDir)/include/coin
-IncDir	+= $(FlopcDir)/include 
+###########################################################################
+# Compiler
+###########################################################################
 
-LIBDIRS := $(CoinDir)/lib
-LIBDIRS += $(FlopcDir)/lib
+# C++ Compiler command
+CXX = @CXX@
 
-LIBS	:= -lFlopCpp
-LIBS 	+= -lOsi
-LIBS 	+= -lOsiClp
-LIBS 	+= -lClp
-LIBS 	+= -lOsiCbc
-LIBS 	+= -lCbc
-LIBS 	+= -lCoinUtils
-LIBS 	+= -lCgl
+# C++ Compiler options
+CXXFLAGS = @CXXFLAGS@
 
-ifneq ($(filter YES,$(USE_OSL)),)
-   ### Change below, if needed, to tell where to find OSL
-   OSLDIR  := $(HOME)/osl
-   LIBS    += -lOsiOsl
-   LIBS    += -losl
-   LIBDIRS += $(OSLDIR)/lib
-   IncDir  += $(OSLDIR)include
+# additional C++ Compiler options for linking
+CXXLINKFLAGS = @RPATH_FLAGS@
+
+###########################################################################
+# define SMI libs
+###########################################################################
+
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
+
+ifeq ($(COIN_HAS_PKGCONFIG),TRUE)
+LIBS += `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs flopcpp`
+else
+LIBS += -L@abs_lib_dir@ -lFlopCpp @FLOPCPP_LIBS_INSTALLED@
 endif
 
-###############################################################################
+###########################################################################
+# define CFLAGS
+###########################################################################
 
-SHLINKPREFIX = -Wl,-rpath,
-CXXFLAGS += $(addprefix -I,${IncDir})
+CYGPATH_W = @CYGPATH_W@
 
-LDFLAGS := $(addprefix -L,$(LIBDIRS))
-LDFLAGS += $(addprefix $(SHLINKPREFIX),$(LIBDIRS))
-LDFLAGS	+= $(LIBS)
+CFLAGS = -I`$(CYGPATH_W) $(COININCDIR)`
+
+ifeq ($(COIN_HAS_PKGCONFIG),TRUE)
+CFLAGS += `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags flopcpp`
+else
+CFLAGS += @FLOPCPP_CFLAGS_INSTALLED@
+endif
+
+CXXFLAGS += $(CFLAGS)
+
+LDFLAGS	= $(CXXLINKFLAGS) $(LIBS) 
 
 ###############################################################################
 

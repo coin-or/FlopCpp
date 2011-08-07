@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([FlopCpp],[0.1],[flopcpp@list.coin-or.org])
+AC_INIT([FlopCpp],[trunk],[flopcpp@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -41,7 +41,7 @@ AC_CANONICAL_BUILD
 # the source root directory contains definition of where to find those
 # externals.  The following macro ensures that those externals are
 # retrieved by svn if they are not there yet.
-AC_COIN_PROJECTDIR_INIT
+AC_COIN_PROJECTDIR_INIT(FlopCpp)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(FlopCpp)
@@ -56,62 +56,17 @@ AC_COIN_INIT_AUTO_TOOLS
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_HAS_PROJECT(FlopCPP)
-AC_COIN_HAS_PROJECT(Cbc)
-AC_COIN_HAS_PROJECT(Cgl)
-AC_COIN_HAS_PROJECT(Clp)
-AC_COIN_HAS_PROJECT(CoinUtils)
-AC_COIN_HAS_PROJECT(DyLP)
-AC_COIN_HAS_PROJECT(Osi)
-AC_COIN_HAS_PROJECT(Sym)
-
-# ToDo: find out when CBC_HAS_CLP should be defined!  For now, I
-# replaced all CBC_USE by COIN_HAS #ifdef's
-
-# Decide which one is the default solver
-AC_MSG_CHECKING(for CBC default solver)
-AC_ARG_WITH([cbc-default-solver],
-            AC_HELP_STRING([--with-cbc-default-solver],
-                           [specify default solver for Cbc in lower case letters (if not given, clp is assumed)]),
-            [cbc_default_solver=$withval],
-            [cbc_default_solver=clp])
-AC_MSG_RESULT($cbc_default_solver)
-
-case $cbc_default_solver in
-  clp)
-    AC_DEFINE([CBC_DEFAULT_SOLVER],"clp",
-              [Define to the name of the default solver to be used in CBC in small letters])
-    ;;
-  dylp)
-    AC_DEFINE([CBC_DEFAULT_SOLVER],"dylp")
-    ;;
-  *)
-    AC_MSG_ERROR([Unknown solver $cbc_default_solver chosen as CBC's default solver])
-    ;;
-esac
-
-
-
-#############################################################################
-#                            Third party solvers                            #
-#############################################################################
-
-# Check which third party solvers are available ToDo!
-AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[CPXgetstat])
-AC_COIN_HAS_USER_LIBRARY([FortMP],[FMP])  #ToDo! is Fortran?
-AC_COIN_HAS_USER_LIBRARY([Mosek],[MSK],[mosekdl.h],[MSK_openmosek])
-AC_COIN_HAS_USER_LIBRARY([Osl],[OSL],[ekk_c_api.h],[ekk_simplex])
-AC_COIN_HAS_USER_LIBRARY([Soplex],[SPX],[spxsolver.h]) # ToDo
-AC_COIN_HAS_USER_LIBRARY([Xpress],[XPR],[xprs.h],[XPRSsetintcontrol])
-
-AC_COIN_HAS_GLPK(Glpk)
-
-#############################################################################
-#                       Other third party software                          #
-#############################################################################
-
-# Ampl Solver library
-# AC_COIN_HAS_ASL
+AC_COIN_CHECK_PACKAGE(CoinUtils, [coinutils], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Cgl, [cgl], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Clp, [osi-clp], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Cbc, [osi-cbc], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Cplex,[osi-cplex], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Mosek,[osi-mosek], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Soplex,[osi-soplex], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Xpress,[osi-xpress], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Gurobi,[osi-gurobi], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Glpk,[osi-glpk], [FlopCpp])
+AC_COIN_CHECK_PACKAGE(Smi, [smi], [FlopCpp])
 
 ##############################################################################
 #                   VPATH links for example input files                      #
@@ -122,6 +77,26 @@ AC_COIN_HAS_GLPK(Glpk)
 
 AC_COIN_VPATH_LINK(examples/fixed.dat)
 AC_COIN_VPATH_LINK(examples/train.dat)
+AC_COIN_VPATH_LINK(examples/aircraft.cpp)
+AC_COIN_VPATH_LINK(examples/ampl.cpp)
+AC_COIN_VPATH_LINK(examples/bid.cpp)
+AC_COIN_VPATH_LINK(examples/CEPFlopCppModel.cpp)
+AC_COIN_VPATH_LINK(examples/coex.cpp)
+AC_COIN_VPATH_LINK(examples/coexx.cpp)
+AC_COIN_VPATH_LINK(examples/cross.cpp)
+AC_COIN_VPATH_LINK(examples/cuttingStock.cpp)
+AC_COIN_VPATH_LINK(examples/gapmin.cpp)
+AC_COIN_VPATH_LINK(examples/magic.cpp)
+AC_COIN_VPATH_LINK(examples/mine.cpp)
+AC_COIN_VPATH_LINK(examples/multiProduct.cpp)
+AC_COIN_VPATH_LINK(examples/stampl2.cpp)
+AC_COIN_VPATH_LINK(examples/stampl.cpp)
+AC_COIN_VPATH_LINK(examples/stochbenders.cpp)
+AC_COIN_VPATH_LINK(examples/sudoku.cpp)
+AC_COIN_VPATH_LINK(examples/tap.cpp)
+AC_COIN_VPATH_LINK(examples/train.cpp)
+AC_COIN_VPATH_LINK(examples/transport.cpp)
+AC_COIN_VPATH_LINK(examples/xbsl.cpp)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #
@@ -133,10 +108,11 @@ AC_CONFIG_FILES([Makefile
                  examples/Makefile
                  src/Makefile
                  test/Makefile
-		 flopcpp_addlibs.txt])
+		 flopcpp.pc
+		 flopcpp-uninstalled.pc])
 
 # Here put the location and name of the configuration header file
-AC_CONFIG_HEADER([inc/config_flopcpp.h])
+AC_CONFIG_HEADER([src/config.h src/config_flopcpp.h])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE

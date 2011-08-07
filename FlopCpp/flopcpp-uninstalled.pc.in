@@ -1,0 +1,11 @@
+prefix=@prefix@
+libdir=@ABSBUILDDIR@/src
+includedir=@abs_source_dir@/src
+
+Name: FlopC++
+Description: An Algebraic Modeling Language in C++
+URL: https://projects.coin-or.org/FlopC++
+Version: @PACKAGE_VERSION@
+Libs: ${libdir}/libFlopCpp.la @FLOPCPP_PCLIBS@
+Cflags: -I${includedir}
+Requires: @FLOPCPP_PCREQUIRES@

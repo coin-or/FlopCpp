@@ -1,7 +1,6 @@
 * text=auto !eol
 /AUTHORS -text
 /Dependencies -text
-/Doxyfile -text
 FlopCpp/AUTHORS -text
 FlopCpp/LICENSE -text
 FlopCpp/MSVisualStudio/v7/FlopCpp.sln -text

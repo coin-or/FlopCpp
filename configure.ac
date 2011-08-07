@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([FlopCpp],[0.1],[flopcpp@list.coin-or.org])
+AC_INIT([FlopCpp],[trunk],[flopcpp@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -37,24 +37,19 @@ AC_PREFIX_DEFAULT([`pwd`])
 #############################################################################
 
 # Initialize automake
-AC_COIN_INIT_AUTOMAKE
-
-#############################################################################
-#             Check which ThirdParty sources are available                  #
-#############################################################################
-
-AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
+AC_COIN_CREATE_LIBTOOL
 
 #############################################################################
 #                  Check which subprojects are there                        #
 #############################################################################
 
-AC_COIN_MAIN_SUBDIRS(CoinUtils)
-AC_COIN_MAIN_SUBDIRS(Clp)
-AC_COIN_MAIN_SUBDIRS(Osi)
-AC_COIN_MAIN_SUBDIRS(Cgl)
-AC_COIN_MAIN_SUBDIRS(Cbc)
-AC_COIN_MAIN_SUBDIRS(FlopCpp)
+AC_COIN_MAIN_PACKAGEDIR(ASL, ThirdParty, [solvers/asl.h])
+AC_COIN_MAIN_PACKAGEDIR(CoinUtils)
+AC_COIN_MAIN_PACKAGEDIR(Osi)
+AC_COIN_MAIN_PACKAGEDIR(Clp)
+AC_COIN_MAIN_PACKAGEDIR(Cgl)
+AC_COIN_MAIN_PACKAGEDIR(Cbc)
+AC_COIN_MAIN_PACKAGEDIR(FlopCpp)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

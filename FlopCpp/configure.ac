@@ -1,6 +1,6 @@
 # Copyright (C) 2006 International Business Machines.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id: configure.ac 369 2006-06-14 01:19:26Z andreasw $
 

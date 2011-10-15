@@ -9,6 +9,9 @@
 #ifndef _MP_variable_hpp_
 #define _MP_variable_hpp_
 
+#include <set>
+#include <vector>
+
 #include "MP_set.hpp"
 #include "MP_index.hpp"
 #include "MP_expression.hpp"
@@ -43,7 +46,7 @@ namespace flopc {
 
 	double level() const;
 
-	void insertVariables(set<MP_variable*>& v) const {
+	void insertVariables(std::set<MP_variable*>& v) const {
 	    v.insert(V);
 	}
 	double getValue() const { 
@@ -53,7 +56,7 @@ namespace flopc {
 	    return 0;
 	}
 	void generate(const MP_domain& domain,
-		      vector<Constant> multiplicators,
+		      std::vector<Constant> multiplicators,
 		      GenerateFunctor& f,
 		      double m) const;
 	MP_variable* V;

@@ -14,6 +14,8 @@
 #include "MP_set.hpp"
 #include "MP_variable.hpp"
 
+using namespace std;
+
 namespace flopc {
 
 class Expression_constant : public TerminalExpression {

@@ -11,6 +11,7 @@
 #include "MP_domain.hpp"
 #include "MP_set.hpp"
 
+using namespace std;
 
 namespace flopc {
 

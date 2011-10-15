@@ -11,8 +11,6 @@
 
 #include <vector>
 #include <set>
-using std::vector;
-using std::set;
 
 #include "MP_domain.hpp"
 #include "MP_constant.hpp"
@@ -49,14 +47,14 @@ namespace flopc {
     */
     class GenerateFunctor : public Functor {
     public:
-	GenerateFunctor(vector<Coef>& coefs) : Coefs(coefs) {}
+	GenerateFunctor(std::vector<Coef>& coefs) : Coefs(coefs) {}
 
 	virtual ~GenerateFunctor(){}
 
 	void setConstraint(MP_constraint* r) {
 	    R = r;
 	}
-	void setMultiplicator(vector<Constant>& mults, double m) {
+	void setMultiplicator(std::vector<Constant>& mults, double m) {
 	    multiplicators = mults;
 	    m_ = m;
 	}
@@ -68,10 +66,10 @@ namespace flopc {
 	void operator()() const;
 
 	double m_;
-	vector<Constant> multiplicators;
+	std::vector<Constant> multiplicators;
 	MP_constraint* R;
 	const TerminalExpression* C;
-	vector<Coef>& Coefs;
+	std::vector<Coef>& Coefs;
     };
 
     /** @brief Functor to facilitate generation of the objective function.
@@ -81,7 +79,7 @@ namespace flopc {
     */
     class ObjectiveGenerateFunctor : public GenerateFunctor {
     public:
-	ObjectiveGenerateFunctor(vector<Coef>& coefs) : GenerateFunctor(coefs) {}
+	ObjectiveGenerateFunctor(std::vector<Coef>& coefs) : GenerateFunctor(coefs) {}
 	virtual int row_number() const {
 	    return -1;
 	}
@@ -102,10 +100,10 @@ namespace flopc {
 
 	virtual double level() const = 0;
 	virtual void generate(const MP_domain& domain,
-			      vector<Constant> multiplicators,
+			      std::vector<Constant> multiplicators,
 			      GenerateFunctor& f,
 			      double m) const = 0;
-	virtual void insertVariables(set<MP_variable*>& v) const = 0;
+	virtual void insertVariables(std::set<MP_variable*>& v) const = 0;
 
 	virtual ~MP_expression_base() {}
     };
@@ -160,7 +158,7 @@ namespace flopc {
     public:
 	Expression_operator(const MP_expression& e1, const MP_expression& e2) : 
 	    left(e1),right(e2) {}
-	void insertVariables(set<MP_variable*>& v) const {
+	void insertVariables(std::set<MP_variable*>& v) const {
 	    left->insertVariables(v);
 	    right->insertVariables(v);
 	}

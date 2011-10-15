@@ -10,10 +10,7 @@
 #define _MP_utilities_hpp_
 
 #include <string>
-using std::string;
-
 #include <vector>
-using std::vector;
 
 namespace flopc {
 
@@ -42,8 +39,8 @@ namespace flopc {
         @ingroup INTERNAL_USE
      */
     template<int nbr, class T>
-    vector<T> makeVector(T i1, T i2=0, T i3=0, T i4=0, T i5=0) {
-	vector<T> S(nbr);
+    std::vector<T> makeVector(T i1, T i2=0, T i3=0, T i4=0, T i5=0) {
+	std::vector<T> S(nbr);
 	S[0] = i1; 
 	if (nbr==1) return S;
 	S[1] = i2;
@@ -96,10 +93,10 @@ namespace flopc {
      */
     class Named {
     public:
-	string getName() const { return name; }
-	void setName(const string& n) { name = n; }
+	std::string getName() const { return name; }
+	void setName(const std::string& n) { name = n; }
     private:
-	string name;
+	std::string name;
     };
 
     /** @brief Utility for doing reference counted pointers.

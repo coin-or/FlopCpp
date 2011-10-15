@@ -9,9 +9,6 @@
 #ifndef _MP_boolean_hpp_
 #define _MP_boolean_hpp_
 
-#include <vector>
-using std::vector;
-
 #include "MP_index.hpp"
 #include "MP_constant.hpp"
 #include "MP_utilities.hpp"

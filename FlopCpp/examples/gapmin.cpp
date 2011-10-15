@@ -1,6 +1,7 @@
 // $Id$
 #include "flopc.hpp"
 using namespace flopc;
+using namespace std;
 #include "OsiCbcSolverInterface.hpp"
 
 /* This is a FlopCpp version of the model gapmin.gms from 

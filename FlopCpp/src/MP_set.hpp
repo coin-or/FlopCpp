@@ -11,11 +11,9 @@
 
 #include <iostream>
 #include <sstream>
-using std::cout;
-using std::endl;
-
 #include <string>
-using std::string;
+#include <vector>
+#include <map>
 
 #include "MP_domain.hpp"
 #include "MP_index.hpp"
@@ -135,10 +133,10 @@ template <int nbr> class MP_subset;
 
 template<int nbr> class InsertFunctor : public Functor {
 public:
-    InsertFunctor( MP_subset<nbr>* s, vector<MP_index_exp> i) 
+    InsertFunctor( MP_subset<nbr>* s, std::vector<MP_index_exp> i) 
 	: S(s), I(i) {}
     void operator()() const { 
-	vector<int> elm(nbr);
+	std::vector<int> elm(nbr);
 	for (int i=0; i<nbr; i++) {
 	    elm[i] = I[i]->evaluate();
 	}
@@ -146,7 +144,7 @@ public:
     }
 private:
     MP_subset<nbr>* S;
-    vector<MP_index_exp> I;
+    std::vector<MP_index_exp> I;
 };
 
 template <int nbr> class SubsetRef;
@@ -188,12 +186,12 @@ public:
 // 		}
 	}
 
-    MP_subset(vector<const MP_set*> s) : S(s) {}
+    MP_subset(std::vector<const MP_set*> s) : S(s) {}
 
     ~MP_subset() {}
 
     int operator()(int i1, int i2=0, int i3=0, int i4=0, int i5=0) {
-	std::map<vector<int>, int>::const_iterator pos;
+	std::map<std::vector<int>, int>::const_iterator pos;
 	pos = elements.find(makeVector<nbr>(i1, i2, i3, i4, i5));
 	if (pos==elements.end()) {
 	    return outOfBound;
@@ -214,13 +212,13 @@ public:
 	return MP_domain(s);
     }
 
-    int evaluate(const vector<MP_index*>& I) const {
-	vector<int> vi;
+    int evaluate(const std::vector<MP_index*>& I) const {
+	std::vector<int> vi;
 	for (int k=0; k<nbr; k++) {
 	    int temp = I[k]->evaluate();
 	    vi.push_back(temp);
 	}
-	std::map<vector<int>, int>::const_iterator pos;
+	std::map<std::vector<int>, int>::const_iterator pos;
 	pos = elements.find(vi);
 	if (pos==elements.end()) {
 	    return outOfBound;
@@ -229,7 +227,7 @@ public:
 	}
     }
     
-    void insert(const vector<int> &args) {
+    void insert(const std::vector<int> &args) {
 	bool isOk = true;
 	for (int i=0; i<nbr; i++) {
 	    if ( S[i]->check(args[i]) == outOfBound ) {
@@ -237,7 +235,7 @@ public:
 	    }
 	}
 	if (isOk == true) {
-	    std::map<vector<int>, int>::const_iterator pos;
+	    std::map<std::vector<int>, int>::const_iterator pos;
 	    pos = elements.find(args);
 	    if (pos==elements.end()) {  // insert if not existent
 		const int v = static_cast<int>(elements.size());
@@ -260,7 +258,7 @@ public:
     }
 
 private:
-    vector<const MP_set*> S; 
+    std::vector<const MP_set*> S; 
 	std::map<std::vector<int>, int> elements;
 };
 
@@ -335,13 +333,13 @@ private:
 	}
 
  	int evaluate() const {
-	    vector<MP_index_exp> I = makeVector<nbr>(I1,I2,I3,I4,I5);
-	    vector<int> vi;
+	    std::vector<MP_index_exp> I = makeVector<nbr>(I1,I2,I3,I4,I5);
+	    std::vector<int> vi;
 	    for (int k=0; k<nbr; k++) {
 		int temp = I[k]->evaluate();
 		vi.push_back(temp);
 	    }
-	    std::map<vector<int>, int>::const_iterator pos;
+	    std::map<std::vector<int>, int>::const_iterator pos;
 	    pos = S->elements.find(vi);
 	    if (pos==S->elements.end()) {
 		return outOfBound;

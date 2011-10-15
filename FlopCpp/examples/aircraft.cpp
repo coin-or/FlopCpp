@@ -1,6 +1,7 @@
 // $Id$
 #include "flopc.hpp"
 using namespace flopc;
+using namespace std;
 #include <OsiCbcSolverInterface.hpp>
 
 /*The objective of this model is to allocate aircrafts to routes to maximize

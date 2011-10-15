@@ -8,8 +8,6 @@
 
 #include <iostream>
 #include <sstream>
-using std::cout;
-using std::endl;
 
 #include "MP_constraint.hpp"
 #include "MP_expression.hpp"
@@ -18,6 +16,7 @@ using std::endl;
 #include "MP_data.hpp"
 
 using namespace flopc;
+using namespace std;
 
 
 void MP_constraint::operator=(const Constraint &v) {

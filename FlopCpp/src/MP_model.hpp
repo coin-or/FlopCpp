@@ -12,8 +12,7 @@
 #include <ostream>
 #include <vector>
 #include <set>
-using std::vector;
-using std::set;
+#include <string>
 
 #include "MP_expression.hpp"
 #include "MP_constraint.hpp"
@@ -38,8 +37,8 @@ namespace flopc {
         virtual void logMessage(int level, const char * const msg){}
         friend class MP_model;
     private:
-        virtual void constraintDebug(string name, const vector<Coef>& cfs) {}
-        virtual void objectiveDebug(const vector<Coef>& cfs) {}
+        virtual void constraintDebug(std::string name, const std::vector<Coef>& cfs) {}
+        virtual void objectiveDebug(const std::vector<Coef>& cfs) {}
         virtual void statistics(int bm, int m, int bn, int n, int nz) {}
         virtual void generationTime(double t) {}
     protected:
@@ -62,8 +61,8 @@ namespace flopc {
     class VerboseMessenger : public NormalMessenger {
         friend class MP_model;
     private:
-        virtual void constraintDebug(string name, const vector<Coef>& cfs);
-        virtual void objectiveDebug(const vector<Coef>& cfs);
+        virtual void constraintDebug(std::string name, const std::vector<Coef>& cfs);
+        virtual void objectiveDebug(const std::vector<Coef>& cfs);
     };
 
     /** @brief This is the anchor point for all constructs in a FlopC++ model.
@@ -247,11 +246,11 @@ namespace flopc {
         Messenger* messenger;
    
     
-        static void assemble(vector<Coef>& v, vector<Coef>& av);
+        static void assemble(std::vector<Coef>& v, std::vector<Coef>& av);
         void add(MP_constraint* c);
         MP_expression Objective;
-        set<MP_constraint *> Constraints;
-        set<MP_variable *> Variables;
+        std::set<MP_constraint *> Constraints;
+        std::set<MP_variable *> Variables;
     public:
         /// @todo should this be private?
         OsiSolverInterface* Solver; 

@@ -8,6 +8,7 @@
 
 #include "flopc.hpp"
 using namespace flopc;
+using namespace std;
 
 int readFile(string fname, map<string, vector<double> >& d) {
     std::ifstream file(fname.c_str());

@@ -10,10 +10,7 @@
 #define _MP_constraint_hpp_
 
 #include <set>
-using std::set;
-
-#include <map>
-using std::map;
+#include <string>
 
 #include "MP_set.hpp"
 #include "MP_domain.hpp"
@@ -234,11 +231,11 @@ namespace flopc {
 	    return *this; 
 	}
 
-	void insertVariables(set<MP_variable*>& v);
+	void insertVariables(std::set<MP_variable*>& v);
 
 	void operator=(const Constraint& v); 
     
-	void display(string s="") const;
+	void display(std::string s="") const;
 
 	MP_model* M;
 	int offset;

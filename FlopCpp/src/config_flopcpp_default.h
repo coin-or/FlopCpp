@@ -5,13 +5,13 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define FLOPCPP_VERSION      "trunk"
+#define FLOPCPP_VERSION        "1.1"
 
 /* Major Version number of project */
-#define FLOPCPP_VERSION_MAJOR   9999
+#define FLOPCPP_VERSION_MAJOR      1
 
 /* Minor Version number of project */
-#define FLOPCPP_VERSION_MINOR   9999
+#define FLOPCPP_VERSION_MINOR      1
 
 /* Release Version number of project */
 #define FLOPCPP_VERSION_RELEASE 9999

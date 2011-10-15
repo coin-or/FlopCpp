@@ -5,6 +5,7 @@
 
 
 using namespace flopc;
+using namespace std;
 
 
 //Eduardo F. Silva, PhD

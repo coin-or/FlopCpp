@@ -2,6 +2,7 @@
 #include <OsiCbcSolverInterface.hpp>
 #include <flopc.hpp>
 using namespace flopc;
+using namespace std;
 
 void MultiProduct(
     MP_set& Cities,

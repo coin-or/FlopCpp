@@ -1,6 +1,7 @@
 // $Id$
 #include "flopc.hpp"
 using namespace flopc;
+using namespace std;
 #include "OsiClpSolverInterface.hpp"
 
 /* Benders decomposition for a simple transportation problem

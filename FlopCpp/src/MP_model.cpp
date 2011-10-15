@@ -8,8 +8,6 @@
 
 #include <iostream>
 #include <sstream>
-using std::cout;
-using std::endl;
 #include <algorithm>
 
 #include <CoinPackedMatrix.hpp>
@@ -20,6 +18,7 @@ using std::endl;
 #include <CoinTime.hpp>
 
 using namespace flopc;
+using namespace std;
 
 MP_model& MP_model::default_model = *new MP_model(0);
 MP_model* MP_model::current_model = &MP_model::default_model;

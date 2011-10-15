@@ -6,6 +6,7 @@
 #include <OsiCbcSolverInterface.hpp>
 #include "flopc.hpp"
 using namespace flopc;
+using namespace std;
 
 int main() {
     const int numJ =  4;

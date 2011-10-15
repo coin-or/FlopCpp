@@ -1,6 +1,7 @@
 // $Id$
 #include "flopc.hpp"
 using namespace flopc;
+using namespace std;
 #include "OsiCbcSolverInterface.hpp"
 
 /* FLOPC++ implementation of a financial planning and control model from

@@ -10,6 +10,8 @@
 #define _MP_data_hpp_
 
 #include <vector>
+#include <string>
+
 #include "MP_index.hpp"    
 #include "MP_set.hpp"      
 #include "MP_constant.hpp" 
@@ -166,9 +168,9 @@ namespace flopc {
     
 
 	/// For displaying data in a human readable format.
-	void display(string s = "");
+	void display(std::string s = "");
     protected:
-	vector<DataRef*> myrefs;
+	std::vector<DataRef*> myrefs;
     private:
 	MP_data(const MP_data&); // Forbid copy constructor
 	MP_data& operator=(const MP_data&); // Forbid assignment

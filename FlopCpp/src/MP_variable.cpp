@@ -8,15 +8,15 @@
 
 #include <iostream>
 #include <sstream>
-using std::cout;
-using std::endl;
 
 #include <OsiSolverInterface.hpp>
 #include "MP_variable.hpp"
 #include "MP_domain.hpp" 
 #include "MP_constant.hpp" 
 #include "MP_model.hpp"
+
 using namespace flopc;
+using namespace std;
 
 VariableRef::VariableRef(MP_variable* v, 
 			 const MP_index_exp& i1,

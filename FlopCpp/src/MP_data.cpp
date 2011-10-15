@@ -7,8 +7,6 @@
 //****************************************************************************
 
 #include <iostream>
-using std::cout;
-using std::endl;
 
 #include "MP_data.hpp"
 #include "MP_domain.hpp" 
@@ -18,7 +16,9 @@ using std::endl;
 #include "MP_expression.hpp" 
 
 using namespace flopc;
- double MP_data::outOfBoundData = 0;
+using namespace std;
+
+double MP_data::outOfBoundData = 0;
 
 const DataRef& DataRef::operator=(const Constant& c) {
     C = c;

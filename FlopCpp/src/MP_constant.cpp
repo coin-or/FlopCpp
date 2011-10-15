@@ -14,6 +14,8 @@
 #include "MP_domain.hpp"
 #include "MP_index.hpp"
 
+using namespace std;
+
 namespace flopc {
 
     class Constant_index : public Constant_base {

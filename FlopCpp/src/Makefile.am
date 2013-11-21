@@ -32,6 +32,11 @@ libFlopCpp_la_SOURCES = \
 	MP_utilities.cpp MP_utilities.hpp \
 	MP_variable.cpp MP_variable.hpp 
 
+# List all additionally required libraries
+if DEPENDENCY_LINKING
+libFlopCpp_la_LIBADD = $(FLOPCPP_LIBS)
+endif
+
 # This is for libtool
 libFlopCpp_la_LDFLAGS = $(LT_LDFLAGS)
 

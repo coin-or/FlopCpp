@@ -9,6 +9,9 @@
 #include <float.h>
 #include <cmath>
 #include <sstream>
+#ifdef _MSC_VER
+#include <algorithm>
+#endif
 #include "MP_constant.hpp"
 #include "MP_data.hpp"
 #include "MP_domain.hpp"

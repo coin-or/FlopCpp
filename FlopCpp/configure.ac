@@ -107,7 +107,8 @@ AC_CONFIG_FILES([Makefile
                  test/Makefile
                  unittest/Makefile
                  flopcpp.pc
-                 flopcpp-uninstalled.pc])
+                 flopcpp-uninstalled.pc
+		 doxydoc/doxygen.conf])
 
 # Here put the location and name of the configuration header file
 AC_CONFIG_HEADER([src/config.h src/config_flopcpp.h])

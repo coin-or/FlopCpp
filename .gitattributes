@@ -30,6 +30,7 @@ FlopCpp/config.guess -text
 FlopCpp/config.sub -text
 FlopCpp/configure -text
 FlopCpp/depcomp -text
+FlopCpp/doxydoc/doxygen.conf.in -text
 FlopCpp/examples/CEPFlopCppModel.cpp -text
 FlopCpp/examples/aircraft.cpp -text
 FlopCpp/examples/ampl.cpp -text

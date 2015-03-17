@@ -95,6 +95,12 @@ AC_COIN_VPATH_LINK(examples/xbsl.cpp)
 AC_COIN_VPATH_LINK(examples/runall)
 AC_COIN_VPATH_LINK(examples/runone)
 
+#############################################################################
+#                  Check for doxygen                                        #
+#############################################################################
+
+AC_COIN_DOXYGEN(CoinUtils Osi Clp Cgl Cbc)
+
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################

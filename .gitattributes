@@ -1,4 +1,5 @@
 * text=auto !eol
+/.travis.yml -text
 /AUTHORS -text
 /Dependencies -text
 FlopCpp/AUTHORS -text
@@ -104,6 +105,7 @@ FlopCpp/unittest/unitTest.hpp -text
 /INSTALL -text
 /LICENSE -text
 /README -text
+/appveyor.yml -text
 /config.guess -text
 /config.sub -text
 /configure -text

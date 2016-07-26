@@ -395,7 +395,8 @@ void MP_model::attach(OsiSolverInterface *_solver) {
     delete [] u;  
     delete [] bl;  
     delete [] bu;  
-
+    delete [] c;
+    
     for (varIt i=Variables.begin(); i!=Variables.end(); i++) {
         int begin = (*i)->offset;
         int end = (*i)->offset+(*i)->size();

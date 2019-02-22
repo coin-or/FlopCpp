@@ -208,7 +208,7 @@ public:
 	return *new SubsetRef<nbr>(this,i1,i2,i3,i4,i5);
     }
 
-    MP_domain& operator()(const SUBSETREF& s) {
+    const MP_domain& operator()(const SUBSETREF& s) {
 	return MP_domain(s);
     }
 

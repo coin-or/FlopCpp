@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type = "text/xsl" href = "http://www.coin-or.org/projects/autoGen.xsl"?>
+<projectData xmlns="coin-or.org" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="coin-or.org http://www.coin-or.org/projects/autoGen.xsd">
+
+	<!-- This file is a template that will you fill in to provide -->
+	<!-- specific information about your project. Once the template is     -->
+	<!-- filled in and checked into your projects repository in the conf/  -->
+	<!-- directory, it will be automatically parsed and displayed in a     -->
+	<!-- standard HTML format when users call up the file from the main    -->
+	<!-- COIN Web site. The file is extensively commented to help you      -->
+	<!-- understand where to fill in the various pieces of required        -->
+	<!-- information. The comments are enclosed in blocks like this one.   -->
+
+	<projectBasics>
+
+		<projectName>FLOPC++</projectName>
+		<projectRepo>FlopC++</projectRepo>
+
+		<!-- Fill in a brief description of your project here.         -->
+		<!-- For example, for SYMPHONY, you might put:                 -->
+		<!--                                                           -->
+		<!-- <projectDescription>                                      -->
+		<!--    SYMPHONY is an open-source generic MILP solver,        -->
+		<!--    callable library, and extensible framework for         -->
+		<!--    implementing customized solvers for mixed-integer      -->
+		<!--    linear programs (MILPs). Blah, blah, blah.             -->
+		<!-- </projectDescription>                                     -->
+		<!--                                                           -->
+		<!-- Fill in your text below (outside the comment block)       -->
+
+		<projectDescription>
+		  An open source algebraic modelling language implemented as
+		  a C++ class library.
+		</projectDescription>
+		<projectShortDescription>
+		  An algebraic modeling language embedded in C++.
+		</projectShortDescription>
+
+		<projectManager>Tim Hultberg, tim dot hultberg at eumetsat dot int  </projectManager>
+
+		<projectHomePage>https://projects.coin-or.org/FlopC++ </projectHomePage>
+
+		<projectLicense>Eclipse Public License 1.0</projectLicense>
+		<projectLicenseURL>http://www.opensource.org/licenses/eclipse-1.0</projectLicenseURL>
+
+		<coinLinkedProjects>
+			<coinProject>
+				<repoName>CoinUtils</repoName>
+			</coinProject>
+			<coinProject>
+				<repoName>Cgl</repoName>
+			</coinProject>
+			<coinProject>
+				<repoName>Clp</repoName>
+			</coinProject>
+			<coinProject>
+				<repoName>Osi</repoName>
+			</coinProject>
+			<coinProject>
+				<repoName>Cbc</repoName>
+			</coinProject>
+			<coinProject>
+				<repoName>Smi</repoName>
+			</coinProject>
+			<coinProject>
+				<repoName>BuildTools</repoName>
+			</coinProject>
+		</coinLinkedProjects>
+
+		<!-- Below, you can list other packages your project           -->
+		<!-- either requires or can optionally link to. These are      -->
+		<!-- one by one, as in the following example:                  -->
+		<!--                                                           -->
+		<!--<otherLinkedPackages>                                      -->
+		<!--                                                           -->
+		<!--   <otherPackage>                                          -->
+		<!--      <packageName>                                        -->
+		<!--         GLPK                                              -->
+		<!--      </packageName>                                       -->
+		<!--      <packageURL>                                         -->
+		<!--         http://www.gnu.org/software/glpk/                 -->
+		<!--      </packageURL>                                        -->
+		<!--      <requiredOrOptional>                                 -->
+		<!--         Optional                                          -->
+		<!--      </requiredOrOptional>                                -->
+		<!--   </otherPackage>                                         -->
+		<!--                                                           -->
+		<!--   <otherPackage>                                          -->
+		<!--      <packageName>                                        -->
+		<!--         GNU Readline                                      -->
+		<!--      </packageName>                                       -->
+		<!--      <packageURL>                                         -->
+		<!--      </packageURL>                                        -->
+		<!--      <requiredOrOptional>                                 -->
+		<!--         Optional                                          -->
+		<!--      </requiredOrOptional>                                -->
+		<!--   </otherPackage>                                         -->
+		<!--                                                           -->
+		<!--   <otherPackage>                                          -->
+		<!--      <packageName>                                        -->
+		<!--         GNU History                                       -->
+		<!--      </packageName>                                       -->
+		<!--      <packageURL>                                         -->
+		<!--      </packageURL>                                        -->
+		<!--      <requiredOrOptional>                                 -->
+		<!--         Optional                                          -->
+		<!--      </requiredOrOptional>                                -->
+		<!--   </otherPackage>                                         -->
+		<!--                                                           -->
+		<!--</otherLinkedPackages>                                     -->
+		<!--                                                           -->
+		<!--Fill in your text below (outside the comment block).       -->
+
+		<otherLinkedPackages>
+			<otherPackage>
+				<packageName></packageName>
+				<packageURL></packageURL>
+				<requiredOrOptional></requiredOrOptional>
+			</otherPackage>
+		</otherLinkedPackages>
+
+		<projectLanguage>C++</projectLanguage>
+
+
+		<!--The following fields describe the development status       -->
+		<!--of the project.                                            -->
+		<!--                                                           -->
+		<!--Fill in your text below (outside the comment block).       -->
+
+		<developmentStatus>
+
+			<!--If you are actively managing your project, use     -->
+
+			<activityStatus>Active</activityStatus>
+
+			<!--The maturity level is determined during project    -->
+			<!--review and should have been reported to you.       -->
+			<!--See http://www.coin-or.org/faqs.html#q18 for       -->
+			<!--more information on maturity level.                -->
+			<!--Fill it in like this:                              -->
+			<!--                                                   -->
+			<!--<maturityLevel>5</maturityLevel>                   -->
+			<!--                                                   -->
+
+			<maturityLevel>4</maturityLevel>
+
+			<!--If you have versioning and releases, you should    -->
+			<!--fill in your latest stable version number here.    -->
+			<!--See http://www.coin-or.org/faqs.html#q19 for       -->
+			<!--more information on version numbers.               -->
+			<!--Fill it in like this:                              -->
+			<!--                                                   -->
+			<!--<stableVersionNumber>5.1</stableVersionNumber>     -->
+			<!-- DO NOT USE stableVersionNumber or releaseNumber
+			     unless you need to override the automated version
+			     tracking system.
+
+			<stableVersionNumber>1.0</stableVersionNumber>
+			-->
+
+			<!--If you have versioning and releases, you should    -->
+			<!--fill in your latest stable release number here.    -->
+			<!--See http://www.coin-or.org/faqs.html#q19 for       -->
+			<!--more information on version numbers.               -->
+			<!--Fill it in like this:                              -->
+			<!--                                                   -->
+			<!--<releaseVersionNumber>5.1.4</releaseeVersionNumber>-->
+			<!--                                                   -->
+
+			<!-- <releaseNumber>1.0.1</releaseNumber> -->
+
+		</developmentStatus>
+
+		<!--Below, you can list the platforms on which your            -->
+		<!--project has been tested. Again, these are listed one       -->
+		<!--by one. There are fields for both operating system and     -->
+		<!--compiler. Here is an example for SYMPHONY                  -->
+		<!--                                                           -->
+		<!--<testedPlatforms>                                          -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
+		<!--      <compiler>MSVC++/cl</compiler>                       -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
+		<!--      <compiler>CYGWIN/cl</compiler>                       -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
+		<!--      <compiler>CYGWIN/gcc</compiler>                      -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
+		<!--      <compiler>MSys/gcc</compiler>                        -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Linux</operatingSystem> -->
+		<!--      <compiler>gcc</compiler>                             -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Mac OSX</operatingSystem>           -->
+		<!--      <compiler>gcc</compiler>                             -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Solaris x86</operatingSystem>       -->
+		<!--      <compiler>gcc</compiler>                             -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--   <platform>                                              -->
+		<!--      <operatingSystem>Solaris x86</operatingSystem>       -->
+		<!--      <compiler>sunpro</compiler>                          -->
+		<!--   </platform>                                             -->
+		<!--                                                           -->
+		<!--</testedPlatforms>					       -->
+		<!--                                                           -->
+		<!--Fill in your text below (outside the comment block).       -->
+
+		<testedPlatforms>
+
+			<platform>
+				<operatingSystem></operatingSystem>
+				<compiler></compiler>
+			</platform>
+
+		</testedPlatforms>
+		
+		<projectCategories>
+			<!-- Start  of projectCategories block   -->
+		
+			<!--Below is the list of COIN-OR project categores.    -->
+			<!--Simply "un-comment" any categories that apply to   -->
+			<!--your project.                                      -->
+			
+			<!--   <category>                                      -->
+			<!--        Development tools                          -->
+			<!--    </category>                                    -->
+			<!--    <category>                                     -->
+			<!--        Graphs                                     -->
+			<!--    </category>                                    -->
+			<!--    <category>                                     -->
+			<!--        Interfaces                                 -->
+			<!--    </category>                                    -->
+			<!--    <category>                                     -->
+			<!--        Metaheuristics                             -->
+			<!--    </category>                                    -->
+			    <category>                                     
+			        Modeling systems                           
+			    </category>                                    
+			<!--    <category>                                     -->
+			<!--        Optimization convex non-differentiable     -->
+			<!--    </category>                                    -->
+			    <category>                                     
+			        Optimization deterministic linear continuous 
+			    </category>                                    
+			   <category>                                     
+			        Optimization deterministic linear discrete 
+			    </category>                                    
+			<!--    <category>                                     -->
+			<!--        Optimization deterministic nonlinear discrete -->
+			<!--    </category>                                    -->
+			<!--    <category>                                     -->
+			<!--        Optimization deterministic semidefinite continuous -->
+			<!--    </category>                                    -->
+			    <category>                                     
+			        Optimization stochastic                    
+			    </category>                                    
+			<!--    <category>                                     -->
+			<!--        Optimization utility                       -->
+			<!--    </category>                                    -->
+			
+			<!-- End of projectCategories block                    -->
+		</projectCategories>
+		
+
+		<!-- End of projectBasics block                                -->
+
+	</projectBasics>
+
+	<!--Below, you can specify the links for the left-hand side menu.      -->
+	<!--Note that these are optional, so if there is a blank, there will   -->
+	<!--be no corresponding menu item                                      -->
+	<!--                                                                   -->
+	<!--For SYMPHONY, this block would look like this:                     -->
+	<!--                                                                   -->
+	<!--<leftMenuLinks>                                                    -->
+	<!--                                                                   -->
+	<!--   <documentation>                                                 -->
+	<!--      http://www.coin-or.org/SYMPHONY/man-5.1                      -->
+	<!--   </documentation>                                                -->
+	<!--                                                                   -->
+	<!--   <sourceCodeDownload>                                            -->
+	<!--      http://www.coin-or.org/download/source/SYMPHONY              -->
+	<!--   </sourceCodeDownload>                                           -->
+	<!--                                                                   -->
+	<!--   <binaryDownload>                                                -->
+	<!--      http://www.coin-or.org/download/binary/SYMPHONY              -->
+	<!--   </binaryDownload>                                               -->
+	<!--                                                                   -->
+	<!--   <mailingList>                                                   -->
+	<!--      http://list.coin-or.org/mailman/listinfo/coin-symphony       -->
+	<!--   </mailingList>                                                  -->
+	<!--</leftMenuLinks>                                                   -->
+	<!--                                                                   -->
+	<!--Fill in your text below (outside the comment block).               -->
+
+	<leftMenuLinks>
+
+		<documentation>https://projects.coin-or.org/FlopC++/wiki/DocumentationPage</documentation>
+
+		<sourceCodeDownload>http://www.coin-or.org/download/source/FlopC++/</sourceCodeDownload>
+
+		<binaryDownload>http://www.coin-or.org/download/binary/FlopC++/</binaryDownload>
+
+		<mailingList>http://list.coin-or.org/mailman/listinfo/flopcpp</mailingList>
+
+	</leftMenuLinks>
+
+	<!-- End of projectData block                                          -->
+</projectData>

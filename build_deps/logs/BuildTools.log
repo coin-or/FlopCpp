@@ -1,0 +1,3 @@
+Cloning into '/workspaces/FlopCpp/build_deps/BuildTools'...
+Using COIN_AUTOTOOLS_DIR=/home/codespace/.local
+You are not using the required version 2.72 of autoconf ( /usr/bin/autoconf )

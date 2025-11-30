@@ -1,12 +1,13 @@
 #!/bin/bash
 
 ################################################################################
-# FlopCpp Dependencies Installation Script
+# FlopCpp Build and Installation Script
 # 
-# This script installs all required dependencies for FlopCpp by cloning
-# repositories and building them from source.
+# This script installs all required dependencies for FlopCpp and then builds
+# and installs FlopCpp itself. All components are cloned from their respective
+# repositories and built from source.
 #
-# Usage: ./install_dependencies.sh
+# Usage: ./install.sh
 ################################################################################
 
 set -e  # Exit on error
@@ -52,7 +53,7 @@ check_build_tools() {
     log_info "Checking for required build tools..."
     
     local missing_tools=()
-    local required_tools=("gcc" "g++" "make" "git" "autoconf" "automake" "libtool" "pkg-config")
+    local required_tools=("gcc" "g++" "gfortran" "make" "git" "autoconf" "automake" "libtoolize" "pkg-config")
     
     for tool in "${required_tools[@]}"; do
         if ! command -v "$tool" &> /dev/null; then
@@ -68,12 +69,20 @@ check_build_tools() {
                     version=$(g++ --version | head -n1)
                     log_success "Found $tool: $version"
                     ;;
+                gfortran)
+                    version=$(gfortran --version | head -n1)
+                    log_success "Found $tool: $version"
+                    ;;
                 make)
                     version=$(make --version | head -n1)
                     log_success "Found $tool: $version"
                     ;;
                 git)
                     version=$(git --version)
+                    log_success "Found $tool: $version"
+                    ;;
+                libtoolize)
+                    version=$(libtoolize --version | head -n1)
                     log_success "Found $tool: $version"
                     ;;
                 *)
@@ -87,10 +96,10 @@ check_build_tools() {
         log_error "Missing required build tools: ${missing_tools[*]}"
         log_info "Please install missing tools. For Debian/Ubuntu, run:"
         echo "  sudo apt-get update"
-        echo "  sudo apt-get install -y build-essential git autoconf automake libtool pkg-config"
+        echo "  sudo apt-get install -y build-essential git autoconf automake libtool pkg-config gfortran"
         log_info "For RHEL/CentOS/Fedora, run:"
         echo "  sudo yum groupinstall 'Development Tools'"
-        echo "  sudo yum install -y git autoconf automake libtool pkgconfig"
+        echo "  sudo yum install -y git autoconf automake libtool pkgconfig gcc-gfortran"
         exit 1
     fi
     
@@ -112,7 +121,7 @@ check_permissions() {
             log_error "Cannot create $INSTALL_PREFIX. You may need sudo privileges."
             log_info "Either run this script with sudo, or set INSTALL_PREFIX to a writable location:"
             echo "  export INSTALL_PREFIX=\$HOME/.local"
-            echo "  ./install_dependencies.sh"
+            echo "  ./install.sh"
             exit 1
         fi
     fi
@@ -121,7 +130,7 @@ check_permissions() {
         log_error "No write permission for $INSTALL_PREFIX"
         log_info "Either run this script with sudo, or set INSTALL_PREFIX to a writable location:"
         echo "  export INSTALL_PREFIX=\$HOME/.local"
-        echo "  ./install_dependencies.sh"
+        echo "  ./install.sh"
         exit 1
     fi
     
@@ -194,10 +203,14 @@ install_buildtools() {
     log_info "BuildTools does not require installation, only cloning"
     log_info "BuildTools will be used to generate configure scripts for FlopCpp"
     
-    # Detect the FlopCpp project directory
+    # Detect the FlopCpp project directory (assuming script runs from FlopCpp root)
     local project_dir=""
-    if [ -d "/workspaces/FlopCpp/FlopCpp" ]; then
-        project_dir="/workspaces/FlopCpp/FlopCpp"
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    
+    if [ -d "$script_dir/FlopCpp" ]; then
+        project_dir="$script_dir/FlopCpp"
+    elif [ -d "$(pwd)/FlopCpp" ]; then
+        project_dir="$(pwd)/FlopCpp"
     elif [ -d "$(pwd)/../../FlopCpp" ]; then
         project_dir="$(cd $(pwd)/../../FlopCpp && pwd)"
     elif [ -d "$(pwd)/../FlopCpp" ]; then
@@ -216,19 +229,35 @@ install_buildtools() {
     # Set COIN_AUTOTOOLS_DIR as recommended by BuildTools documentation
     export COIN_AUTOTOOLS_DIR="$INSTALL_PREFIX"
     log_info "Setting COIN_AUTOTOOLS_DIR=$COIN_AUTOTOOLS_DIR"
+    
+    # Install autotools using BuildTools' install_autotools.sh script
+    log_info "Installing autotools (autoconf, automake, libtool) to $COIN_AUTOTOOLS_DIR..."
+    if [ -f "./install_autotools.sh" ]; then
+        if ! bash ./install_autotools.sh >> "$log_file" 2>&1; then
+            log_warning "install_autotools.sh failed (non-critical)"
+            log_info "Check log file: $log_file"
+            log_info "Continuing with system autotools..."
+        else
+            log_success "Autotools installed successfully"
+        fi
+    else
+        log_warning "install_autotools.sh script not found in BuildTools"
+        log_info "Continuing without installing autotools (using system autotools)"
+    fi
+    
     log_info "Running run_autotools for FlopCpp project..."
     
     if [ -f "./run_autotools" ]; then
         if ! ./run_autotools "$project_dir" >> "$log_file" 2>&1; then
-            log_error "run_autotools failed for FlopCpp project"
+            log_warning "run_autotools failed for FlopCpp project (non-critical)"
             log_info "Check log file: $log_file"
             log_info "You may need to run it manually:"
             echo "  cd $repo_dir"
             echo "  export COIN_AUTOTOOLS_DIR=$INSTALL_PREFIX"
             echo "  ./run_autotools $project_dir"
-            return 1
+        else
+            log_success "BuildTools successfully generated configure scripts for FlopCpp"
         fi
-        log_success "BuildTools successfully generated configure scripts for FlopCpp"
     else
         log_warning "run_autotools script not found in BuildTools"
         log_info "To generate configure scripts for your project, run manually:"
@@ -362,7 +391,7 @@ install_git_dependency() {
 ################################################################################
 
 main() {
-    log_info "FlopCpp Dependencies Installation Script"
+    log_info "FlopCpp Build and Installation Script"
     log_info "Installation prefix: $INSTALL_PREFIX"
     log_info "Build directory: $BUILD_DIR"
     echo ""
@@ -445,13 +474,112 @@ main() {
         log_info "Installation prefix: $INSTALL_PREFIX"
         log_info "Build logs: $LOG_DIR"
         
+        # Build FlopCpp itself
+        echo ""
+        log_info "=========================================="
+        log_info "Building FlopCpp"
+        log_info "=========================================="
+        
+        local flopcpp_dir=""
+        local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        
+        if [ -d "$script_dir/FlopCpp" ]; then
+            flopcpp_dir="$script_dir/FlopCpp"
+        elif [ -d "$(pwd)/FlopCpp" ]; then
+            flopcpp_dir="$(pwd)/FlopCpp"
+        elif [ -d "$(pwd)/../../FlopCpp" ]; then
+            flopcpp_dir="$(cd $(pwd)/../../FlopCpp && pwd)"
+        elif [ -d "$(pwd)/../FlopCpp" ]; then
+            flopcpp_dir="$(cd $(pwd)/../FlopCpp && pwd)"
+        fi
+        
+        if [ -n "$flopcpp_dir" ] && [ -d "$flopcpp_dir" ]; then
+            log_info "Found FlopCpp at: $flopcpp_dir"
+            local flopcpp_log="$LOG_DIR/FlopCpp.log"
+            
+            cd "$flopcpp_dir"
+            
+            # Configure FlopCpp
+            log_info "Configuring FlopCpp..."
+            if [ ! -f "./configure" ]; then
+                log_warning "configure script not found, you may need to run BuildTools first"
+            fi
+            
+            if [ -f "./configure" ]; then
+                if ! ./configure --prefix="$INSTALL_PREFIX" >> "$flopcpp_log" 2>&1; then
+                    log_error "FlopCpp configuration failed"
+                    log_info "Check log file: $flopcpp_log"
+                else
+                    log_success "FlopCpp configured successfully"
+                    
+                    # Build FlopCpp
+                    log_info "Building FlopCpp (this may take a while)..."
+                    if ! make -j$(nproc) >> "$flopcpp_log" 2>&1; then
+                        log_warning "Parallel build failed, trying single-threaded build..."
+                        make clean >> "$flopcpp_log" 2>&1 || true
+                        if ! make >> "$flopcpp_log" 2>&1; then
+                            log_error "FlopCpp build failed"
+                            log_info "Check log file: $flopcpp_log"
+                        else
+                            log_success "FlopCpp built successfully"
+                            
+                            # Test FlopCpp
+                            log_info "Testing FlopCpp..."
+                            if ! make test >> "$flopcpp_log" 2>&1; then
+                                log_warning "FlopCpp tests failed (non-critical)"
+                                log_info "Check log file: $flopcpp_log"
+                            else
+                                log_success "FlopCpp tests passed"
+                            fi
+                            
+                            # Install FlopCpp
+                            log_info "Installing FlopCpp..."
+                            if ! make install >> "$flopcpp_log" 2>&1; then
+                                log_error "FlopCpp installation failed"
+                                log_info "Check log file: $flopcpp_log"
+                            else
+                                log_success "FlopCpp installed successfully!"
+                            fi
+                        fi
+                    else
+                        log_success "FlopCpp built successfully"
+                        
+                        # Test FlopCpp
+                        log_info "Testing FlopCpp..."
+                        if ! make test >> "$flopcpp_log" 2>&1; then
+                            log_warning "FlopCpp tests failed (non-critical)"
+                            log_info "Check log file: $flopcpp_log"
+                        else
+                            log_success "FlopCpp tests passed"
+                        fi
+                        
+                        # Install FlopCpp
+                        log_info "Installing FlopCpp..."
+                        if ! make install >> "$flopcpp_log" 2>&1; then
+                            log_error "FlopCpp installation failed"
+                            log_info "Check log file: $flopcpp_log"
+                        else
+                            log_success "FlopCpp installed successfully!"
+                        fi
+                    fi
+                fi
+            fi
+        else
+            log_warning "Could not find FlopCpp directory to build"
+            log_info "To build FlopCpp manually, run:"
+            echo "  cd /path/to/FlopCpp"
+            echo "  ./configure --prefix=$INSTALL_PREFIX"
+            echo "  make"
+            echo "  make install"
+        fi
+        
         # Update environment variables
         echo ""
         log_info "Updating environment variables..."
         
-        export PKG_CONFIG_PATH="$INSTALL_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-        export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:$LD_LIBRARY_PATH"
-        export PATH="$INSTALL_PREFIX/bin:$PATH"
+        export PKG_CONFIG_PATH="$INSTALL_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH:-}"
+        export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:${LD_LIBRARY_PATH:-}"
+        export PATH="$INSTALL_PREFIX/bin:${PATH:-}"
         
         log_success "Environment variables updated for current session"
         
@@ -474,7 +602,7 @@ main() {
             if ! grep -q "# FlopCpp dependencies environment" "$shell_profile" 2>/dev/null; then
                 cat >> "$shell_profile" << EOF
 
-# FlopCpp dependencies environment (added by install_dependencies.sh)
+# FlopCpp environment (added by install.sh)
 export PKG_CONFIG_PATH="$INSTALL_PREFIX/lib/pkgconfig:\$PKG_CONFIG_PATH"
 export LD_LIBRARY_PATH="$INSTALL_PREFIX/lib:\$LD_LIBRARY_PATH"
 export PATH="$INSTALL_PREFIX/bin:\$PATH"

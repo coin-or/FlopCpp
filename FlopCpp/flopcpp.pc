@@ -1,0 +1,12 @@
+prefix=/home/codespace/.local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/coin
+
+Name: FlopC++
+Description: An Algebraic Modeling Language in C++
+URL: https://projects.coin-or.org/FlopC++
+Version: trunk
+Libs: -L${libdir} -lFlopCpp 
+Cflags: -I${includedir}
+Requires: osi 

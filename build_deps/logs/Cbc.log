@@ -1,0 +1,370 @@
+Cloning into '/workspaces/FlopCpp/build_deps/Cbc'...
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking whether make supports nested variables... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking xargs -n works... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether make supports the include directive... yes (GNU style)
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... gcc3
+checking for g++... g++
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking dependency style of g++... gcc3
+checking whether g++ understands -c and -o together... yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking the archiver (ar) interface... ar
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for g++ option to produce PIC... -fPIC -DPIC
+checking if g++ PIC flag -fPIC -DPIC works... yes
+checking if g++ static flag -static works... yes
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for cmath... no
+checking for math.h... yes
+checking for cfloat... no
+checking for float.h... yes
+checking for cieeefp... no
+checking for ieeefp.h... no
+checking for execinfo.h... yes
+checking for signal.h... yes
+checking for pkgconf... pkgconf
+checking pkgconf is at least version 0.16.0... yes: 1.8.1
+configure: pkgconf path is "/home/codespace/.local/lib/pkgconfig:"
+checking for package CoinUtils... yes
+checking for package Osi... yes
+checking for package Cgl... yes
+checking for package Clp... yes
+checking for package OsiClp... yes
+checking for readline/readline.h... yes
+checking for library containing tputs... -lncurses
+checking for readline in -lreadline... yes
+checking for package ASL... no
+checking for package Nauty... no
+checking for package OsiTests... yes
+checking for package Sample... no
+checking for package Netlib... no
+checking for package Miplib3... no
+checking for library Cplex with link check... no (bare link)
+configure: Linker flags are "-lcplex -lpthread -lm -ldl". Use --with-cplex-lflags to overwrite. Check config.log for details of failed link attempt.
+checking for pthread_create in -lpthread... yes
+checking for clock_gettime in -lrt... yes
+configure: Cbc multithreading enabled
+configure: OsiCbc default solver is clp
+configure: configuring doxygen documentation options
+checking for doxygen... no
+checking for latex... no
+checking for dot... NO
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating examples/Makefile
+config.status: creating src/Makefile
+config.status: creating src/OsiCbc/Makefile
+config.status: creating test/Makefile
+config.status: creating cbc.pc
+config.status: creating osi-cbc.pc
+config.status: creating doxydoc/doxygen.conf
+config.status: creating src/config.h
+config.status: creating src/config_cbc.h
+config.status: creating src/OsiCbc/config_osicbc.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+configure: Configuration of Cbc successful
+Making all in src
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+make  all-am
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+  CXX      cbc-CoinSolve.o
+  CXX      libCbc_la-CbcBab.lo
+  CXX      libCbc_la-CbcBranchAllDifferent.lo
+  CXX      libCbc_la-CbcBranchCut.lo
+  CXX      libCbc_la-CbcBranchDecision.lo
+  CXX      libCbc_la-CbcBranchDefaultDecision.lo
+  CXX      libCbc_la-CbcBranchDynamic.lo
+  CXX      libCbc_la-CbcBranchingObject.lo
+  CXX      libCbc_la-CbcBranchLotsize.lo
+  CXX      libCbc_la-CbcBranchToFixLots.lo
+  CXX      libCbc_la-CbcCompareDefault.lo
+  CXX      libCbc_la-CbcCompareDepth.lo
+  CXX      libCbc_la-CbcCompareEstimate.lo
+  CXX      libCbc_la-CbcCompareObjective.lo
+  CXX      libCbc_la-CbcConsequence.lo
+  CXX      libCbc_la-CbcClique.lo
+  CXX      libCbc_la-CbcCountRowCut.lo
+  CXX      libCbc_la-CbcCutGenerator.lo
+  CXX      libCbc_la-CbcCutModifier.lo
+  CXX      libCbc_la-CbcCutSubsetModifier.lo
+  CXX      libCbc_la-CbcDummyBranchingObject.lo
+  CXX      libCbc_la-CbcEventHandler.lo
+  CXX      libCbc_la-CbcFathom.lo
+  CXX      libCbc_la-CbcFathomDynamicProgramming.lo
+  CXX      libCbc_la-CbcFixVariable.lo
+  CXX      libCbc_la-CbcFullNodeInfo.lo
+  CXX      libCbc_la-CbcFollowOn.lo
+  CXX      libCbc_la-CbcGeneral.lo
+  CXX      libCbc_la-CbcGeneralDepth.lo
+  CXX      libCbc_la-CbcHeuristic.lo
+  CXX      libCbc_la-CbcHeuristicDINS.lo
+CbcHeuristic.cpp: In member function 'int CbcHeuristic::smallBranchAndBound(OsiSolverInterface*, int, double*, double&, double, std::string) const':
+CbcHeuristic.cpp:1037:16: warning: ignoring return value of 'char* fgets(char*, int, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1037 |           fgets(line,120,fp); // skip first
+      |           ~~~~~^~~~~~~~~~~~~
+  CXX      libCbc_la-CbcHeuristicDive.lo
+  CXX      libCbc_la-CbcHeuristicDiveCoefficient.lo
+  CXX      libCbc_la-CbcHeuristicDiveFractional.lo
+  CXX      libCbc_la-CbcHeuristicDiveGuided.lo
+  CXX      libCbc_la-CbcHeuristicDiveLineSearch.lo
+  CXX      libCbc_la-CbcHeuristicDivePseudoCost.lo
+  CXX      libCbc_la-CbcHeuristicDiveVectorLength.lo
+  CXX      libCbc_la-CbcHeuristicFPump.lo
+  CXX      libCbc_la-CbcHeuristicGreedy.lo
+  CXX      libCbc_la-CbcHeuristicLocal.lo
+  CXX      libCbc_la-CbcHeuristicPivotAndFix.lo
+  CXX      libCbc_la-CbcHeuristicRandRound.lo
+  CXX      libCbc_la-CbcHeuristicRENS.lo
+  CXX      libCbc_la-CbcHeuristicRINS.lo
+  CXX      libCbc_la-CbcHeuristicVND.lo
+  CXX      libCbc_la-CbcHeuristicDW.lo
+  CXX      libCbc_la-CbcMessage.lo
+  CXX      libCbc_la-CbcMipStartIO.lo
+  CXX      libCbc_la-CbcModel.lo
+  CXX      libCbc_la-CbcNode.lo
+CbcModel.cpp: In member function 'void CbcModel::findIntegers(bool, int)':
+CbcModel.cpp:12888:38: warning: argument 1 range [18446744071562067968, 18446744073709551615] exceeds maximum object size 9223372036854775807 [-Walloc-size-larger-than=]
+12888 |   char *mark = new char[numberColumns];
+      |                                      ^
+In file included from /usr/include/c++/13/bits/new_allocator.h:34,
+                 from /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h:33,
+                 from /usr/include/c++/13/bits/allocator.h:46,
+                 from /usr/include/c++/13/string:43,
+                 from CbcModel.cpp:11:
+/usr/include/c++/13/new:128:26: note: in a call to allocation function 'void* operator new [](std::size_t)' declared here
+  128 | _GLIBCXX_NODISCARD void* operator new[](std::size_t) _GLIBCXX_THROW (std::bad_alloc)
+      |                          ^~~~~~~~
+  CXX      libCbc_la-CbcNodeInfo.lo
+  CXX      libCbc_la-CbcNWay.lo
+  CXX      libCbc_la-CbcObject.lo
+  CXX      libCbc_la-CbcObjectUpdateData.lo
+  CXX      libCbc_la-CbcParam.lo
+  CXX      libCbc_la-CbcParamUtils.lo
+  CXX      libCbc_la-CbcPartialNodeInfo.lo
+CbcParamUtils.cpp: In function 'bool CbcParamUtils::readSolution(std::string, int&, int&, double&, double**, double**, double**, double**)':
+CbcParamUtils.cpp:1107:10: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1107 |     fread(&numRows, sizeof(int), 1, fp);
+      |     ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CbcParamUtils.cpp:1108:10: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1108 |     fread(&numCols, sizeof(int), 1, fp);
+      |     ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CbcParamUtils.cpp:1109:10: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1109 |     fread(&objVal, sizeof(double), 1, fp);
+      |     ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CbcParamUtils.cpp:1113:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1113 |       fread(*rowActivity, sizeof(double), numRows, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CbcParamUtils.cpp:1120:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1120 |       fread(*dualVars, sizeof(double), numRows, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CbcParamUtils.cpp:1127:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1127 |       fread(*primalVars, sizeof(double), numCols, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CbcParamUtils.cpp:1134:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1134 |       fread(*reducedCosts, sizeof(double), numCols, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  CXX      libCbc_la-CbcSimpleInteger.lo
+  CXX      libCbc_la-CbcSimpleIntegerDynamicPseudoCost.lo
+  CXX      libCbc_la-CbcSimpleIntegerPseudoCost.lo
+  CXX      libCbc_la-CbcSOS.lo
+  CXX      libCbc_la-CbcSolution.lo
+  CXX      libCbc_la-CbcSolver.lo
+  CXX      libCbc_la-CbcSolverAnalyze.lo
+  CXX      libCbc_la-CbcSolverExpandKnapsack.lo
+  CXX      libCbc_la-CbcSolverHeuristics.lo
+  CXX      libCbc_la-CbcParameters.lo
+  CXX      libCbc_la-CbcStatistics.lo
+  CXX      libCbc_la-CbcStrategy.lo
+  CXX      libCbc_la-CbcSubProblem.lo
+  CXX      libCbc_la-CbcSymmetry.lo
+  CXX      libCbc_la-CbcThread.lo
+  CXX      libCbc_la-CbcTree.lo
+  CXX      libCbc_la-CbcTreeLocal.lo
+  CXX      libCbc_la-Cbc_C_Interface.lo
+  CXX      libCbc_la-CbcLinked.lo
+  CXX      libCbc_la-CbcLinkedUtils.lo
+  CXX      libCbc_la-unitTestClp.lo
+  CXXLD    libCbc.la
+  CXXLD    cbc
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+Making all in src/OsiCbc
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+make  all-am
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+  CXX      OsiCbcSolverInterface.lo
+  CXXLD    libOsiCbc.la
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc'
+Making install in src
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+ /usr/bin/mkdir -p '/home/codespace/.local/lib'
+ /bin/bash ../libtool   --mode=install /usr/bin/install -c   libCbc.la '/home/codespace/.local/lib'
+libtool: install: /usr/bin/install -c .libs/libCbc.so.0.0.0 /home/codespace/.local/lib/libCbc.so.0.0.0
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libCbc.so.0.0.0 libCbc.so.0 || { rm -f libCbc.so.0 && ln -s libCbc.so.0.0.0 libCbc.so.0; }; })
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libCbc.so.0.0.0 libCbc.so || { rm -f libCbc.so && ln -s libCbc.so.0.0.0 libCbc.so; }; })
+libtool: install: /usr/bin/install -c .libs/libCbc.lai /home/codespace/.local/lib/libCbc.la
+libtool: finish: PATH="/usr/local/sdkman/candidates/java/current/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/gradle/latest/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/maven/latest/bin:/usr/local/rvm/gems/ruby-3.4.1/bin:/usr/local/rvm/gems/ruby-3.4.1@global/bin:/usr/local/rvm/rubies/ruby-3.4.1/bin:/home/codespace/.cache/cloud-code/m2c/bin:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/debugCommand:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/copilotCli:/vscode/bin/linux-x64/bf9252a2fb45be6893dd8870c0bf37e2e1766d61/bin/remote-cli:/home/codespace/.local/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/jupyter:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/sdkman/candidates/ant/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/usr/local/php/current/bin:/opt/conda/bin:/usr/local/nvs:/usr/local/share/nvm/versions/node/v22.21.1/bin:/usr/local/hugo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/dotnet:/home/codespace/.dotnet/tools:/usr/local/rvm/bin:/sbin" ldconfig -n /home/codespace/.local/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/codespace/.local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /usr/bin/mkdir -p '/home/codespace/.local/bin'
+  /bin/bash ../libtool   --mode=install /usr/bin/install -c cbc '/home/codespace/.local/bin'
+libtool: install: /usr/bin/install -c .libs/cbc /home/codespace/.local/bin/cbc
+/bin/bash /workspaces/FlopCpp/build_deps/Cbc/install-sh -c -m 644 config_cbc.h /home/codespace/.local/include/coin-or/CbcConfig.h
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 Cbc_C_Interface.h CbcBranchActual.hpp CbcBranchAllDifferent.hpp CbcBranchBase.hpp CbcBranchDynamic.hpp CbcBranchCut.hpp CbcBranchDecision.hpp CbcBranchDefaultDecision.hpp CbcBranchingObject.hpp CbcBranchLotsize.hpp CbcBranchToFixLots.hpp CbcCompareActual.hpp CbcCompareBase.hpp CbcCompareDefault.hpp CbcCompareDepth.hpp CbcCompareEstimate.hpp CbcCompareObjective.hpp CbcConsequence.hpp CbcClique.hpp CbcCompare.hpp CbcCountRowCut.hpp CbcCutGenerator.hpp CbcCutModifier.hpp CbcCutSubsetModifier.hpp CbcDummyBranchingObject.hpp CbcFathom.hpp CbcEventHandler.hpp CbcFathomDynamicProgramming.hpp CbcFeasibilityBase.hpp CbcFixVariable.hpp CbcFollowOn.hpp CbcFullNodeInfo.hpp CbcGeneral.hpp CbcGeneralDepth.hpp CbcGenMessages.hpp CbcHeuristic.hpp CbcHeuristicDINS.hpp CbcHeuristicDive.hpp CbcHeuristicDiveCoefficient.hpp CbcHeuristicDiveFractional.hpp '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CbcHeuristicDiveGuided.hpp CbcHeuristicDiveLineSearch.hpp CbcHeuristicDivePseudoCost.hpp CbcHeuristicDiveVectorLength.hpp CbcHeuristicFPump.hpp CbcHeuristicGreedy.hpp CbcHeuristicLocal.hpp CbcHeuristicPivotAndFix.hpp CbcHeuristicRandRound.hpp CbcHeuristicRENS.hpp CbcHeuristicRINS.hpp CbcHeuristicVND.hpp CbcHeuristicDW.hpp CbcMessage.hpp CbcModel.hpp CbcNode.hpp CbcNodeInfo.hpp CbcNWay.hpp CbcObject.hpp CbcObjectUpdateData.hpp CbcParam.hpp CbcPartialNodeInfo.hpp CbcParameters.hpp CbcSimpleInteger.hpp CbcSimpleIntegerDynamicPseudoCost.hpp CbcSimpleIntegerPseudoCost.hpp CbcStrategy.hpp CbcSolver.hpp CbcMipStartIO.hpp CbcSOS.hpp CbcSubProblem.hpp CbcTree.hpp CbcLinked.hpp CbcTreeLocal.hpp ClpConstraintAmpl.hpp ClpAmplObjective.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src'
+Making install in src/OsiCbc
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+/bin/bash /workspaces/FlopCpp/build_deps/Cbc/install-sh -c -m 644 config_osicbc.h /home/codespace/.local/include/coin-or/OsiCbcConfig.h
+ /usr/bin/mkdir -p '/home/codespace/.local/lib'
+ /bin/bash ../../libtool   --mode=install /usr/bin/install -c   libOsiCbc.la '/home/codespace/.local/lib'
+libtool: warning: relinking 'libOsiCbc.la'
+libtool: install: (cd /workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc; /bin/bash "/workspaces/FlopCpp/build_deps/Cbc/libtool"  --silent --tag CXX --mode=relink g++ -O2 -DNDEBUG -no-undefined -o libOsiCbc.la -rpath /home/codespace/.local/lib OsiCbcSolverInterface.lo ../libCbc.la )
+libtool: install: /usr/bin/install -c .libs/libOsiCbc.so.0.0.0T /home/codespace/.local/lib/libOsiCbc.so.0.0.0
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libOsiCbc.so.0.0.0 libOsiCbc.so.0 || { rm -f libOsiCbc.so.0 && ln -s libOsiCbc.so.0.0.0 libOsiCbc.so.0; }; })
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libOsiCbc.so.0.0.0 libOsiCbc.so || { rm -f libOsiCbc.so && ln -s libOsiCbc.so.0.0.0 libOsiCbc.so; }; })
+libtool: install: /usr/bin/install -c .libs/libOsiCbc.lai /home/codespace/.local/lib/libOsiCbc.la
+libtool: finish: PATH="/usr/local/sdkman/candidates/java/current/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/gradle/latest/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/maven/latest/bin:/usr/local/rvm/gems/ruby-3.4.1/bin:/usr/local/rvm/gems/ruby-3.4.1@global/bin:/usr/local/rvm/rubies/ruby-3.4.1/bin:/home/codespace/.cache/cloud-code/m2c/bin:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/debugCommand:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/copilotCli:/vscode/bin/linux-x64/bf9252a2fb45be6893dd8870c0bf37e2e1766d61/bin/remote-cli:/home/codespace/.local/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/jupyter:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/sdkman/candidates/ant/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/usr/local/php/current/bin:/opt/conda/bin:/usr/local/nvs:/usr/local/share/nvm/versions/node/v22.21.1/bin:/usr/local/hugo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/dotnet:/home/codespace/.dotnet/tools:/usr/local/rvm/bin:/sbin" ldconfig -n /home/codespace/.local/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/codespace/.local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 OsiCbcSolverInterface.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc/src/OsiCbc'
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cbc'
+/usr/bin/mkdir -p "/home/codespace/.local/share/doc/coin-or-cbc"
+for file in README README.md AUTHORS LICENSE; do \
+  if test -f "$file"; then dir=; else dir="./"; fi; \
+  if test -f "$dir$file"; then \
+    /usr/bin/install -c -m 644 "$dir$file" "/home/codespace/.local/share/doc/coin-or-cbc/$file"; \
+  fi; \
+done
+ /usr/bin/mkdir -p '/home/codespace/.local/lib/pkgconfig'
+ /usr/bin/install -c -m 644 cbc.pc osi-cbc.pc '/home/codespace/.local/lib/pkgconfig'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cbc'

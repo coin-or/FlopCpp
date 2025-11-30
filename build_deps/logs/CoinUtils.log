@@ -154,7 +154,169 @@ make[2]: Entering directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
   CXX      CoinAlloc.lo
   CXX      CoinBuild.lo
   CXX      CoinDenseVector.lo
-make[2]: *** [Makefile:769: CoinBuild.lo] Error 1
-make[2]: *** [Makefile:769: CoinDenseVector.lo] Error 1
-make[1]: *** [Makefile:576: all] Interrupt
-make: *** [Makefile:450: all-recursive] Interrupt
+  CXX      CoinError.lo
+  CXX      CoinFactorization1.lo
+  CXX      CoinFactorization2.lo
+  CXX      CoinFactorization3.lo
+  CXX      CoinFactorization4.lo
+  CXX      CoinDenseFactorization.lo
+  CXX      CoinFileIO.lo
+  CXX      CoinFinite.lo
+  CXX      CoinIndexedVector.lo
+  CXX      CoinLpIO.lo
+  CXX      CoinMessage.lo
+  CXX      CoinMessageHandler.lo
+  CXX      CoinModel.lo
+  CXX      CoinStructuredModel.lo
+CoinModel.cpp: In member function 'void CoinModel::addColumn(int, const int*, const double*, double, double, double, const char*, bool)':
+CoinModel.cpp:5565:22: warning: '%7.7d' directive writing between 7 and 11 bytes into a region of size 8 [-Wformat-overflow=]
+ 5565 |     sprintf(field,"%c%7.7d",rowColumn,number);
+      |                      ^~~~~
+In member function 'void CoinModel::Coin8CharacterName(char, int, char*)',
+    inlined from 'void CoinModel::Coin8CharacterName(char, int, char*)' at CoinModel.cpp:5561:13,
+    inlined from 'void CoinModel::addColumn(int, const int*, const double*, double, double, double, const char*, bool)' at CoinModel.cpp:933:23:
+CoinModel.cpp:5565:19: note: directive argument in the range [-2147483648, 9999999]
+ 5565 |     sprintf(field,"%c%7.7d",rowColumn,number);
+      |                   ^~~~~~~~~
+In file included from /usr/include/stdio.h:980,
+                 from /usr/include/c++/13/cstdio:42,
+                 from CoinHelperFunctions.hpp:21,
+                 from CoinModel.cpp:5:
+In function 'int sprintf(char*, const char*, ...)',
+    inlined from 'void CoinModel::Coin8CharacterName(char, int, char*)' at CoinModel.cpp:5565:12,
+    inlined from 'void CoinModel::Coin8CharacterName(char, int, char*)' at CoinModel.cpp:5561:13,
+    inlined from 'void CoinModel::addColumn(int, const int*, const double*, double, double, double, const char*, bool)' at CoinModel.cpp:933:23:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:30:34: note: '__builtin___sprintf_chk' output between 9 and 13 bytes into a destination of size 9
+   30 |   return __builtin___sprintf_chk (__s, __USE_FORTIFY_LEVEL - 1,
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   31 |                                   __glibc_objsize (__s), __fmt,
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   32 |                                   __va_arg_pack ());
+      |                                   ~~~~~~~~~~~~~~~~~
+CoinModel.cpp: In member function 'void CoinModel::addRow(int, const int*, const double*, double, double, const char*)':
+CoinModel.cpp:5565:22: warning: '%7.7d' directive writing between 7 and 11 bytes into a region of size 8 [-Wformat-overflow=]
+ 5565 |     sprintf(field,"%c%7.7d",rowColumn,number);
+      |                      ^~~~~
+In member function 'void CoinModel::Coin8CharacterName(char, int, char*)',
+    inlined from 'void CoinModel::Coin8CharacterName(char, int, char*)' at CoinModel.cpp:5561:13,
+    inlined from 'void CoinModel::addRow(int, const int*, const double*, double, double, const char*)' at CoinModel.cpp:800:23:
+CoinModel.cpp:5565:19: note: directive argument in the range [-2147483648, 9999999]
+ 5565 |     sprintf(field,"%c%7.7d",rowColumn,number);
+      |                   ^~~~~~~~~
+In function 'int sprintf(char*, const char*, ...)',
+    inlined from 'void CoinModel::Coin8CharacterName(char, int, char*)' at CoinModel.cpp:5565:12,
+    inlined from 'void CoinModel::Coin8CharacterName(char, int, char*)' at CoinModel.cpp:5561:13,
+    inlined from 'void CoinModel::addRow(int, const int*, const double*, double, double, const char*)' at CoinModel.cpp:800:23:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:30:34: note: '__builtin___sprintf_chk' output between 9 and 13 bytes into a destination of size 9
+   30 |   return __builtin___sprintf_chk (__s, __USE_FORTIFY_LEVEL - 1,
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   31 |                                   __glibc_objsize (__s), __fmt,
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   32 |                                   __va_arg_pack ());
+      |                                   ~~~~~~~~~~~~~~~~~
+  CXX      CoinModelUseful.lo
+  CXX      CoinModelUseful2.lo
+  CXX      CoinMpsIO.lo
+  CXX      CoinPackedMatrix.lo
+  CXX      CoinPackedVector.lo
+  CXX      CoinPackedVectorBase.lo
+  CXX      CoinParam.lo
+  CXX      CoinParamUtils.lo
+  CXX      CoinPostsolveMatrix.lo
+  CXX      CoinPrePostsolveMatrix.lo
+  CXX      CoinPresolveDoubleton.lo
+  CXX      CoinPresolveDual.lo
+  CXX      CoinPresolveDupcol.lo
+  CXX      CoinPresolveEmpty.lo
+  CXX      CoinPresolveFixed.lo
+  CXX      CoinPresolveForcing.lo
+  CXX      CoinPresolveHelperFunctions.lo
+  CXX      CoinPresolveImpliedFree.lo
+  CXX      CoinPresolveIsolated.lo
+  CXX      CoinPresolveMatrix.lo
+  CXX      CoinPresolvePsdebug.lo
+  CXX      CoinPresolveMonitor.lo
+  CXX      CoinPresolveSingleton.lo
+  CXX      CoinPresolveSubst.lo
+  CXX      CoinPresolveTighten.lo
+  CXX      CoinPresolveTripleton.lo
+  CXX      CoinPresolveUseless.lo
+  CXX      CoinPresolveZeros.lo
+  CXX      CoinRational.lo
+  CXX      CoinSearchTree.lo
+  CXX      CoinShallowPackedVector.lo
+  CXX      CoinSnapshot.lo
+  CXX      CoinWarmStartBasis.lo
+  CXX      CoinWarmStartVector.lo
+  CXX      CoinWarmStartDual.lo
+  CXX      CoinWarmStartPrimalDual.lo
+  CXX      CoinAdjacencyVector.lo
+  CXX      CoinBronKerbosch.lo
+  CXX      CoinCliqueExtender.lo
+  CXX      CoinCliqueList.lo
+  CXX      CoinCliqueSet.lo
+  CXX      CoinConflictGraph.lo
+  CXX      CoinCutPool.lo
+  CXX      CoinDynamicConflictGraph.lo
+  CXX      CoinNodeHeap.lo
+  CXX      CoinOddWheelSeparator.lo
+  CXX      CoinShortestPath.lo
+  CXX      CoinStaticConflictGraph.lo
+  CXX      CoinOslFactorization.lo
+  CXX      CoinOslFactorization2.lo
+  CXX      CoinOslFactorization3.lo
+  CXX      CoinSimpFactorization.lo
+  CXXLD    libCoinUtils.la
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/CoinUtils'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils'
+Making install in src
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
+/bin/bash /workspaces/FlopCpp/build_deps/CoinUtils/install-sh -c -m 644 config_coinutils.h /home/codespace/.local/include/coin-or/CoinUtilsConfig.h
+ /usr/bin/mkdir -p '/home/codespace/.local/lib'
+ /bin/bash ../libtool   --mode=install /usr/bin/install -c   libCoinUtils.la '/home/codespace/.local/lib'
+libtool: install: /usr/bin/install -c .libs/libCoinUtils.so.0.0.0 /home/codespace/.local/lib/libCoinUtils.so.0.0.0
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libCoinUtils.so.0.0.0 libCoinUtils.so.0 || { rm -f libCoinUtils.so.0 && ln -s libCoinUtils.so.0.0.0 libCoinUtils.so.0; }; })
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libCoinUtils.so.0.0.0 libCoinUtils.so || { rm -f libCoinUtils.so && ln -s libCoinUtils.so.0.0.0 libCoinUtils.so; }; })
+libtool: install: /usr/bin/install -c .libs/libCoinUtils.lai /home/codespace/.local/lib/libCoinUtils.la
+libtool: finish: PATH="/usr/local/sdkman/candidates/java/current/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/gradle/latest/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/maven/latest/bin:/usr/local/rvm/gems/ruby-3.4.1/bin:/usr/local/rvm/gems/ruby-3.4.1@global/bin:/usr/local/rvm/rubies/ruby-3.4.1/bin:/home/codespace/.cache/cloud-code/m2c/bin:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/debugCommand:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/copilotCli:/vscode/bin/linux-x64/bf9252a2fb45be6893dd8870c0bf37e2e1766d61/bin/remote-cli:/home/codespace/.local/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/jupyter:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/sdkman/candidates/ant/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/usr/local/php/current/bin:/opt/conda/bin:/usr/local/nvs:/usr/local/share/nvm/versions/node/v22.21.1/bin:/usr/local/hugo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/dotnet:/home/codespace/.dotnet/tools:/usr/local/rvm/bin:/sbin" ldconfig -n /home/codespace/.local/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/codespace/.local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CoinAlloc.hpp CoinBuild.hpp CoinDenseVector.hpp CoinDistance.hpp CoinError.hpp CoinFactorization.hpp CoinDenseFactorization.hpp CoinFileIO.hpp CoinFinite.hpp CoinFloatEqual.hpp CoinHelperFunctions.hpp CoinIndexedVector.hpp CoinLpIO.hpp CoinMessage.hpp CoinMessageHandler.hpp CoinModel.hpp CoinStructuredModel.hpp CoinModelUseful.hpp CoinMpsIO.hpp CoinPackedMatrix.hpp CoinPackedVector.hpp CoinPackedVectorBase.hpp CoinParam.hpp CoinPragma.hpp CoinPresolveDoubleton.hpp CoinPresolveDual.hpp CoinPresolveDupcol.hpp CoinPresolveEmpty.hpp CoinPresolveFixed.hpp CoinPresolveForcing.hpp CoinPresolveImpliedFree.hpp CoinPresolveIsolated.hpp CoinPresolveMatrix.hpp CoinPresolveMonitor.hpp CoinPresolvePsdebug.hpp CoinPresolveSingleton.hpp CoinPresolveSubst.hpp CoinPresolveTighten.hpp CoinPresolveTripleton.hpp CoinPresolveUseless.hpp '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CoinPresolveZeros.hpp CoinRational.hpp CoinSearchTree.hpp CoinShallowPackedVector.hpp CoinSignal.hpp CoinSmartPtr.hpp CoinSnapshot.hpp CoinSort.hpp CoinTime.hpp CoinTypes.h CoinUtility.hpp CoinWarmStart.hpp CoinWarmStartBasis.hpp CoinWarmStartVector.hpp CoinWarmStartDual.hpp CoinWarmStartPrimalDual.hpp CoinAdjacencyVector.hpp CoinBronKerbosch.hpp CoinCliqueExtender.hpp CoinCliqueList.hpp CoinCliqueSet.hpp CoinConflictGraph.hpp CoinCutPool.hpp CoinDynamicConflictGraph.hpp CoinNodeHeap.hpp CoinOddWheelSeparator.hpp CoinShortestPath.hpp CoinStaticConflictGraph.hpp CoinOslFactorization.hpp CoinSimpFactorization.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils/src'
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/CoinUtils'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/CoinUtils'
+make[2]: Nothing to be done for 'install-exec-am'.
+/usr/bin/mkdir -p "/home/codespace/.local/share/doc/coin-or-coinutils"
+for file in README README.md AUTHORS LICENSE; do \
+  if test -f "$file"; then dir=; else dir="./"; fi; \
+  if test -f "$dir$file"; then \
+    /usr/bin/install -c -m 644 "$dir$file" "/home/codespace/.local/share/doc/coin-or-coinutils/$file"; \
+  fi; \
+done
+ /usr/bin/mkdir -p '/home/codespace/.local/lib/pkgconfig'
+ /usr/bin/install -c -m 644 coinutils.pc '/home/codespace/.local/lib/pkgconfig'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/CoinUtils'

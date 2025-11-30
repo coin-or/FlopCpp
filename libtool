@@ -7564,10 +7564,10 @@ LTCC="gcc"
 LTCFLAGS="-O3 -pipe -DNDEBUG -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas -Wno-long-long  "
 
 # A language-specific compiler.
-CC="unavailable"
+CC="gfortran"
 
 # Is the compiler the GNU C compiler?
-with_gcc=
+with_gcc=yes
 
 # An ERE matcher.
 EGREP="grep -E"
@@ -7619,14 +7619,14 @@ shrext_cmds='.so'
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=""
+pic_flag=" -fPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
 max_cmd_len=32768
 
 # Does compiler simultaneously support -c and -o options?
-compiler_c_o="no"
+compiler_c_o="yes"
 
 # Must we lock files when doing compilation?
 need_locks="no"
@@ -7647,7 +7647,7 @@ dlopen_self=unknown
 dlopen_self_static=unknown
 
 # Compiler flag to prevent dynamic linking.
-link_static_flag=""
+link_static_flag="-static"
 
 # Compiler flag to turn off builtin functions.
 no_builtin_flag=""
@@ -7801,7 +7801,7 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=""
+sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/13/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/13/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../../x86_64-linux-gnu/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/13/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib/ /lib/x86_64-linux-gnu/13/ /lib/x86_64-linux-gnu/ /lib/../lib/ /usr/lib/x86_64-linux-gnu/13/ /usr/lib/x86_64-linux-gnu/ /usr/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/13/../../../ /lib/ /usr/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/lib /usr/local/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /lib32 /usr/lib32 "

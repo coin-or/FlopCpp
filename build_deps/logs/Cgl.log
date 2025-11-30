@@ -1,0 +1,556 @@
+Cloning into '/workspaces/FlopCpp/build_deps/Cgl'...
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking whether make supports nested variables... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 0.01
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking xargs -n works... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking whether make supports the include directive... yes (GNU style)
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... gcc3
+checking for g++... g++
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking dependency style of g++... gcc3
+checking whether g++ understands -c and -o together... yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking the archiver (ar) interface... ar
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for g++ option to produce PIC... -fPIC -DPIC
+checking if g++ PIC flag -fPIC -DPIC works... yes
+checking if g++ static flag -static works... yes
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for cmath... yes
+checking for cfloat... yes
+checking for cieeefp... no
+checking for ieeefp.h... no
+checking for pkgconf... pkgconf
+checking pkgconf is at least version 0.16.0... yes: 1.8.1
+configure: pkgconf path is "/home/codespace/.local/lib/pkgconfig:"
+checking for package CoinUtils... yes
+checking for package Osi... yes
+checking for package Clp... yes
+checking for package OsiClp... yes
+checking for package OsiCpx... no
+checking for package OsiGlpk... no
+checking for package OsiGrb... no
+checking for package OsiMsk... no
+checking for package OsiXpr... no
+checking for package OsiVol... no
+checking for package OsiDyLP... no
+checking for package OsiSpx... no
+checking for package Sample... no
+configure: configuring doxygen documentation options
+checking for doxygen... no
+checking for latex... no
+checking for dot... NO
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating examples/Makefile
+config.status: creating src/CglCommon/Makefile
+config.status: creating src/CglAllDifferent/Makefile
+config.status: creating src/CglBKClique/Makefile
+config.status: creating src/CglClique/Makefile
+config.status: creating src/CglCliqueStrengthening/Makefile
+config.status: creating src/CglDuplicateRow/Makefile
+config.status: creating src/CglFlowCover/Makefile
+config.status: creating src/CglGMI/Makefile
+config.status: creating src/CglGomory/Makefile
+config.status: creating src/CglKnapsackCover/Makefile
+config.status: creating src/CglLandP/Makefile
+config.status: creating src/CglLiftAndProject/Makefile
+config.status: creating src/CglMixedIntegerRounding/Makefile
+config.status: creating src/CglMixedIntegerRounding2/Makefile
+config.status: creating src/CglOddHole/Makefile
+config.status: creating src/CglOddWheel/Makefile
+config.status: creating src/CglPreProcess/Makefile
+config.status: creating src/CglProbing/Makefile
+config.status: creating src/CglRedSplit/Makefile
+config.status: creating src/CglRedSplit2/Makefile
+config.status: creating src/CglResidualCapacity/Makefile
+config.status: creating src/CglSimpleRounding/Makefile
+config.status: creating src/CglTwomir/Makefile
+config.status: creating src/CglZeroHalf/Makefile
+config.status: creating test/Makefile
+config.status: creating cgl.pc
+config.status: creating doxydoc/doxygen.conf
+config.status: creating src/CglCommon/config.h
+config.status: creating src/CglCommon/config_cgl.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+configure: Configuration of Cgl successful
+Making all in src/CglAllDifferent
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglAllDifferent'
+  CXX      CglAllDifferent.lo
+  CXXLD    libCglAllDifferent.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglAllDifferent'
+Making all in src/CglBKClique
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglBKClique'
+  CXX      CglBKClique.lo
+  CXXLD    libCglBKClique.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglBKClique'
+Making all in src/CglClique
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglClique'
+  CXX      CglClique.lo
+  CXX      CglCliqueHelper.lo
+  CXX      CglCliqueTest.lo
+  CXXLD    libCglClique.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglClique'
+Making all in src/CglCliqueStrengthening
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCliqueStrengthening'
+  CXX      CglCliqueStrengthening.lo
+  CXXLD    libCglCliqueStrengthening.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCliqueStrengthening'
+Making all in src/CglDuplicateRow
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglDuplicateRow'
+  CXX      CglDuplicateRow.lo
+  CXXLD    libCglDuplicateRow.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglDuplicateRow'
+Making all in src/CglFlowCover
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglFlowCover'
+  CXX      CglFlowCover.lo
+  CXX      CglFlowCoverTest.lo
+  CXXLD    libCglFlowCover.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglFlowCover'
+Making all in src/CglGMI
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGMI'
+  CXX      CglGMI.lo
+  CXX      CglGMIParam.lo
+  CXXLD    libCglGMI.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGMI'
+Making all in src/CglGomory
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGomory'
+  CXX      CglGomory.lo
+  CXX      CglGomoryTest.lo
+  CXXLD    libCglGomory.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGomory'
+Making all in src/CglKnapsackCover
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglKnapsackCover'
+  CXX      CglKnapsackCover.lo
+  CXX      CglKnapsackCoverTest.lo
+  CXXLD    libCglKnapsackCover.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglKnapsackCover'
+Making all in src/CglLandP
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLandP'
+  CXX      CglLandPUtils.lo
+  CXX      CglLandP.lo
+  CXX      CglLandPTabRow.lo
+  CXX      CglLandPMessages.lo
+  CXX      CglLandPSimplex.lo
+  CXX      CglLandPValidator.lo
+  CXX      CglLandPTest.lo
+  CXXLD    libCglLandP.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLandP'
+Making all in src/CglLiftAndProject
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLiftAndProject'
+  CXX      CglLiftAndProject.lo
+  CXXLD    libCglLiftAndProject.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLiftAndProject'
+Making all in src/CglMixedIntegerRounding
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding'
+  CXX      CglMixedIntegerRounding.lo
+  CXX      CglMixedIntegerRoundingTest.lo
+  CXXLD    libCglMixedIntegerRounding.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding'
+Making all in src/CglMixedIntegerRounding2
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding2'
+  CXX      CglMixedIntegerRounding2.lo
+  CXX      CglMixedIntegerRounding2Test.lo
+  CXXLD    libCglMixedIntegerRounding2.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding2'
+Making all in src/CglOddHole
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddHole'
+  CXX      CglOddHole.lo
+  CXX      CglOddHoleTest.lo
+  CXXLD    libCglOddHole.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddHole'
+Making all in src/CglOddWheel
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddWheel'
+  CXX      CglOddWheel.lo
+  CXXLD    libCglOddWheel.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddWheel'
+Making all in src/CglPreProcess
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglPreProcess'
+  CXX      CglPreProcess.lo
+  CXXLD    libCglPreProcess.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglPreProcess'
+Making all in src/CglProbing
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglProbing'
+  CXX      CglProbing.lo
+  CXX      CglProbingTest.lo
+  CXXLD    libCglProbing.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglProbing'
+Making all in src/CglRedSplit
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit'
+  CXX      CglRedSplit.lo
+  CXX      CglRedSplitTest.lo
+  CXX      CglRedSplitParam.lo
+  CXXLD    libCglRedSplit.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit'
+Making all in src/CglRedSplit2
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit2'
+  CXX      CglRedSplit2.lo
+  CXX      CglRedSplit2Test.lo
+  CXX      CglRedSplit2Param.lo
+  CXXLD    libCglRedSplit2.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit2'
+Making all in src/CglResidualCapacity
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglResidualCapacity'
+  CXX      CglResidualCapacity.lo
+  CXX      CglResidualCapacityTest.lo
+  CXXLD    libCglResidualCapacity.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglResidualCapacity'
+Making all in src/CglSimpleRounding
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglSimpleRounding'
+  CXX      CglSimpleRounding.lo
+  CXX      CglSimpleRoundingTest.lo
+  CXXLD    libCglSimpleRounding.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglSimpleRounding'
+Making all in src/CglTwomir
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglTwomir'
+  CXX      CglTwomir.lo
+  CXX      CglTwomirTest.lo
+  CXXLD    libCglTwomir.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglTwomir'
+Making all in src/CglZeroHalf
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglZeroHalf'
+  CXX      CglZeroHalf.lo
+  CXX      Cgl012cut.lo
+  CXX      CglZeroHalfTest.lo
+  CXXLD    libCglZeroHalf.la
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglZeroHalf'
+Making all in src/CglCommon
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+make  all-am
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+  CXX      CglCutGenerator.lo
+  CXX      CglMessage.lo
+  CXX      CglStored.lo
+  CXX      CglParam.lo
+CglStored.cpp: In constructor 'CglStored::CglStored(const char*)':
+CglStored.cpp:299:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+  299 |       fread(&n, sizeof(int), 1, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+CglStored.cpp:314:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+  314 |       fread(rhs, sizeof(double), 2, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CglStored.cpp:316:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+  316 |       fread(index, sizeof(int), n, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+CglStored.cpp:317:12: warning: ignoring return value of 'size_t fread(void*, size_t, size_t, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+  317 |       fread(coefficient, sizeof(double), n, fp);
+      |       ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  CXX      CglTreeInfo.lo
+  CXXLD    libCgl.la
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl'
+Making install in src/CglAllDifferent
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglAllDifferent'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglAllDifferent'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglAllDifferent.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglAllDifferent'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglAllDifferent'
+Making install in src/CglBKClique
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglBKClique'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglBKClique'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglBKClique.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglBKClique'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglBKClique'
+Making install in src/CglClique
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglClique'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglClique'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglClique.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglClique'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglClique'
+Making install in src/CglCliqueStrengthening
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCliqueStrengthening'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCliqueStrengthening'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglCliqueStrengthening.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCliqueStrengthening'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCliqueStrengthening'
+Making install in src/CglDuplicateRow
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglDuplicateRow'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglDuplicateRow'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglDuplicateRow.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglDuplicateRow'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglDuplicateRow'
+Making install in src/CglFlowCover
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglFlowCover'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglFlowCover'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglFlowCover.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglFlowCover'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglFlowCover'
+Making install in src/CglGMI
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGMI'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGMI'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglGMI.hpp CglGMIParam.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGMI'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGMI'
+Making install in src/CglGomory
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGomory'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGomory'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglGomory.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGomory'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglGomory'
+Making install in src/CglKnapsackCover
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglKnapsackCover'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglKnapsackCover'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglKnapsackCover.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglKnapsackCover'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglKnapsackCover'
+Making install in src/CglLandP
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLandP'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLandP'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglLandP.hpp CglLandPValidator.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLandP'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLandP'
+Making install in src/CglLiftAndProject
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLiftAndProject'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLiftAndProject'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglLiftAndProject.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLiftAndProject'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglLiftAndProject'
+Making install in src/CglMixedIntegerRounding
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglMixedIntegerRounding.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding'
+Making install in src/CglMixedIntegerRounding2
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding2'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding2'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglMixedIntegerRounding2.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding2'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglMixedIntegerRounding2'
+Making install in src/CglOddHole
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddHole'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddHole'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglOddHole.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddHole'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddHole'
+Making install in src/CglOddWheel
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddWheel'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddWheel'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglOddWheel.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddWheel'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglOddWheel'
+Making install in src/CglPreProcess
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglPreProcess'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglPreProcess'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglPreProcess.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglPreProcess'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglPreProcess'
+Making install in src/CglProbing
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglProbing'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglProbing'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglProbing.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglProbing'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglProbing'
+Making install in src/CglRedSplit
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglRedSplit.hpp CglRedSplitParam.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit'
+Making install in src/CglRedSplit2
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit2'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit2'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglRedSplit2.hpp CglRedSplit2Param.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit2'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglRedSplit2'
+Making install in src/CglResidualCapacity
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglResidualCapacity'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglResidualCapacity'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglResidualCapacity.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglResidualCapacity'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglResidualCapacity'
+Making install in src/CglSimpleRounding
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglSimpleRounding'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglSimpleRounding'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglSimpleRounding.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglSimpleRounding'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglSimpleRounding'
+Making install in src/CglTwomir
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglTwomir'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglTwomir'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglTwomir.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglTwomir'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglTwomir'
+Making install in src/CglZeroHalf
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglZeroHalf'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglZeroHalf'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglZeroHalf.hpp Cgl012cut.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglZeroHalf'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglZeroHalf'
+Making install in src/CglCommon
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+/bin/bash /workspaces/FlopCpp/build_deps/Cgl/install-sh -c -m 644 config_cgl.h /home/codespace/.local/include/coin-or/CglConfig.h
+ /usr/bin/mkdir -p '/home/codespace/.local/lib'
+ /bin/bash ../../libtool   --mode=install /usr/bin/install -c   libCgl.la '/home/codespace/.local/lib'
+libtool: install: /usr/bin/install -c .libs/libCgl.so.0.0.0 /home/codespace/.local/lib/libCgl.so.0.0.0
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libCgl.so.0.0.0 libCgl.so.0 || { rm -f libCgl.so.0 && ln -s libCgl.so.0.0.0 libCgl.so.0; }; })
+libtool: install: (cd /home/codespace/.local/lib && { ln -s -f libCgl.so.0.0.0 libCgl.so || { rm -f libCgl.so && ln -s libCgl.so.0.0.0 libCgl.so; }; })
+libtool: install: /usr/bin/install -c .libs/libCgl.lai /home/codespace/.local/lib/libCgl.la
+libtool: finish: PATH="/usr/local/sdkman/candidates/java/current/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/gradle/latest/bin:/home/codespace/.vscode-remote/data/User/globalStorage/pleiades.java-extension-pack-jdk/maven/latest/bin:/usr/local/rvm/gems/ruby-3.4.1/bin:/usr/local/rvm/gems/ruby-3.4.1@global/bin:/usr/local/rvm/rubies/ruby-3.4.1/bin:/home/codespace/.cache/cloud-code/m2c/bin:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/debugCommand:/home/codespace/.vscode-remote/data/User/globalStorage/github.copilot-chat/copilotCli:/vscode/bin/linux-x64/bf9252a2fb45be6893dd8870c0bf37e2e1766d61/bin/remote-cli:/home/codespace/.local/bin:/home/codespace/.dotnet:/home/codespace/nvm/current/bin:/home/codespace/.php/current/bin:/home/codespace/.python/current/bin:/home/codespace/java/current/bin:/home/codespace/.ruby/current/bin:/home/codespace/.local/bin:/usr/local/python/current/bin:/usr/local/py-utils/bin:/usr/local/jupyter:/usr/local/oryx:/usr/local/go/bin:/go/bin:/usr/local/sdkman/bin:/usr/local/sdkman/candidates/java/current/bin:/usr/local/sdkman/candidates/gradle/current/bin:/usr/local/sdkman/candidates/maven/current/bin:/usr/local/sdkman/candidates/ant/current/bin:/usr/local/rvm/gems/default/bin:/usr/local/rvm/gems/default@global/bin:/usr/local/rvm/rubies/default/bin:/usr/local/share/rbenv/bin:/usr/local/php/current/bin:/opt/conda/bin:/usr/local/nvs:/usr/local/share/nvm/versions/node/v22.21.1/bin:/usr/local/hugo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/dotnet:/home/codespace/.dotnet/tools:/usr/local/rvm/bin:/sbin" ldconfig -n /home/codespace/.local/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/codespace/.local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /usr/bin/mkdir -p '/home/codespace/.local/include/coin-or'
+ /usr/bin/install -c -m 644 CglCutGenerator.hpp CglMessage.hpp CglStored.hpp CglParam.hpp CglTreeInfo.hpp '/home/codespace/.local/include/coin-or'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl/src/CglCommon'
+make[1]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl'
+make[2]: Entering directory '/workspaces/FlopCpp/build_deps/Cgl'
+/usr/bin/mkdir -p "/home/codespace/.local/share/doc/coin-or-cgl"
+for file in README README.md AUTHORS LICENSE; do \
+  if test -f "$file"; then dir=; else dir="./"; fi; \
+  if test -f "$dir$file"; then \
+    /usr/bin/install -c -m 644 "$dir$file" "/home/codespace/.local/share/doc/coin-or-cgl/$file"; \
+  fi; \
+done
+ /usr/bin/mkdir -p '/home/codespace/.local/lib/pkgconfig'
+ /usr/bin/install -c -m 644 cgl.pc '/home/codespace/.local/lib/pkgconfig'
+make[2]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl'
+make[1]: Leaving directory '/workspaces/FlopCpp/build_deps/Cgl'

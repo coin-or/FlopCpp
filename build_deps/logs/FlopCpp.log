@@ -1,0 +1,559 @@
+checking build system type... x86_64-unknown-linux-gnu
+checking whether we want to compile in debug mode... no
+checking for gcc... gcc
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+configure: C compiler options are: -O3 -pipe -DNDEBUG -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas -Wno-long-long  
+checking for g++... g++
+checking whether we are using the GNU C++ compiler... yes
+checking whether g++ accepts -g... yes
+checking whether C++ compiler g++ works... yes
+configure: C++ compiler options are: -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long  
+configure: Trying to determine Fortran compiler name
+checking for gfortran... gfortran
+checking whether we are using the GNU Fortran 77 compiler... yes
+checking whether gfortran accepts -g... yes
+configure: Fortran compiler options are: -O3 -pipe  
+checking for egrep... grep -E
+checking whether ln -s works... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for style of include used by make... GNU
+checking dependency style of gcc... gcc3
+checking dependency style of g++... gcc3
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking host system type... x86_64-unknown-linux-gnu
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for ld used by gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for /usr/bin/ld option to reload object files... -r
+checking for BSD-compatible nm... /usr/bin/nm -B
+checking how to recognise dependent libraries... pass_all
+checking how to run the C preprocessor... gcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking dlfcn.h usability... yes
+checking dlfcn.h presence... yes
+checking for dlfcn.h... yes
+checking how to run the C++ preprocessor... g++ -E
+checking the maximum length of command line arguments... 32768
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for objdir... .libs
+checking for ar... ar
+checking for ranlib... ranlib
+checking for strip... strip
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC
+checking if gcc PIC flag -fPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+configure: creating libtool
+appending configuration tag "CXX" to libtool
+checking for ld used by g++... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for g++ option to produce PIC... -fPIC
+checking if g++ PIC flag -fPIC works... yes
+checking if g++ static flag -static works... yes
+checking if g++ supports -c -o file.o... yes
+checking whether the g++ linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+appending configuration tag "F77" to libtool
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking for gfortran option to produce PIC... -fPIC
+checking if gfortran PIC flag -fPIC works... yes
+checking if gfortran static flag -static works... yes
+checking if gfortran supports -c -o file.o... yes
+checking whether the gfortran linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+configure: Build is "x86_64-unknown-linux-gnu".
+checking if library version is set... no
+checking whether source of project CoinUtils is available and should be compiled... no
+checking whether source of project Osi is available and should be compiled... no
+checking whether source of project Clp is available and should be compiled... no
+checking whether source of project Cgl is available and should be compiled... no
+checking whether source of project Cbc is available and should be compiled... no
+checking whether source of project FlopCpp is available and should be compiled... yes, source in FlopCpp
+checking which command should be used to link input files... ln -s
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing depfiles commands
+configure: configuring in FlopCpp
+configure: running /bin/bash './configure' --prefix=/home/codespace/.local  '--prefix=/home/codespace/.local' --cache-file=/dev/null --srcdir=.
+checking build system type... x86_64-pc-linux-gnu
+checking for svnversion... no
+checking whether we want to compile in debug mode... no
+checking for gcc... gcc
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+configure: C compiler options are: -O3 -pipe -DNDEBUG -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD
+checking for g++... g++
+checking whether we are using the GNU C++ compiler... yes
+checking whether g++ accepts -g... yes
+checking whether C++ compiler g++ works... yes
+configure: C++ compiler options are: -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD
+checking for egrep... grep -E
+checking whether ln -s works... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for style of include used by make... GNU
+checking dependency style of gcc... gcc3
+checking dependency style of g++... gcc3
+checking whether to enable maintainer-specific portions of Makefiles... no
+configure: Using libtool script in directory ..
+checking if library version is set... no
+checking for pkg-config... pkg-config
+checking pkg-config is at least version 0.16.0... yes
+checking for COIN-OR package Osi... yes: devel 
+checking for COIN-OR package Cbc... yes: devel 
+checking for COIN-OR package Clp... yes: devel 
+checking whether this is a VPATH configuration... no
+configure: configuring doxygen documentation options
+checking for doxygen... no
+checking for latex... no
+checking for dot... NO
+checking for doxygen doc'n for CoinUtils ... /home/codespace/.local/share/coin/doc/CoinUtils/doxydoc (tag)
+checking for doxygen doc'n for Osi ... /home/codespace/.local/share/coin/doc/Osi/doxydoc (tag)
+checking for doxygen doc'n for Clp ... /home/codespace/.local/share/coin/doc/Clp/doxydoc (tag)
+checking for doxygen doc'n for Cgl ... /home/codespace/.local/share/coin/doc/Cgl/doxydoc (tag)
+checking for doxygen doc'n for Cbc ... /home/codespace/.local/share/coin/doc/Cbc/doxydoc (tag)
+checking which command should be used to link input files... ln -s
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating examples/Makefile
+config.status: creating src/Makefile
+config.status: creating test/Makefile
+config.status: creating unittest/Makefile
+config.status: creating flopcpp.pc
+config.status: creating flopcpp-uninstalled.pc
+config.status: creating doxydoc/doxygen.conf
+config.status: creating src/config.h
+config.status: src/config.h is unchanged
+config.status: creating src/config_flopcpp.h
+config.status: src/config_flopcpp.h is unchanged
+config.status: executing depfiles commands
+configure: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting
+configure: Configuration of FlopCpp successful
+configure: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting
+configure: Main configuration of FlopCpp successful
+Making all in FlopCpp
+make[1]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+Making all in src
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+make  all-am
+make[3]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+if /bin/bash ../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I/home/codespace/.local/include/coin-or     -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT MP_constraint.lo -MD -MP -MF ".deps/MP_constraint.Tpo" -c -o MP_constraint.lo MP_constraint.cpp; \
+then mv -f ".deps/MP_constraint.Tpo" ".deps/MP_constraint.Plo"; else rm -f ".deps/MP_constraint.Tpo"; exit 1; fi
+if /bin/bash ../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I/home/codespace/.local/include/coin-or     -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT MP_domain.lo -MD -MP -MF ".deps/MP_domain.Tpo" -c -o MP_domain.lo MP_domain.cpp; \
+then mv -f ".deps/MP_domain.Tpo" ".deps/MP_domain.Plo"; else rm -f ".deps/MP_domain.Tpo"; exit 1; fi
+ g++ -DHAVE_CONFIG_H -I. -I. -I/home/codespace/.local/include/coin-or -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -MT MP_domain.lo -MD -MP -MF .deps/MP_domain.Tpo -c MP_domain.cpp  -fPIC -DPIC -o .libs/MP_domain.o
+ g++ -DHAVE_CONFIG_H -I. -I. -I/home/codespace/.local/include/coin-or -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -MT MP_constraint.lo -MD -MP -MF .deps/MP_constraint.Tpo -c MP_constraint.cpp  -fPIC -DPIC -o .libs/MP_constraint.o
+if /bin/bash ../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I/home/codespace/.local/include/coin-or     -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT MP_index.lo -MD -MP -MF ".deps/MP_index.Tpo" -c -o MP_index.lo MP_index.cpp; \
+then mv -f ".deps/MP_index.Tpo" ".deps/MP_index.Plo"; else rm -f ".deps/MP_index.Tpo"; exit 1; fi
+ g++ -DHAVE_CONFIG_H -I. -I. -I/home/codespace/.local/include/coin-or -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -MT MP_index.lo -MD -MP -MF .deps/MP_index.Tpo -c MP_index.cpp  -fPIC -DPIC -o .libs/MP_index.o
+if /bin/bash ../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I/home/codespace/.local/include/coin-or     -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT MP_model.lo -MD -MP -MF ".deps/MP_model.Tpo" -c -o MP_model.lo MP_model.cpp; \
+then mv -f ".deps/MP_model.Tpo" ".deps/MP_model.Plo"; else rm -f ".deps/MP_model.Tpo"; exit 1; fi
+ g++ -DHAVE_CONFIG_H -I. -I. -I/home/codespace/.local/include/coin-or -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -MT MP_model.lo -MD -MP -MF .deps/MP_model.Tpo -c MP_model.cpp  -fPIC -DPIC -o .libs/MP_model.o
+MP_model.cpp: In member function 'flopc::MP_model::MP_status flopc::MP_model::solve(const MP_direction&)':
+MP_model.cpp:436:29: warning: catching polymorphic type 'class CoinError' by value [-Wcatch-value=]
+  436 |         } catch  (CoinError e) {
+      |                             ^
+MP_model.cpp:441:32: warning: catching polymorphic type 'class CoinError' by value [-Wcatch-value=]
+  441 |             } catch (CoinError e) {
+      |                                ^
+MP_model.cpp:448:29: warning: catching polymorphic type 'class CoinError' by value [-Wcatch-value=]
+  448 |         }  catch (CoinError e) {
+      |                             ^
+if /bin/bash ../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I/home/codespace/.local/include/coin-or     -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT MP_set.lo -MD -MP -MF ".deps/MP_set.Tpo" -c -o MP_set.lo MP_set.cpp; \
+then mv -f ".deps/MP_set.Tpo" ".deps/MP_set.Plo"; else rm -f ".deps/MP_set.Tpo"; exit 1; fi
+ g++ -DHAVE_CONFIG_H -I. -I. -I/home/codespace/.local/include/coin-or -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -MT MP_set.lo -MD -MP -MF .deps/MP_set.Tpo -c MP_set.cpp  -fPIC -DPIC -o .libs/MP_set.o
+if /bin/bash ../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I/home/codespace/.local/include/coin-or     -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT MP_variable.lo -MD -MP -MF ".deps/MP_variable.Tpo" -c -o MP_variable.lo MP_variable.cpp; \
+then mv -f ".deps/MP_variable.Tpo" ".deps/MP_variable.Plo"; else rm -f ".deps/MP_variable.Tpo"; exit 1; fi
+ g++ -DHAVE_CONFIG_H -I. -I. -I/home/codespace/.local/include/coin-or -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -MT MP_variable.lo -MD -MP -MF .deps/MP_variable.Tpo -c MP_variable.cpp  -fPIC -DPIC -o .libs/MP_variable.o
+/bin/bash ../../libtool --tag=CXX --mode=link g++  -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD   -o libFlopCpp.la -rpath /home/codespace/.local/lib -no-undefined MP_boolean.lo MP_constant.lo MP_constraint.lo MP_data.lo MP_domain.lo MP_expression.lo MP_index.lo MP_model.lo MP_set.lo MP_utilities.lo MP_variable.lo -L/home/codespace/.local/lib -lOsi   
+rm -fr  .libs/libFlopCpp.la .libs/libFlopCpp.lai .libs/libFlopCpp.so .libs/libFlopCpp.so.0 .libs/libFlopCpp.so.0.0.0
+g++ -shared -nostdlib /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o  .libs/MP_boolean.o .libs/MP_constant.o .libs/MP_constraint.o .libs/MP_data.o .libs/MP_domain.o .libs/MP_expression.o .libs/MP_index.o .libs/MP_model.o .libs/MP_set.o .libs/MP_utilities.o .libs/MP_variable.o  -Wl,--rpath -Wl,/home/codespace/.local/lib -Wl,--rpath -Wl,/home/codespace/.local/lib -L/home/codespace/.local/lib /home/codespace/.local/lib/libOsi.so -L/usr/lib/gcc/x86_64-linux-gnu/13 -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/13/../../.. -lstdc++ -lm -lc -lgcc_s /usr/lib/gcc/x86_64-linux-gnu/13/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crtn.o  -Wl,-soname -Wl,libFlopCpp.so.0 -o .libs/libFlopCpp.so.0.0.0
+(cd .libs && rm -f libFlopCpp.so.0 && ln -s libFlopCpp.so.0.0.0 libFlopCpp.so.0)
+(cd .libs && rm -f libFlopCpp.so && ln -s libFlopCpp.so.0.0.0 libFlopCpp.so)
+creating libFlopCpp.la
+(cd .libs && rm -f libFlopCpp.la && ln -s ../libFlopCpp.la libFlopCpp.la)
+make[3]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+make[2]: Nothing to be done for 'all-am'.
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[1]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[1]: Entering directory '/workspaces/FlopCpp'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/workspaces/FlopCpp'
+Making all in FlopCpp
+make[1]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+Making all in src
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+make  all-am
+make[3]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+make[3]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+make[2]: Nothing to be done for 'all-am'.
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[1]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[1]: Entering directory '/workspaces/FlopCpp'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/workspaces/FlopCpp'
+cd FlopCpp; make test
+make[1]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+Making all in src
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+make  all-am
+make[3]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+make[3]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+make[2]: Nothing to be done for 'all-am'.
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+cd unittest; make test
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp/unittest'
+/bin/bash ../../libtool --tag=CXX --mode=link g++  -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD   -o unitTest  booleanTest.o constantTest.o indexTest.o setTest.o TestBed.o TestItem.o unitTest.o ../src/libFlopCpp.la -L/home/codespace/.local/lib -lOsi   
+g++ -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -o .libs/unitTest booleanTest.o constantTest.o indexTest.o setTest.o TestBed.o TestItem.o unitTest.o  ../src/.libs/libFlopCpp.so -L/home/codespace/.local/lib /home/codespace/.local/lib/libOsi.so /home/codespace/.local/lib/libCoinUtils.so -lreadline -lncurses -lbz2 -lz -Wl,--rpath -Wl,/home/codespace/.local/lib
+creating unitTest
+./unitTest
+Test begin
+How tell if this is successful?
+How tell if this is successful?
+Is there a way to test the correctness of an MP_index_exp directly?
+This isn't really sufficient testing against zero..but it's what I can do.
+Test end
+results:
+TestBed Detail:
+--------------
+Passed!:flopc:booleanTest
+Passed!:flopc:constantTest
+Passed!:flopc:indexTest
+Passed!:flopc:setTest
+
+Summary:
+-----------
+4 Passed
+0 Failed
+----------
+4 Tested
+PASSED
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp/unittest'
+cd test; make test
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp/test'
+if g++ -DHAVE_CONFIG_H -I. -I`echo .`   -I`echo ./../src` -I/home/codespace/.local/include/coin-or   -I/home/codespace/.local/include/coin -I/home/codespace/.local/include/coin-or    -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD -MT unitTest.o -MD -MP -MF ".deps/unitTest.Tpo" -c -o unitTest.o unitTest.cpp; \
+then mv -f ".deps/unitTest.Tpo" ".deps/unitTest.Po"; else rm -f ".deps/unitTest.Tpo"; exit 1; fi
+/bin/bash ../../libtool --tag=CXX --mode=link g++  -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long   -DFLOPCPP_BUILD   -o unitTest  unitTest.o ../src/libFlopCpp.la -L/home/codespace/.local/lib -lOsi   -L/home/codespace/.local/lib -lOsiCbc  
+g++ -O3 -pipe -DNDEBUG -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long -DFLOPCPP_BUILD -o .libs/unitTest unitTest.o  ../src/.libs/libFlopCpp.so -L/home/codespace/.local/lib /home/codespace/.local/lib/libOsiCbc.so /home/codespace/.local/lib/libCbc.so -lrt -lpthread /home/codespace/.local/lib/libCgl.so /home/codespace/.local/lib/libOsiClp.so /home/codespace/.local/lib/libClp.so /home/codespace/.local/lib/libOsi.so /home/codespace/.local/lib/libCoinUtils.so -lbz2 -lz -lreadline -lncurses -Wl,--rpath -Wl,/home/codespace/.local/lib
+creating unitTest
+./unitTest
+c
+0 0   18
+0 1   21
+0 2   18
+0 3   16
+0 4   10
+1 0   0
+1 1   15
+1 2   16
+1 3   14
+1 4   9
+2 0   0
+2 1   10
+2 2   0
+2 3   9
+2 4   6
+3 0   17
+3 1   16
+3 2   17
+3 3   15
+3 4   10
+ed
+0   252.5
+1   120
+2   180
+3   90
+4   600
+gamma
+0 0   1
+0 1   0.8
+0 2   0.75
+0 3   0.4
+0 4   0.2
+1 0   1
+1 1   0.7
+1 2   0
+1 3   0
+1 4   0
+2 0   1
+2 1   0.9
+2 2   0.7
+2 3   0.3
+2 4   0.1
+3 0   1
+3 1   0.8
+3 2   0.6
+3 3   0.3
+3 4   0.1
+4 0   1
+4 1   0.9
+4 2   0.1
+4 3   0
+4 4   0
+deltb
+0 0   200
+0 1   20
+0 2   30
+0 3   20
+0 4   30
+1 0   50
+1 1   100
+1 2   0
+1 3   0
+1 4   0
+2 0   140
+2 1   20
+2 2   20
+2 3   20
+2 4   20
+3 0   10
+3 1   40
+3 2   30
+3 3   20
+3 4   240
+4 0   580
+4 1   20
+4 2   20
+4 3   0
+4 4   0
+aa
+0   10
+1   19
+2   25
+3   15
+y upper
+0 0   200
+0 1   20
+0 2   30
+0 3   20
+0 4   30
+1 0   50
+1 1   100
+1 2   0
+1 3   0
+1 4   0
+2 0   140
+2 1   20
+2 2   20
+2 3   20
+2 4   20
+3 0   10
+3 1   40
+3 2   30
+3 3   20
+3 4   240
+4 0   580
+4 1   20
+4 2   20
+4 3   0
+4 4   0
+FlopCpp: Number of constraint blocks: 4
+FlopCpp: Number of individual constraints: 11
+FlopCpp: Number of variable blocks: 4
+FlopCpp: Number of individual variables: 47
+FlopCpp: Number of non-zeroes (including rhs): 112
+FlopCpp: Generation time: -4e-05
+Coin0506I Presolve 9 (-2) rows, 37 (-10) columns and 54 (-42) elements
+Clp0000I Optimal - objective value 1566.0422
+Coin0511I After Postsolve, objective 1566.0422, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective 1566.042189 - 14 iterations time 0.002, Presolve 0.00
+FlopCpp: Optimal obj. value = 1566.04
+FlopCpp: Solver(m, n, nz) = 11  47  96
+y first model
+0 0   200
+0 1   20
+0 2   6.07053
+0 3   0
+0 4   0
+1 0   50
+1 1   100
+1 2   0
+1 3   0
+1 4   0
+2 0   140
+2 1   20
+2 2   20
+2 3   0
+2 4   0
+3 0   10
+3 1   40
+3 2   30
+3 3   0
+3 4   0
+4 0   580
+4 1   20
+4 2   0
+4 3   0
+4 4   0
+ab
+0  5.37012e-310  10  5.37012e-310  -138
+1  5.8037e-186  19  5.37051e-310  -39.8409
+2  25  25  0  -17.4205
+3  15  15  -nan  -70.75
+db
+4  1.79769e+308  0  -nan  9.75
+5  1.79769e+308  0  0  5.48409
+6  1.79769e+308  -2.13163e-14  0  3.98864
+7  1.79769e+308  0  0  3.58939
+8  1.79769e+308  0  0  0.807602
+bcd1
+10  7332.5  7332.5  7332.5  1
+ocd
+9  0  0  2.122e-314  1
+FlopCpp: Number of constraint blocks: 5
+FlopCpp: Number of individual constraints: 56
+FlopCpp: Number of variable blocks: 5
+FlopCpp: Number of individual variables: 72
+FlopCpp: Number of non-zeroes (including rhs): 271
+FlopCpp: Generation time: -4.2e-05
+Coin0506I Presolve 24 (-32) rows, 37 (-35) columns and 102 (-117) elements
+Clp0000I Optimal - objective value 1566.0422
+Coin0511I After Postsolve, objective 1566.0422, infeasibilities - dual 0 (0), primal 0 (0)
+Clp0032I Optimal objective 1566.042189 - 19 iterations time 0.002, Presolve 0.00
+FlopCpp: Optimal obj. value = 1566.04
+FlopCpp: Solver(m, n, nz) = 56  72  219
+y second model
+0 0   200
+0 1   220
+0 2   226.071
+0 3   226.071
+0 4   226.071
+1 0   50
+1 1   150
+1 2   0
+1 3   0
+1 4   0
+2 0   140
+2 1   160
+2 2   180
+2 3   180
+2 4   180
+3 0   10
+3 1   50
+3 2   80
+3 3   80
+3 4   80
+4 0   580
+4 1   600
+4 2   600
+4 3   0
+4 4   0
+All tests completed successfully
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp/test'
+make[1]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+Making install in FlopCpp
+make[1]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+Making install in src
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+make[3]: Entering directory '/workspaces/FlopCpp/FlopCpp/src'
+/workspaces/FlopCpp/FlopCpp/install-sh -c -m 644 config_flopcpp.h /home/codespace/.local/include/coin/FlopCppConfig.h
+test -z "/home/codespace/.local/lib" || mkdir -p -- "/home/codespace/.local/lib"
+ /bin/bash ../../libtool --mode=install /usr/bin/install -c  'libFlopCpp.la' '/home/codespace/.local/lib/libFlopCpp.la'
+/usr/bin/install -c .libs/libFlopCpp.so.0.0.0 /home/codespace/.local/lib/libFlopCpp.so.0.0.0
+(cd /home/codespace/.local/lib && { ln -s -f libFlopCpp.so.0.0.0 libFlopCpp.so.0 || { rm -f libFlopCpp.so.0 && ln -s libFlopCpp.so.0.0.0 libFlopCpp.so.0; }; })
+(cd /home/codespace/.local/lib && { ln -s -f libFlopCpp.so.0.0.0 libFlopCpp.so || { rm -f libFlopCpp.so && ln -s libFlopCpp.so.0.0.0 libFlopCpp.so; }; })
+/usr/bin/install -c .libs/libFlopCpp.lai /home/codespace/.local/lib/libFlopCpp.la
+PATH="$PATH:/sbin" ldconfig -n /home/codespace/.local/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/codespace/.local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,--rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+test -z "/home/codespace/.local/include/coin" || mkdir -p -- "/home/codespace/.local/include/coin"
+ /usr/bin/install -c -m 644 'flopc.hpp' '/home/codespace/.local/include/coin/flopc.hpp'
+ /usr/bin/install -c -m 644 'MP_boolean.hpp' '/home/codespace/.local/include/coin/MP_boolean.hpp'
+ /usr/bin/install -c -m 644 'MP_constant.hpp' '/home/codespace/.local/include/coin/MP_constant.hpp'
+ /usr/bin/install -c -m 644 'MP_constraint.hpp' '/home/codespace/.local/include/coin/MP_constraint.hpp'
+ /usr/bin/install -c -m 644 'MP_data.hpp' '/home/codespace/.local/include/coin/MP_data.hpp'
+ /usr/bin/install -c -m 644 'MP_domain.hpp' '/home/codespace/.local/include/coin/MP_domain.hpp'
+ /usr/bin/install -c -m 644 'MP_expression.hpp' '/home/codespace/.local/include/coin/MP_expression.hpp'
+ /usr/bin/install -c -m 644 'MP_index.hpp' '/home/codespace/.local/include/coin/MP_index.hpp'
+ /usr/bin/install -c -m 644 'MP_model.hpp' '/home/codespace/.local/include/coin/MP_model.hpp'
+ /usr/bin/install -c -m 644 'MP_set.hpp' '/home/codespace/.local/include/coin/MP_set.hpp'
+ /usr/bin/install -c -m 644 'MP_utilities.hpp' '/home/codespace/.local/include/coin/MP_utilities.hpp'
+ /usr/bin/install -c -m 644 'MP_variable.hpp' '/home/codespace/.local/include/coin/MP_variable.hpp'
+make[3]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp/src'
+make[2]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+make[3]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+test -z "/home/codespace/.local/share/coin/doc/FlopCpp" || mkdir -p -- "/home/codespace/.local/share/coin/doc/FlopCpp"
+for file in README AUTHORS LICENSE ; do \
+  if test -f "$file"; then dir=; else dir="./"; fi; \
+  if test -f "$dir$file"; then /usr/bin/install -c -m 644 "$dir$file" "/home/codespace/.local/share/coin/doc/FlopCpp/$file"; fi; \
+done 
+test -z "/home/codespace/.local/lib/pkgconfig" || mkdir -p -- "/home/codespace/.local/lib/pkgconfig"
+ /usr/bin/install -c -m 644 'flopcpp.pc' '/home/codespace/.local/lib/pkgconfig/flopcpp.pc'
+make  install-data-hook
+make[4]: Entering directory '/workspaces/FlopCpp/FlopCpp'
+PKG_CONFIG_PATH=/home/codespace/.local/lib64/pkgconfig:/home/codespace/.local/lib/pkgconfig:/home/codespace/.local/share/pkgconfig::/home/codespace/.local/lib/pkgconfig \
+pkg-config --libs flopcpp > /home/codespace/.local/share/coin/doc/FlopCpp/flopcpp_addlibs.txt
+make[4]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[3]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[2]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[1]: Leaving directory '/workspaces/FlopCpp/FlopCpp'
+make[1]: Entering directory '/workspaces/FlopCpp'
+make[2]: Entering directory '/workspaces/FlopCpp'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/workspaces/FlopCpp'
+make[1]: Leaving directory '/workspaces/FlopCpp'

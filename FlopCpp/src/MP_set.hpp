@@ -209,7 +209,7 @@ public:
     }
 
     const MP_domain& operator()(const SUBSETREF& s) {
-	return MP_domain(s);
+       return MP_domain::getEmpty();
     }
 
     int evaluate(const std::vector<MP_index*>& I) const {

@@ -1,6 +1,252 @@
-FlopCpp README
-==============
+# FlopCpp - An Algebraic Modeling Language in C++
 
-For the FlopCp README file, please see the file FlopCpp/README. For the
-README files of other COIN-OR projects included in this distribution, please
-see the README files in their associated subdirectories. 
+FlopCpp is an algebraic modeling language implemented as a C++ class library. It provides a high-level interface for formulating linear and mixed-integer programming problems within C++ applications. FlopCpp is part of the [COIN-OR](https://www.coin-or.org/) (Computational Infrastructure for Operations Research) initiative.
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Installation using coinbrew (Recommended)](#installation-using-coinbrew-recommended)
+  - [Manual Installation](#manual-installation)
+- [Running Examples](#running-examples)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [License](#license)
+- [Support](#support)
+
+## Features
+
+- **C++ Integration**: Seamlessly integrate optimization models into C++ applications
+- **Intuitive Syntax**: Express mathematical programming problems using natural algebraic notation
+- **COIN-OR Ecosystem**: Compatible with various COIN-OR solvers (Clp, Cbc, etc.)
+- **Rich Examples**: Includes numerous examples demonstrating different modeling techniques
+- **Sets and Indices**: Support for complex index structures and sparse data representations
+
+## Installation
+
+### Prerequisites
+
+Before installing FlopCpp, ensure you have:
+
+- A C++ compiler (GCC 4.8+, Clang 3.4+, or MSVC 2015+)
+- `wget` or `curl` for downloading coinbrew
+- `make` and other standard build tools
+- Git (automatically used by coinbrew to fetch dependencies)
+
+On Ubuntu/Debian:
+```bash
+sudo apt-get update
+sudo apt-get install build-essential wget git
+```
+
+On macOS:
+```bash
+xcode-select --install
+brew install wget
+```
+
+### Installation using coinbrew (Recommended)
+
+The easiest way to install FlopCpp is using the [coinbrew](https://github.com/coin-or/coinbrew) script, which automatically handles dependencies and builds the project.
+
+#### Step 1: Download coinbrew
+
+```bash
+wget https://raw.githubusercontent.com/coin-or/coinbrew/master/coinbrew
+chmod +x coinbrew
+```
+
+#### Step 2: Build FlopCpp
+
+To build the latest stable version (1.2):
+
+```bash
+./coinbrew build FlopCpp@stable/1.2
+```
+
+To build the latest development version:
+
+```bash
+./coinbrew build FlopCpp@master
+```
+
+The coinbrew script will:
+- Automatically fetch FlopCpp and all its dependencies (Osi, Clp, CoinUtils, etc.)
+- Configure the build environment
+- Compile all components
+- Install libraries and headers in the `dist` directory
+
+#### Step 3: Install (Optional)
+
+If you want to install to the standard system directories:
+
+```bash
+cd FlopCpp
+./configure
+make
+sudo make install
+```
+
+Or to install to a custom location:
+
+```bash
+cd FlopCpp
+./configure --prefix=/path/to/install
+make
+make install
+```
+
+### Manual Installation
+
+If you prefer manual installation or need more control:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/coin-or/FlopCpp.git
+   cd FlopCpp
+   git checkout stable/1.2
+   ```
+
+2. **Ensure dependencies are installed**:
+   FlopCpp requires CoinUtils, Osi, and at least one solver (e.g., Clp)
+
+3. **Configure and build**:
+   ```bash
+   ./configure
+   make
+   sudo make install
+   ```
+
+## Running Examples
+
+FlopCpp includes a comprehensive set of examples demonstrating various optimization problems.
+
+### Navigate to the examples directory
+
+```bash
+cd FlopCpp/examples
+```
+
+### Run all examples
+
+```bash
+./runall
+```
+
+This will execute all example programs sequentially, including:
+- **transport**: Classic transportation problem
+- **aircraft**: Aircraft allocation problem
+- **sudoku**: Sudoku puzzle solver using integer programming
+- **cuttingStock**: Cutting stock problem
+- **stochbenders**: Stochastic programming with Benders decomposition
+- And many more...
+
+### Run a single example
+
+```bash
+./runone transport
+```
+
+Or directly execute the compiled binary:
+
+```bash
+./transport
+```
+
+### Example Programs
+
+The examples directory contains numerous optimization models:
+
+| Example | Description |
+|---------|-------------|
+| `transport` | Transportation problem |
+| `aircraft` | Aircraft allocation |
+| `sudoku` | Sudoku puzzle solver |
+| `cuttingStock` | Cutting stock optimization |
+| `multiProduct` | Multi-product planning |
+| `stochbenders` | Stochastic programming |
+| `mine` | Mining optimization |
+| `train` | Train scheduling |
+| `tap` | Traffic assignment problem |
+
+## Quick Start
+
+Here's a simple example of a transportation problem using FlopCpp:
+
+```cpp
+#include "flopc.hpp"
+using namespace flopc;
+
+int main() {
+    // Create sets for sources and destinations
+    enum {seattle, sandiego, numS}; 
+    enum {newyork, chicago, topeka, numD};
+    
+    MP_set S(numS);  // Sources
+    MP_set D(numD);  // Destinations
+    
+    // Define supply and demand
+    MP_data SUPPLY(S);
+    MP_data DEMAND(D);
+    
+    SUPPLY(seattle) = 350;
+    SUPPLY(sandiego) = 600;
+    DEMAND(newyork) = 325;
+    DEMAND(chicago) = 300;
+    DEMAND(topeka) = 275;
+    
+    // Decision variables
+    MP_variable x(S, D);
+    
+    // Constraints
+    MP_constraint supply(S);
+    MP_constraint demand(D);
+    
+    supply(S) = sum(D, x(S,D)) <= SUPPLY(S);
+    demand(D) = sum(S, x(S,D)) >= DEMAND(D);
+    
+    // Objective function
+    minimize(sum(S, sum(D, cost(S,D) * x(S,D))));
+    
+    return 0;
+}
+```
+
+## Documentation
+
+- **COIN-OR Main Site**: [https://www.coin-or.org/](https://www.coin-or.org/)
+- **coinbrew Documentation**: [https://coin-or.github.io/coinbrew](https://coin-or.github.io/coinbrew)
+- **API Documentation**: Generated using Doxygen (see `doxydoc` directory)
+
+To generate API documentation locally:
+```bash
+cd doxydoc
+doxygen doxygen.conf
+```
+
+## License
+
+FlopCpp is distributed under the Eclipse Public License (EPL) v1.0. See the [LICENSE](LICENSE) file for full details.
+
+## Support
+
+- **Mailing List**: flopcpp@list.coin-or.org
+- **Issue Tracker**: [GitHub Issues](https://github.com/coin-or/FlopCpp/issues)
+- **General COIN-OR Support**: [https://github.com/coin-or](https://github.com/coin-or)
+
+## Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## Authors
+
+FlopCpp is developed and maintained by the COIN-OR community. See [AUTHORS](AUTHORS) for the list of contributors.
+
+---
+
+For more information about the COIN-OR project and other optimization tools, visit [https://www.coin-or.org/](https://www.coin-or.org/) 

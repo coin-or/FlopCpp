@@ -18,7 +18,7 @@ AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package FlopC++ which is distributed
-under the Common Public License.])
+under the Eclipse Public License.])
 
 AC_REVISION(0.9)
 

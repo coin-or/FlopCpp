@@ -42,8 +42,8 @@
 
 		<projectHomePage>https://projects.coin-or.org/FlopC++ </projectHomePage>
 
-		<projectLicense>Eclipse Public License 1.0</projectLicense>
-		<projectLicenseURL>http://www.opensource.org/licenses/eclipse-1.0</projectLicenseURL>
+		<projectLicense>Eclipse Public License 2.0</projectLicense>
+		<projectLicenseURL>http://www.opensource.org/licenses/EPL-2.0</projectLicenseURL>
 
 		<coinLinkedProjects>
 			<coinProject>

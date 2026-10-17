@@ -9,6 +9,8 @@
 #ifndef _MP_constant_hpp_
 #define _MP_constant_hpp_
 
+#include "FlopCppConfig.h"
+
 #include "MP_utilities.hpp"
 
 namespace flopc {
@@ -17,7 +19,7 @@ namespace flopc {
     @note FOR INTERNAL USE: This is not normally used directly by the
     calling code.
     */
-    class Constant_base {
+    class FLOPCPPLIB_EXPORT Constant_base {
 	friend class Constant;
 	friend class Handle<Constant_base*>;
     public:
@@ -45,7 +47,7 @@ namespace flopc {
     This contains counters to ConstantBase pointers.
     These pointers may be of any of the Constant_base * type.  
     */
-    class Constant : public Handle<Constant_base*> {
+    class FLOPCPPLIB_EXPORT Constant : public Handle<Constant_base*> {
     public:
 	Constant(Constant_base* r) : Handle<Constant_base*>(r) {}
 	Constant(const MP_index_exp& i);
@@ -60,7 +62,7 @@ namespace flopc {
     @li input is a constant.  It cannot be a variable expression.
     @li Returns a Constant evaluating to the absolute value of the parameter 
     */
-    Constant abs(const Constant& c);
+    FLOPCPPLIB_EXPORT Constant abs(const Constant& c);
     /** @brief for returning non-negative value of the constant. 
     @ingroup PublicInterface
     This is used in the formation of an expression.  It is used to return
@@ -70,7 +72,7 @@ namespace flopc {
     @li if the Constant is positive, it returns a positive number.
     @li if the Constant is negative or zero, it returns 0.0
     */
-    Constant pos(const Constant& c);
+    FLOPCPPLIB_EXPORT Constant pos(const Constant& c);
     /** @brief The ceiling integral value of the input constant.
     @ingroup PublicInterface
     This is used in the formation of an expression.  It is used to "round up"
@@ -79,7 +81,7 @@ namespace flopc {
     @return the ceiling or "rounded up" of the parameter 
     @li ceil(3.2) evaluates to 4.0
     */
-    Constant ceil(const Constant& c);
+    FLOPCPPLIB_EXPORT Constant ceil(const Constant& c);
     /** @brief The floor integral value of the input constant.
     @ingroup PublicInterface
     This is used in the formation of an expression.  It is used to "truncate"
@@ -88,7 +90,7 @@ namespace flopc {
     @return the floor or "truncated" value of the parameter 
     @li floor(3.7) evaluates to 3.0
     */
-    Constant floor(const Constant& c);
+    FLOPCPPLIB_EXPORT Constant floor(const Constant& c);
     /** @brief Returns the smaller of two constants.
     @ingroup PublicInterface
     This is used in the formation of an expression.  
@@ -97,7 +99,7 @@ namespace flopc {
     @return the lesser of the two values.
     @li minimum(3.6,3.7) evaluates to 3.6
     */
-    Constant minimum(const Constant& a, const Constant& b);
+    FLOPCPPLIB_EXPORT Constant minimum(const Constant& a, const Constant& b);
     /** @brief Returns the larger of two constants.
     @ingroup PublicInterface
     This is used in the formation of an expression.  
@@ -106,7 +108,7 @@ namespace flopc {
     @return the greater of the two numbers
     @li maximum(3.6,3.7) evaluates to 3.7
     */
-    Constant maximum(const Constant& a, const Constant& b);
+    FLOPCPPLIB_EXPORT Constant maximum(const Constant& a, const Constant& b);
     /** @brief Returns the sum of two constants.
     @ingroup PublicInterface
     This is used in the formation of an expression.  
@@ -114,7 +116,7 @@ namespace flopc {
     @param b second constant
     @return the sum of the constants.
     */
-    Constant operator+(const Constant& a, const Constant& b);
+    FLOPCPPLIB_EXPORT Constant operator+(const Constant& a, const Constant& b);
     /** @brief Returns the difference of two constants.
     @ingroup PublicInterface
     This is used in the formation of an expression.  
@@ -122,7 +124,7 @@ namespace flopc {
     @param b second constant
     @return the difference between the constants.
     */
-    Constant operator-(const Constant& a, const Constant& b);
+    FLOPCPPLIB_EXPORT Constant operator-(const Constant& a, const Constant& b);
     /** @brief Returns the product of two constants.
     @ingroup PublicInterface
     This is used in the formation of an expression.  
@@ -130,7 +132,7 @@ namespace flopc {
     @param b second constant
     @return the result of multiplying the constants.
     */
-    Constant operator*(const Constant& a, const Constant& b);
+    FLOPCPPLIB_EXPORT Constant operator*(const Constant& a, const Constant& b);
     /** @brief Returns the quotient of two constants.
     @ingroup PublicInterface
     This is used in the formation of an expression.  
@@ -138,7 +140,7 @@ namespace flopc {
     @param b second constant
     @return the result of dividing the first parameter by the second.
     */
-    Constant operator/(const Constant& a, const Constant& b);
+    FLOPCPPLIB_EXPORT Constant operator/(const Constant& a, const Constant& b);
 
     /** @brief Returns the maximum over the domain of the constant.
     @ingroup PublicInterface
@@ -146,27 +148,27 @@ namespace flopc {
     @param i MP_domain used in evaluation
     @param e constant
     */
-    Constant maximum(const MP_domain& i, const Constant& e);
+    FLOPCPPLIB_EXPORT Constant maximum(const MP_domain& i, const Constant& e);
     /** @brief Returns the sum of two constants.
     @ingroup PublicInterface
     @todo description?  Haven't used this.
     @param i MP_domain used in evaluation
     @param e second constant
     */
-    Constant minimum(const MP_domain& i, const Constant& e);
+    FLOPCPPLIB_EXPORT Constant minimum(const MP_domain& i, const Constant& e);
     /** @brief Returns the sum of two constants.
     @ingroup PublicInterface
     @todo description?  Haven't used this.
     @param i MP_domain used in evaluation
     @param e constant
     */
-    Constant sum(const MP_domain& i, const Constant& e);
+    FLOPCPPLIB_EXPORT Constant sum(const MP_domain& i, const Constant& e);
     /** @brief Returns the sum of two constants.
     @ingroup PublicInterface
     @todo description?  Haven't used this.
     @param i MP_domain used in evaluation
     @param e constant
     */
-    Constant product(const MP_domain& i, const Constant& e);
+    FLOPCPPLIB_EXPORT Constant product(const MP_domain& i, const Constant& e);
 }  // End of namespace flopc
 #endif

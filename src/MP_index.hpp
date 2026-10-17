@@ -9,6 +9,8 @@
 #ifndef _MP_index_hpp_
 #define _MP_index_hpp_
 
+#include "FlopCppConfig.h"
+
 #include "MP_utilities.hpp"
 #include "MP_constant.hpp"
 
@@ -23,7 +25,7 @@ namespace flopc {
         @note FOR INTERNAL USE: This is not normally used directly by the
         calling code.
     */
-    class MP_index_base {
+    class FLOPCPPLIB_EXPORT MP_index_base {
 	friend class Handle<MP_index_base*>;
 	friend class MP_index_exp;
     public:
@@ -50,7 +52,7 @@ namespace flopc {
         This constant is used when defaulting passed parameters for \
         extra dimensions which are unused.
     */
-    class MP_index : public MP_index_base {
+    class FLOPCPPLIB_EXPORT MP_index : public MP_index_base {
     public:
         /// Default constructor. 
 	MP_index() : index(0), instantiated(false) {}
@@ -106,26 +108,30 @@ namespace flopc {
 
 
     /// returns a Constant as a result of addition of two MP_index values.
-    Constant operator+(MP_index& a, MP_index& b);
+    FLOPCPPLIB_EXPORT Constant operator+(MP_index& a, MP_index& b);
     /// returns a Constant as a result of a difference of two MP_index values.
-    Constant operator-(MP_index& a, MP_index& b);
+    FLOPCPPLIB_EXPORT Constant operator-(MP_index& a, MP_index& b);
 
     /** returns an index expression from a difference between an MP_index
         and an integer.  (i-5)
     */
-    MP_index_exp operator-(MP_index& i,const int& j);
+    FLOPCPPLIB_EXPORT MP_index_exp operator-(MP_index& i,const int& j);
     /** returns an index expression from a sum between an MP_index
         and an integer.  (i+5)
     */
-    MP_index_exp operator+(MP_index& i,const int& j);
+    FLOPCPPLIB_EXPORT MP_index_exp operator+(MP_index& i,const int& j);
     /** returns an index expression from a sum between an MP_index
         and a Constant.  
     */
-    MP_index_exp operator+(MP_index& i,const Constant& j);
+    FLOPCPPLIB_EXPORT MP_index_exp operator+(MP_index& i,const Constant& j);
+    /** returns an index expression from a difference between an MP_index
+        and a Constant.
+    */
+    FLOPCPPLIB_EXPORT MP_index_exp operator-(MP_index& i,const Constant& j);
     /** returns an index expression from a product between an MP_index
         and a Constant.  
     */
-    MP_index_exp operator*(MP_index& i,const Constant& j);
+    FLOPCPPLIB_EXPORT MP_index_exp operator*(MP_index& i,const Constant& j);
 
     class SUBSETREF;
 
@@ -142,7 +148,7 @@ namespace flopc {
         There is a unique 'empty' version for use in defaulting extra
         dimensions.
     */
-    class MP_index_exp : public Handle<MP_index_base*> {
+    class FLOPCPPLIB_EXPORT MP_index_exp : public Handle<MP_index_base*> {
     public:
     /// For internal use.
 	MP_index_exp(MP_index_base* r) : Handle<MP_index_base*>(r) {} 
@@ -171,7 +177,7 @@ namespace flopc {
         calling code.
         @see operator*(MP_index& i, const Constant & j);
     */
-    class MP_index_mult : public MP_index_base {
+    class FLOPCPPLIB_EXPORT MP_index_mult : public MP_index_base {
 	friend MP_index_exp operator*(MP_index& i,const Constant& j);
     private:
 	MP_index_mult(MP_index& i, const Constant& j) : left(i), right(j) {}
@@ -193,7 +199,7 @@ namespace flopc {
         calling code.
         @see operator+(MP_index& i, const Constant & j);
     */
-    class MP_index_sum : public MP_index_base {
+    class FLOPCPPLIB_EXPORT MP_index_sum : public MP_index_base {
 	friend MP_index_exp operator+(MP_index& i,const Constant& j);
 	friend MP_index_exp operator+(MP_index& i,const int& j);
     private:
@@ -216,7 +222,7 @@ namespace flopc {
         calling code.
         @see operator+(MP_index& i, const Constant & j);
     */
-    class MP_index_dif : public MP_index_base {
+    class FLOPCPPLIB_EXPORT MP_index_dif : public MP_index_base {
 	friend MP_index_exp operator-(MP_index& i,const Constant& j);
 	friend MP_index_exp operator-(MP_index& i,const int& j);
     private:

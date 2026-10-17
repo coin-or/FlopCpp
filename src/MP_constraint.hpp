@@ -9,6 +9,8 @@
 #ifndef _MP_constraint_hpp_
 #define _MP_constraint_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <set>
 #include <string>
 
@@ -36,7 +38,7 @@ namespace flopc {
         @see MP_constraint for a public interface.
         @note of interest is the operator overloads which are 'friends'
      */
-    class Constraint {
+    class FLOPCPPLIB_EXPORT Constraint {
 	friend class MP_constraint;
 	friend class MP_model;
 	friend Constraint operator<=(const MP_expression& l, const MP_expression& r);
@@ -191,7 +193,7 @@ namespace flopc {
     @todo more work on MP_constraint.
     
     */
-    class MP_constraint : public RowMajor, public Named {
+    class FLOPCPPLIB_EXPORT MP_constraint : public RowMajor, public Named {
     public: 
         /// construct the MP_constraint with appropriate sets for indexing.
 	MP_constraint(

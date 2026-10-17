@@ -9,6 +9,8 @@
 #ifndef _MP_set_hpp_
 #define _MP_set_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -25,7 +27,7 @@ namespace flopc {
     @ingroup INTERNAL_USE
     @note FOR INTERNAL USE: This is not normally used directly by the calling code.
 */
-class MP_set_base : public MP_index , public Named {
+class FLOPCPPLIB_EXPORT MP_set_base : public MP_index , public Named {
 public:
     MP_set_base() : Cyclic(false) {}
 
@@ -75,7 +77,7 @@ public:
     @note term: dimension is the number of indices used to reference into it.
     @note there is a distince 'empty' MP_set
 */
-class MP_set : public MP_set_base {
+class FLOPCPPLIB_EXPORT MP_set : public MP_set_base {
 public:
     /// constructs a set with specific cardinality.
     MP_set(int i = 0): cardinality(i) {}
@@ -116,7 +118,7 @@ private:
     int cardinality;
 };
     
-class MP_stage : public MP_set {
+class FLOPCPPLIB_EXPORT MP_stage : public MP_set {
 public:
     MP_stage(int i = 0): MP_set(i) {}
     virtual int isStage() const {
@@ -270,7 +272,7 @@ private:
     subset a set.
 */
 
-    class SUBSETREF : public MP_index_base {
+    class FLOPCPPLIB_EXPORT SUBSETREF : public MP_index_base {
     public:
 	virtual MP_index* getIndex() const {
 	    return 0;

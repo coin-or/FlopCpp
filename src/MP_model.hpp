@@ -9,6 +9,8 @@
 #ifndef _MP_model_hpp_
 #define _MP_model_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <ostream>
 #include <vector>
 #include <set>
@@ -32,7 +34,7 @@ namespace flopc {
         class, and register it with the MP_model.  Also overload whichever
         message events you wish to handle.
     */
-    class Messenger {
+    class FLOPCPPLIB_EXPORT Messenger {
     public:
         virtual void logMessage(int level, const char * const msg){}
         friend class MP_model;
@@ -48,7 +50,7 @@ namespace flopc {
     /** Internal use: used when Normal output is selected. Uses cout.
         @ingroup INTERNAL_USE
     */
-    class NormalMessenger : public Messenger {
+    class FLOPCPPLIB_EXPORT NormalMessenger : public Messenger {
         friend class MP_model;
     private:
         virtual void statistics(int bm, int m, int bn, int n, int nz);
@@ -58,7 +60,7 @@ namespace flopc {
     /** Internal use: used when Verbose output is selected. Uses cout.
         @ingroup INTERNAL_USE
     */
-    class VerboseMessenger : public NormalMessenger {
+    class FLOPCPPLIB_EXPORT VerboseMessenger : public NormalMessenger {
         friend class MP_model;
     private:
         virtual void constraintDebug(std::string name, const std::vector<Coef>& cfs);
@@ -86,7 +88,7 @@ namespace flopc {
         @see silent().
         @see Messenger
     */
-    class MP_model {
+    class FLOPCPPLIB_EXPORT MP_model {
         friend class MP_constraint;
     public:
         /// used when calling the solve() method.  
@@ -271,10 +273,10 @@ namespace flopc {
     };
     
     /// allows print of result from call to solve();
-    std::ostream &operator<<(std::ostream &os, 
+    FLOPCPPLIB_EXPORT std::ostream &operator<<(std::ostream &os, 
                              const MP_model::MP_status &condition);
     /// allows print of direction used when calling solve. (MIN/MAX)
-    std::ostream &operator<<(std::ostream &os, 
+    FLOPCPPLIB_EXPORT std::ostream &operator<<(std::ostream &os, 
                              const MP_model::MP_direction &direction);
 
 } // End of namespace flopc

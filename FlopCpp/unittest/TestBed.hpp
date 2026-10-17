@@ -7,7 +7,7 @@
 #include "TestItem.hpp"
 
 template <class T>
-struct PLess : std::binary_function<T, T, bool> {
+struct PLess {
     bool operator()(const T& x, const T& y) const { return *x < *y; }
 };
 

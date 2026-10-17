@@ -1,0 +1,58 @@
+Description:
+  Slug: FlopCpp
+  ShortName: FlopCpp
+  LongName: FLOPC++ (Formulation of Linear Optimization Problems in C++)
+  ShortDescription: An algebraic modeling language embedded in C++.
+  LongDescription: |2
+    FLOPC++ (Formulation of Linear Optimization Problems in C++) is an
+    open-source algebraic modeling language implemented as a C++ class
+    library. It uses the Open Solver Interface (Osi) to connect to LP and MIP
+    solvers.
+  Manager: Tim Hultberg
+  Homepage: https://github.com/coin-or/FlopCpp
+  License: Eclipse Public License 2.0
+  LicenseURL: http://www.opensource.org/licenses/EPL-2.0
+  Zenodo:
+  IncludedIn:
+    Package: FlopCpp
+  Language:
+    - C++
+  Categories:
+    - Modeling systems
+
+Dependencies:
+  - Description: COIN-OR Utilities
+    URL: https://github.com/coin-or/CoinUtils
+    Version: 2.11
+    Required: Required
+  - Description: Open Solver Interface
+    URL: https://github.com/coin-or/Osi
+    Version: 0.108
+    Required: Required
+  - Description: COIN-OR Linear Programming Solver
+    URL: https://github.com/coin-or/Clp
+    Version: 1.17
+    Required: Recommended
+  - Description: Cut Generator Library
+    URL: https://github.com/coin-or/Cgl
+    Version: 0.60
+    Required: Recommended
+  - Description: COIN-OR Branch and Cut
+    URL: https://github.com/coin-or/Cbc
+    Version: 2.10
+    Required: Recommended
+
+DevelopmentStatus:
+  activityStatus: Active
+  maturityLevel: 4
+  testedPlatforms:
+  - operatingSystem: Linux
+    compiler: gcc
+  - operatingSystem: Mac OS X
+    compiler:
+    - gcc
+    - clang
+  - operatingSystem: Microsoft Windows with MSys2
+    compiler:
+    - gcc
+    - cl

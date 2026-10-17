@@ -8,6 +8,8 @@
 #ifndef _MP_domain_hpp_
 #define _MP_domain_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <vector>
 #include <map>
 #include "MP_utilities.hpp"
@@ -27,7 +29,7 @@ template<int nbr> class MP_subset;
         @note FOR INTERNAL USE: This is not normally used directly by the
         calling code.
      */
-class MP_domain_base : public Functor, public MP_index_base {
+class FLOPCPPLIB_EXPORT MP_domain_base : public Functor, public MP_index_base {
     friend class MP_domain;
     friend class Handle<MP_domain_base*>;
     friend MP_domain operator*(const MP_domain& a, const MP_domain& b);
@@ -58,7 +60,7 @@ public:
         for dimensions which are not used.
         
     */
-class MP_domain : public Handle<MP_domain_base*> {
+class FLOPCPPLIB_EXPORT MP_domain : public Handle<MP_domain_base*> {
     friend MP_domain operator*(const MP_domain& a, const MP_domain& b);
     
     friend class MP_constraint;
@@ -107,7 +109,7 @@ private:
         into by the index.
         
     */
-class MP_domain_set : public MP_domain_base {
+class FLOPCPPLIB_EXPORT MP_domain_set : public MP_domain_base {
 public:
     /// Constructor taking a set pointer and an index pointer.
     MP_domain_set(const MP_set* s, MP_index* i);
@@ -249,7 +251,7 @@ private:
     /** operator which creates a new domain as the pairwise combinations
         of two input domains.
      */
-MP_domain operator*(const MP_domain& a, const MP_domain& b);
+FLOPCPPLIB_EXPORT MP_domain operator*(const MP_domain& a, const MP_domain& b);
   
 }  // End of namespace flopc
 #endif

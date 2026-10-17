@@ -9,6 +9,8 @@
 #ifndef _MP_expression_hpp_
 #define _MP_expression_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <vector>
 #include <set>
 
@@ -31,7 +33,7 @@ namespace flopc {
         @note FOR INTERNAL USE: This is not normally used directly by the
         calling code.
     */
-    struct Coef {
+    struct FLOPCPPLIB_EXPORT Coef {
 	Coef(int c, int r, double v, int s = 0) : 
 	    col(c), row(r), stage(s), val(v)  {}
 	int col, row, stage;
@@ -45,7 +47,7 @@ namespace flopc {
         @note FOR INTERNAL USE: This is not normally used directly by the
         calling code.
     */
-    class GenerateFunctor : public Functor {
+    class FLOPCPPLIB_EXPORT GenerateFunctor : public Functor {
     public:
 	GenerateFunctor(std::vector<Coef>& coefs) : Coefs(coefs) {}
 
@@ -77,7 +79,7 @@ namespace flopc {
         @note FOR INTERNAL USE: This is not normally used directly by the
         calling code.
     */
-    class ObjectiveGenerateFunctor : public GenerateFunctor {
+    class FLOPCPPLIB_EXPORT ObjectiveGenerateFunctor : public GenerateFunctor {
     public:
 	ObjectiveGenerateFunctor(std::vector<Coef>& coefs) : GenerateFunctor(coefs) {}
 	virtual int row_number() const {
@@ -90,7 +92,7 @@ namespace flopc {
         @note FOR INTERNAL USE: This is not normally used directly by the
         calling code.
     */
-    class MP_expression_base {
+    class FLOPCPPLIB_EXPORT MP_expression_base {
 	friend class MP_expression;
 	friend class Handle<MP_expression_base*>;
     private:
@@ -119,7 +121,7 @@ namespace flopc {
         @note There are constructors which are (silently) used to convert \
         other componenets into expressions.
     */
-    class MP_expression : public Handle<MP_expression_base*> {
+    class FLOPCPPLIB_EXPORT MP_expression : public Handle<MP_expression_base*> {
 	friend class MP_constraint;
     public:
         /// default constructor
@@ -141,7 +143,7 @@ namespace flopc {
         calling code.
         @todo can this be moved to the cpp file?
     */
-    class TerminalExpression : public MP_expression_base {
+    class FLOPCPPLIB_EXPORT TerminalExpression : public MP_expression_base {
     public:
 	virtual double getValue() const = 0; 
 	virtual int getColumn() const = 0;
@@ -154,7 +156,7 @@ namespace flopc {
         calling code.
         @todo can this be moved to the cpp file?
     */
-    class Expression_operator : public MP_expression_base {
+    class FLOPCPPLIB_EXPORT Expression_operator : public MP_expression_base {
     public:
 	Expression_operator(const MP_expression& e1, const MP_expression& e2) : 
 	    left(e1),right(e2) {}
@@ -167,39 +169,39 @@ namespace flopc {
     };
 
     /// Operator which sums two MP_expressions, forms a new MP_expression
-    MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator+(const MP_expression& e1, const MP_expression& e2);
     /** Operator which sums an MP_expression and a constant, and forms a new
         MP_expression
      */
-    MP_expression operator+(const MP_expression& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator+(const MP_expression& e1, const Constant& e2);
     /** Operator which sums a constant and an MP_expression , and forms a new
         MP_expression
      */
-    MP_expression operator+(const Constant& e1, const MP_expression& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator+(const Constant& e1, const MP_expression& e2);
     /** Operator which subtracts an MP_expression from an MP_expression, and
         forms a new MP_expression
      */
-    MP_expression operator-(const MP_expression& e1, const MP_expression& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator-(const MP_expression& e1, const MP_expression& e2);
     /** Operator which subtracts a Constant from an MP_expression, and
         forms a new MP_expression
      */
-    MP_expression operator-(const MP_expression& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator-(const MP_expression& e1, const Constant& e2);
     /** Operator which subtracts an MP_expression from a Constant, and
         forms a new MP_expression
      */
-    MP_expression operator-(const Constant& e1, const MP_expression& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator-(const Constant& e1, const MP_expression& e2);
     /** Operator which multiplies a Constant by an MP_expression, and
         forms a new MP_expression
      */
-    MP_expression operator*(const Constant& e1, const MP_expression& e2); 
+    FLOPCPPLIB_EXPORT MP_expression operator*(const Constant& e1, const MP_expression& e2); 
     /** Operator which multiplies an MP_expression by  a Constant, and
         forms a new MP_expression
      */
-    MP_expression operator*(const MP_expression& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_expression operator*(const MP_expression& e1, const Constant& e2);
     /** forms an expression by summing an expression over a domain.
         @note it's expected that the expression is defined over that domain.
      */
-    MP_expression sum(const MP_domain& d, const MP_expression& e);
+    FLOPCPPLIB_EXPORT MP_expression sum(const MP_domain& d, const MP_expression& e);
 
 } // End of namespace flopc
 #endif

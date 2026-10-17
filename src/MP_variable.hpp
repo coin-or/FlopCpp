@@ -9,6 +9,8 @@
 #ifndef _MP_variable_hpp_
 #define _MP_variable_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <set>
 #include <vector>
 
@@ -32,7 +34,7 @@ namespace flopc {
         @ingroup INTERNAL_USE
         @see MP_variable for a public interface.
      */
-    class VariableRef : public TerminalExpression {
+    class FLOPCPPLIB_EXPORT VariableRef : public TerminalExpression {
 	friend class MP_variable;
     public:
 	int getColumn() const;
@@ -72,7 +74,7 @@ namespace flopc {
         parametersof construction are MP_set s which specify the indexes
         over which the variable is defined.
     */
-    class MP_variable : public RowMajor, public Functor , public Named{
+    class FLOPCPPLIB_EXPORT MP_variable : public RowMajor, public Functor , public Named{
 	friend class MP_model;
 	friend class DisplayVariable;
 	friend class VariableRef;
@@ -133,7 +135,7 @@ namespace flopc {
         pre-specified to be binary.
         @ingroup PublicInterface
      */
-    class MP_binary_variable : public MP_variable {
+    class FLOPCPPLIB_EXPORT MP_binary_variable : public MP_variable {
     public:
 	MP_binary_variable(const MP_set_base &s1 = MP_set::getEmpty(), 
 			   const MP_set_base &s2 = MP_set::getEmpty(), 

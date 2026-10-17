@@ -9,6 +9,8 @@
 #ifndef _MP_data_hpp_
 #define _MP_data_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <vector>
 #include <string>
 
@@ -26,7 +28,7 @@ namespace flopc {
         @note FOR INTERNAL USE: This is not normally used directly by the
 	calling code.
     */
-    class DataRef : public Constant_base, public Functor {
+    class FLOPCPPLIB_EXPORT DataRef : public Constant_base, public Functor {
     public:
 	DataRef(MP_data* d, 
 		const MP_index_exp& i1,
@@ -68,7 +70,7 @@ namespace flopc {
         @li constraint coefficients
         @li 'right hand sides'
     */
-    class MP_data : public RowMajor, public Functor , public Named {
+    class FLOPCPPLIB_EXPORT MP_data : public RowMajor, public Functor , public Named {
 	friend class MP_variable;
 	friend class DisplayData;
 	friend class DataRef;
@@ -183,7 +185,7 @@ namespace flopc {
 	bool manageData;
     };
 
-    class MP_stochastic_data : public MP_data {
+    class FLOPCPPLIB_EXPORT MP_stochastic_data : public MP_data {
     public:
 	MP_stochastic_data(const MP_set_base &s1 = MP_set::getEmpty(), 
 			   const MP_set_base &s2 = MP_set::getEmpty(), 

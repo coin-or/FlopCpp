@@ -9,6 +9,8 @@
 #ifndef _MP_utilities_hpp_
 #define _MP_utilities_hpp_
 
+#include "FlopCppConfig.h"
+
 #include <string>
 #include <vector>
 
@@ -23,7 +25,7 @@ namespace flopc {
         @ingroup INTERNAL_USE
         @note is the base class for passing a fucntion object around.
     */
-    class Functor {
+    class FLOPCPPLIB_EXPORT Functor {
     public:
 	virtual void operator()() const = 0;
     protected:
@@ -66,7 +68,7 @@ namespace flopc {
         dimentional offset information.
         @ingroup INTERNAL_USE
     */
-    class RowMajor {
+    class FLOPCPPLIB_EXPORT RowMajor {
     public:
 	int size() const { return size_; }
     protected:
@@ -91,7 +93,7 @@ namespace flopc {
         structure.
         @ingroup INTERNAL_USE
      */
-    class Named {
+    class FLOPCPPLIB_EXPORT Named {
     public:
 	std::string getName() const { return name; }
 	void setName(const std::string& n) { name = n; }

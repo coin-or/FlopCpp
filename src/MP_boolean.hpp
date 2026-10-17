@@ -9,6 +9,8 @@
 #ifndef _MP_boolean_hpp_
 #define _MP_boolean_hpp_
 
+#include "FlopCppConfig.h"
+
 #include "MP_index.hpp"
 #include "MP_constant.hpp"
 #include "MP_utilities.hpp"
@@ -20,7 +22,7 @@ namespace flopc {
     @note FOR INTERNAL USE: This is not normally used directly by the
     calling code.
     */
-    class Boolean_base {
+    class FLOPCPPLIB_EXPORT Boolean_base {
 	friend class Handle<Boolean_base*>;
 	friend class MP_boolean;
     public:
@@ -42,7 +44,7 @@ namespace flopc {
     @TODO explain SUBSETREF
     @TODO explain using pointer in -- should be private?
     */
-    class MP_boolean : public Handle<Boolean_base*> {
+    class FLOPCPPLIB_EXPORT MP_boolean : public Handle<Boolean_base*> {
 	friend class MP_domain_base_;
     public:
 	MP_boolean() : Handle<Boolean_base*>(0) {}
@@ -60,7 +62,7 @@ namespace flopc {
     @returns A boolean which evaluates to the negation of the input expression.
     @todo true? haven't used it.
     */
-    MP_boolean operator!(const MP_boolean& b);
+    FLOPCPPLIB_EXPORT MP_boolean operator!(const MP_boolean& b);
 
     /** @brief For computing the logical AND of two booleans
     @ingroup PublicInterface
@@ -70,7 +72,7 @@ namespace flopc {
     @returns A boolean which evaluates to true of both booleans are true.
     @todo true? haven't used it.
     */
-    MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator&&(const MP_boolean& e1, const MP_boolean& e2);
     /** @brief For computing the logical OR of two booleans
     @ingroup PublicInterface
     This is used in the normal formation of an expression.
@@ -79,7 +81,7 @@ namespace flopc {
     @returns A boolean which evaluates to true if either booleans are true.
     @todo true? haven't used it.
     */
-    MP_boolean operator||(const MP_boolean& e1, const MP_boolean& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator||(const MP_boolean& e1, const MP_boolean& e2);
 
     /** @brief boolean which returns true if all in domain evaluate to true.
     @ingroup PublicInterface
@@ -89,7 +91,7 @@ namespace flopc {
     @returns A boolean which evaluates to true all domain evaluations of the boolean evaluate to true.
     @todo true? haven't used it.
     */
-    MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
+    FLOPCPPLIB_EXPORT MP_boolean alltrue(const MP_domain& d, const MP_boolean& b);
 
     /** @brief constructs a boolean evaluator using operator overloading
         @ingroup PublicInterface
@@ -108,7 +110,7 @@ namespace flopc {
         <br>MP_boolean &b = (i+5)<=(j);
         </code> 
      */
-    MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator<=(const MP_index_exp& e1, const MP_index_exp& e2);
     /** @brief constructs a boolean evaluator by comparing two constants.
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -116,7 +118,7 @@ namespace flopc {
         @param e1 first constant expression
         @param e2 second constant expression
     */
-    MP_boolean operator<=(const Constant& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator<=(const Constant& e1, const Constant& e2);
     /** @brief constructs a boolean evaluator using operator overloading
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -126,7 +128,7 @@ namespace flopc {
         @li used in forming sets of tuples of index values, or subsets.
         @todo improve this a bit?
     */
-    MP_boolean operator<(const MP_index_exp& e1, const MP_index_exp& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator<(const MP_index_exp& e1, const MP_index_exp& e2);
     /** @brief constructs a boolean evaluator by comparing two constants.
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -134,7 +136,7 @@ namespace flopc {
         @param e1 first constant expression
         @param e2 second constant expression
     */
-    MP_boolean operator<(const Constant& e1, const Constant& e2); 
+    FLOPCPPLIB_EXPORT MP_boolean operator<(const Constant& e1, const Constant& e2); 
     /** @brief constructs a boolean evaluator using operator overloading
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -144,7 +146,7 @@ namespace flopc {
         @li used in forming sets of tuples of index values, or subsets.
         @todo improve this a bit?
     */
-    MP_boolean operator>=(const MP_index_exp& e1, const MP_index_exp& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator>=(const MP_index_exp& e1, const MP_index_exp& e2);
     /** @brief constructs a boolean evaluator by comparing two constants.
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -152,7 +154,7 @@ namespace flopc {
         @param e1 first constant expression
         @param e2 second constant expression
     */
-    MP_boolean operator>=(const Constant& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator>=(const Constant& e1, const Constant& e2);
     /** @brief constructs a boolean evaluator using operator overloading
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -162,7 +164,7 @@ namespace flopc {
         @li used in forming sets of tuples of index values, or subsets.
         @todo improve this a bit?
     */
-    MP_boolean operator>(const MP_index_exp& e1, const MP_index_exp& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator>(const MP_index_exp& e1, const MP_index_exp& e2);
     /** @brief constructs a boolean evaluator by comparing two constants.
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -170,7 +172,7 @@ namespace flopc {
         @param e1 first constant expression
         @param e2 second constant expression
     */
-    MP_boolean operator>(const Constant& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator>(const Constant& e1, const Constant& e2);
     /** @brief constructs a boolean evaluator using operator overloading
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -180,7 +182,7 @@ namespace flopc {
         @li used in forming sets of tuples of index values, or subsets.
         @todo improve this a bit?
     */
-    MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator==(const MP_index_exp& e1, const MP_index_exp& e2);
     /** @brief constructs a boolean evaluator by comparing two constants.
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -188,7 +190,7 @@ namespace flopc {
         @param e1 first constant expression
         @param e2 second constant expression
     */
-    MP_boolean operator==(const Constant& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator==(const Constant& e1, const Constant& e2);
     /** @brief constructs a boolean evaluator using operator overloading
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -198,7 +200,7 @@ namespace flopc {
         @li used in forming sets of tuples of index values, or subsets.
         @todo improve this a bit?
     */
-    MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator!=(const MP_index_exp& e1, const MP_index_exp& e2);
     /** @brief constructs a boolean evaluator by comparing two constants.
         @ingroup PublicInterface
         This is used in the normal formation of an expression.
@@ -206,7 +208,7 @@ namespace flopc {
         @param e1 first constant expression
         @param e2 second constant expression
     */
-    MP_boolean operator!=(const Constant& e1, const Constant& e2);
+    FLOPCPPLIB_EXPORT MP_boolean operator!=(const Constant& e1, const Constant& e2);
 
 } // End of namespace flopc
 #endif

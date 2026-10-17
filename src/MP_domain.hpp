@@ -21,8 +21,14 @@ namespace flopc {
 class MP_set_base;
 class MP_set;
 class MP_index;
+class MP_domain;
 
 template<int nbr> class MP_subset;
+
+// Declared here (with FLOPCPPLIB_EXPORT) before MP_domain_base and MP_domain
+// declare it as a friend, as MSVC doesn't accept adding __declspec(dllexport)
+// in a later declaration. See below for the documentation.
+FLOPCPPLIB_EXPORT MP_domain operator*(const MP_domain& a, const MP_domain& b);
 
     /** @brief Reference to a set of index values.
         @ingroup INTERNAL_USE

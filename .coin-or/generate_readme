@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Exit when command fails
+set -e
+#Attempt to use undefined variable outputs error message, and forces an exit
+set -u
+#Causes a pipeline to return the exit status of the last command in the pipe
+#that returned a non-zero return value.
+set -o pipefail
+#set -x
+
+source $COINBREW_HOME/scripts/generate_readme
+
+pushd . > /dev/null
+cd $(dirname $0)
+SCRIPT_DIR=$PWD
+popd > /dev/null
+
+create_variables $SCRIPT_DIR/config.yml
+
+make_header
+
+echo "FLOPC++ (Formulation of Linear Optimization Problems in C++) is an
+open-source algebraic modeling language implemented as a C++ class library.
+Using FLOPC++, linear and mixed-integer optimization models can be specified
+in a declarative style, similar to algebraic modeling languages such as GAMS
+and AMPL, within a C++ program. This combines the traditional strengths of
+algebraic modeling languages, such as the ability to declare a model in a
+concise and readable way, with the speed, power, and flexibility of an
+object-oriented language. FLOPC++ uses the [Open Solver
+Interface](https://github.com/coin-or/Osi) (Osi) to connect to LP and MIP
+solvers, such as [Clp](https://github.com/coin-or/Clp) and
+[Cbc](https://github.com/coin-or/Cbc)."
+
+# There are no current binary packages of FLOPC++.
+make_build_info_no_packages
+
+echo "### Examples
+
+The \`examples\` directory has a number of models written with FLOPC++ (e.g.,
+\`transport\`, \`aircraft\`, \`sudoku\`). After building and installing FLOPC++,
+an example can be built and run in the \`examples\` subdirectory of the build
+directory with
+\`\`\`
+cd build/FlopCpp/master/examples
+make EXNAME=transport
+./transport
+\`\`\`
+The script \`runall\` there builds and runs all of them.
+"
+
+make_doxygen_info
+
+make_links

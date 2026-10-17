@@ -1,12 +1,15 @@
-prefix=@prefix@
+@COIN_RELOCATABLE_FALSE@prefix=@prefix@
+@COIN_RELOCATABLE_TRUE@prefix=${pcfiledir}/../..
 exec_prefix=@exec_prefix@
 libdir=@libdir@
-includedir=@includedir@/coin
+includedir=@includedir@/coin-or
 
 Name: FlopC++
 Description: An Algebraic Modeling Language in C++
-URL: https://projects.coin-or.org/FlopC++
+URL: @PACKAGE_URL@
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lFlopCpp @FLOPCPP_PCLIBS@
 Cflags: -I${includedir}
-Requires: @FLOPCPP_PCREQUIRES@
+@COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lFlopCpp
+@COIN_STATIC_BUILD_FALSE@Requires.private: @FLOPCPPLIB_PCFILES@
+@COIN_STATIC_BUILD_TRUE@Libs: -L${libdir} -lFlopCpp @FLOPCPPLIB_LFLAGS_NOPC@
+@COIN_STATIC_BUILD_TRUE@Requires: @FLOPCPPLIB_PCFILES@

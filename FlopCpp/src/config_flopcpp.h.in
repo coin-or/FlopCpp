@@ -1,13 +1,21 @@
-/* src/config_flopcpp.h.in. */
+/* src/config_flopcpp.h.in.  */
+
+#ifndef __CONFIG_FLOPCPP_H__
+#define __CONFIG_FLOPCPP_H__
+
+/* Library Visibility Attribute */
+#undef FLOPCPPLIB_EXPORT
 
 /* Version number of project */
 #undef FLOPCPP_VERSION
 
-/* Major Version number of project */
+/* Major version number of project. */
 #undef FLOPCPP_VERSION_MAJOR
 
-/* Minor Version number of project */
+/* Minor version number of project. */
 #undef FLOPCPP_VERSION_MINOR
 
-/* Release Version number of project */
+/* Release version number of project. */
 #undef FLOPCPP_VERSION_RELEASE
+
+#endif

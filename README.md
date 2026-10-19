@@ -28,7 +28,7 @@ solvers, such as [Clp](https://github.com/coin-or/Clp) and
 
 FlopCpp is written in C++ and is released as open source under the [Eclipse Public License 2.0](http://www.opensource.org/licenses/EPL-2.0).
 
-It is distributed under the auspices of the [COIN-OR Foundation](https://www.coin-or.org)
+It is distributed under the auspices of the [COIN-OR Foundation](https://www.coin-or.org).
 
 The FlopCpp development site is https://github.com/coin-or/FlopCpp.
 
@@ -44,20 +44,20 @@ The FlopCpp development site is https://github.com/coin-or/FlopCpp.
 
 There is a Docker image that provides FlopCpp, as well as other projects
 in the [COIN-OR Optimization
-Suite](https://github.com/coin-or/COIN-OR-OptimizationSuite) [here](https://hub.docker.com/repository/docker/coinor/coin-or-optimization-suite)
+Suite](https://github.com/coin-or/COIN-OR-OptimizationSuite) [here](https://hub.docker.com/r/coinor/coin-or-optimization-suite).
 
 ### Binaries
 
 For newer releases, binaries will be made available as assets attached to
 releases in Github
 [here](https://github.com/coin-or/FlopCpp/releases). Older binaries
-are archived as part of FlopCpp
-[here](https://www.coin-or.org/download/binary/FlopCpp).
+are archived as part of FlopC++
+[here](https://www.coin-or.org/download/binary/FlopC++).
 
 Due to license incompatibilities, pre-compiled binaries may lack some
 functionality. If binaries are not available for your platform for the latest
 version and you would like to request them to be built and posted, feel free
-to let us know in the discussion formum.
+to open a discussion on Github.
 
 ### Source
 
@@ -79,7 +79,7 @@ FlopCpp has a number of dependencies, which are detailed in
 automatically downloaded when obtaining the source with `coinbrew`. For some
 of the remaining third-party dependencies, automatic download scripts and
 build wrappers are provided (and will also be automatically run for required
-and recommended dependencies), while other libraries that are aeasy to obtain
+and recommended dependencies), while other libraries that are easy to obtain
 must be installed using an appropriate package manager (or may come with your
 OS by default). 
 
@@ -104,7 +104,7 @@ The `coinbrew` script will fetch the additional projects specified in the Depend
 
  * Download the source code, e.g., by cloning the git repo https://github.com/coin-or/FlopCpp
  * Download and install the source code for the dependencies listed in [config.yml](.coin-or/config.yml)
- * Build the code as follows (make sure to set PKG_CONFIG_PTH to install directory for dependencies).
+ * Build the code as follows (make sure to set `PKG_CONFIG_PATH` to the `lib/pkgconfig` directory of the installation of the dependencies).
 
 ```
 ./configure -C
@@ -130,14 +130,11 @@ The script `runall` there builds and runs all of them.
 
 If you have `Doxygen` available, you can build a HTML documentation by typing
 
-`make doxydoc` 
+`make doxygen-docs` 
 
 in the build directory. If FlopCpp was built via `coinbrew`, then the build
 directory will be `./build/FlopCpp/master` by default. The doxygen documentation main file
 is found at `<build-dir>/doxydoc/html/index.html`.
-
-If you don't have `doxygen` installed locally, you can use also find the
-documentation [here](http://coin-or.github.io/FlopCpp/Doxygen).
 
 
 ## Project Links
@@ -147,5 +144,4 @@ documentation [here](http://coin-or.github.io/FlopCpp/Doxygen).
  * [COIN-OR general discussion forum](https://github.com/orgs/coin-or/discussions)
  * [FlopCpp Discussion forum](https://github.com/coin-or/FlopCpp/discussions)
  * [Report a bug](https://github.com/coin-or/FlopCpp/issues/new)
- * [Doxygen generated documentation](http://coin-or.github.io/FlopCpp/Doxygen)
 
